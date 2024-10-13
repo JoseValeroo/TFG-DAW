@@ -1,0 +1,47 @@
+article {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 8rem; /* Puedes ajustar esto si es necesario */
+}
+
+article header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+article header div {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem; /* Ajusta el tamaño para los textos dentro del header */
+}
+
+article header span {
+    opacity: .6;
+    font-size: 0.875rem; /* Tamaño de fuente más pequeño para el span */
+}
+
+article img {
+    width: 48px;
+    height: 48px;
+    border-radius: 1000px;
+}
+
+article button {
+    margin-top: 16px;
+    margin-left: 8px;
+    border: 0;
+    border-radius: 999px;
+    padding: 8px 15px; /* Reduzco el tamaño del padding */
+    font-size: 0.75rem; /* Reduzco el tamaño de la fuente */
+    font-weight: bold;
+}
+
+aside {
+    padding-bottom: 100px;
+}
+
+img {
+    padding: 10px;
+}
