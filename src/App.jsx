@@ -2,7 +2,8 @@ import { useState,useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import PrimerComponente  from './components/PrimerComponente'
+import PrimerComponente  from './components/MicroPerfil/MicroPerfil'
+import BotonComponent from './components/boton/BotonComponent'
 //Esta es como el componente padre, el main.jsx llama a esto y renderiza esto
 //ahoram esto tienes que meterle los componente
 function App() {
@@ -51,6 +52,7 @@ function App() {
       
       {/*Asi se llama a un componente, ademas tienes que ponerle el import arriba */}
       <PrimerComponente />
+      <BotonComponent/>
     </>
   )
 }
