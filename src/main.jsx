@@ -1,14 +1,11 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-
-//imports del local
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './main.css'
 import App from './App.jsx'
-import './index.css'
-import PrimerComponente from './components/MicroPerfil/MicroPerfil.jsx'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
     <App/>
-  </StrictMode>,
+  </React.StrictMode>
 )
-

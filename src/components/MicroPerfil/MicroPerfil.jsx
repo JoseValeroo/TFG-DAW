@@ -1,5 +1,5 @@
 import React from 'react';
-import './PrimerComponente.css'
+import './MicroPerfil.css'
 function PrimerComponente() {
  
   return(
