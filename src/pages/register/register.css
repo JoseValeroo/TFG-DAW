@@ -1,0 +1,149 @@
+/* Contenedor principal centrado */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #15202b;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    
+  }
+  
+  /* Tarjeta de registro */
+  .register-card {
+   background-color: #1c2732; 
+   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+   width: 100%;
+   max-width: 400px;
+   text-align: center;
+   border-radius: 40px;
+
+  }
+  
+  /* Logo */
+  .register-logo {
+    font-size: 48px;
+    font-weight: bold;
+    color: #1da1f2;
+    margin-bottom: 1rem;
+  }
+  
+  /* Título */
+  h2 {
+    font-size: 24px;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Formulario */
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Estilos de los campos de entrada */
+  .register-input {
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    border: 1px solid #8899a6;
+    background-color: #15202b;
+    color: #ffffff;
+    transition: border 0.3s ease;
+    width: 100%;
+    max-width: 350px;
+  }
+  
+  .register-input:focus {
+    border: 1px solid #1da1f2;
+    outline: none;
+  }
+  
+  /* Contenedor para el input de contraseña con botón de ver/ocultar */
+  .password-container {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #1da1f2;
+  }
+  
+  /* Botón de registro con animación */
+  .register-button {
+    background-color: #1da1f2;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.8rem;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 350px;
+  }
+  
+  .register-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 300%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .register-button:hover::before {
+    left: 100%;
+  }
+  
+  /* Mensaje de error */
+  .error-message {
+    color: #f4212e;
+    margin-bottom: 1rem;
+    font-size: 14px;
+  }
+  
+  /* Footer */
+  .register-footer {
+    margin-top: 1.5rem;
+    font-size: 14px;
+    color: #8899a6;
+  }
+  
+  .register-footer a {
+    color: #1da1f2;
+    text-decoration: none;
+  }
+  
+  .register-footer a:hover {
+    text-decoration: underline;
+  }
+  .input-common {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-sizing: border-box;
+  }
+  .login-buttons, .register-buttons {
+    margin-top: 10px;
+    display: flex; 
+    justify-content: center; 
+  }
+  

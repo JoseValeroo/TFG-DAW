@@ -1,84 +1,161 @@
-
+/* Contenedor principal centrado */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f2f5;
-    width: 100%;
-  }
-  
-  .login-form {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  .login-form h2 {
-    margin-bottom: 0.5rem;
-    color: #333;
-    font-size: 1.5rem;
-  }
-  
-  .login-form p {
-    margin-bottom: 1.5rem;
-    color: #666;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #333;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  .password-input {
-    position: relative;
-  }
-  
-  .toggle-password {
-    position: absolute;
-    right: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    padding: 0;
-  }
-  
-  .error-message {
-    color: #e74c3c;
-    margin-bottom: 1rem;
-  }
-  
-  .submit-button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #4a90e2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .submit-button:hover {
-    background-color: #357abd;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #15202b;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+/* Tarjeta de inicio de sesión */
+.login-card {
+  background-color: #1c2732;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Logo */
+.login-logo {
+  font-size: 48px;
+  font-weight: bold;
+  color: #1da1f2;
+  margin-bottom: 1rem;
+}
+
+/* Título */
+h2 {
+  font-size: 24px;
+  margin-bottom: 1.5rem;
+}
+
+/* Formulario */
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos de los campos de entrada */
+.login-input {
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border: 1px solid #8899a6;
+  background-color: #15202b;
+  color: #ffffff;
+  transition: border 0.3s ease;
+  width: 100%;
+}
+
+.login-input:focus {
+  border: 1px solid #1da1f2;
+  outline: none;
+}
+
+/* Contenedor para el input de contraseña con botón de ver/ocultar */
+.password-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.password-input {
+  width: 93%;
+  padding: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid #8899a6;
+  background-color: #15202b;
+  color: #ffffff;
+  transition: border 0.3s ease;
+}
+
+.password-input:focus {
+  border: 1px solid #1da1f2;
+  outline: none;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #1da1f2;
+}
+
+/* Botón de inicio de sesión con animación */
+.login-button {
+  background-color: #1da1f2;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.8rem;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 300%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.login-button:hover::before {
+  left: 100%;
+}
+
+/* Mensaje de error */
+.error-message {
+  color: #f4212e;
+  margin-bottom: 1rem;
+  font-size: 14px;
+}
+
+/* Footer */
+.login-footer {
+  margin-top: 1.5rem;
+  font-size: 14px;
+  color: #8899a6;
+}
+
+.login-footer a {
+  color: #1da1f2;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos comunes para los inputs */
+.input-common {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  box-sizing: border-box;
+}
+
+.login-buttons, .register-buttons {
+  margin-top: 10px; 
+  display: flex; 
+  justify-content: center; 
+}

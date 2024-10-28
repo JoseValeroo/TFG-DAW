@@ -41,6 +41,17 @@ body {
     font-size: 16px;
     cursor: pointer;
   }
+  .post-button-pequeño{
+    width: 8%;
+    padding: 8px;
+    
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+  }
   
   .main-content {
     flex-grow: 1;
@@ -114,7 +125,7 @@ body {
     margin-top: 20px;
   }
   
-  .premium-offer button {
+  .button-black-small{
     background-color: #000;
     color: #fff;
     border: none;
