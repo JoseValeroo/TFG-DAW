@@ -1,149 +1,243 @@
 /* Contenedor principal centrado */
 .register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #15202b;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    
-  }
-  
-  /* Tarjeta de registro */
-  .register-card {
-   background-color: #1c2732; 
-   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-   width: 100%;
-   max-width: 400px;
-   text-align: center;
-   border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2b4c7e, #567ebb);
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+}
 
-  }
-  
-  /* Logo */
-  .register-logo {
-    font-size: 48px;
-    font-weight: bold;
-    color: #1da1f2;
-    margin-bottom: 1rem;
-  }
-  
-  /* Título */
-  h2 {
-    font-size: 24px;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Formulario */
-  .register-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* Estilos de los campos de entrada */
-  .register-input {
-    padding: 0.8rem;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    border: 1px solid #8899a6;
-    background-color: #15202b;
-    color: #ffffff;
-    transition: border 0.3s ease;
-    width: 100%;
-    max-width: 350px;
-  }
-  
-  .register-input:focus {
-    border: 1px solid #1da1f2;
-    outline: none;
-  }
-  
-  /* Contenedor para el input de contraseña con botón de ver/ocultar */
-  .password-container {
-    position: relative;
-    width: 100%;
-    max-width: 350px;
-  }
-  
-  .toggle-password {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: #1da1f2;
-  }
-  
-  /* Botón de registro con animación */
-  .register-button {
-    background-color: #1da1f2;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 0.8rem;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    max-width: 350px;
-  }
-  
-  .register-button::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 300%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .register-button:hover::before {
-    left: 100%;
-  }
-  
-  /* Mensaje de error */
-  .error-message {
-    color: #f4212e;
-    margin-bottom: 1rem;
-    font-size: 14px;
-  }
-  
-  /* Footer */
-  .register-footer {
-    margin-top: 1.5rem;
-    font-size: 14px;
-    color: #8899a6;
-  }
-  
-  .register-footer a {
-    color: #1da1f2;
-    text-decoration: none;
-  }
-  
-  .register-footer a:hover {
-    text-decoration: underline;
-  }
-  .input-common {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0; 
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    box-sizing: border-box;
-  }
-  .login-buttons, .register-buttons {
-    margin-top: 10px;
-    display: flex; 
-    justify-content: center; 
-  }
-  
+/* Tarjeta de registro */
+.register-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+
+}
+
+/* Logo */
+.register-logo {
+  font-size: 48px;
+  font-weight: bold;
+  color: #2b4c7e;
+  margin-bottom: 1rem;
+  margin-top: -3vh;
+}
+
+/* Título */
+h2 {
+  font-size: 24px;
+  color: #2b4c7e;
+  margin-bottom: 0.5rem;
+}
+
+.subheading {
+  font-size: 16px;
+  color: #8899a6;
+  margin-bottom: 1.5rem;
+}
+
+/* Formulario */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Estilos de los campos de entrada */
+.register-input {
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  color: #333;
+  font-size: 14px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 350px;
+}
+
+#label-input{
+  color: #2b4c7e;
+  font-weight: bold;
+}
+
+.register-input:focus {
+  outline: none;
+  border-color: #567ebb;
+  box-shadow: 0px 0px 5px rgba(86, 126, 187, 0.5);
+}
+
+/* Contenedor para el input de contraseña con botón de ver/ocultar */
+.password-container {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #567ebb;
+}
+
+/* Botón de registro */
+.register-button {
+  padding: 0.8rem;
+  background: #2b4c7e;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+  max-width: 350px;
+}
+
+.register-button:hover {
+  background: #567ebb;
+}
+
+/* Mensaje de error */
+.error-message {
+  color: #d9534f;
+  font-size: 14px;
+  margin-bottom: 1rem;
+}
+
+/* Footer */
+.register-footer {
+  margin-top: 1.5rem;
+  font-size: 14px;
+  color: #606d80;
+}
+
+.register-footer a {
+  color: #567ebb;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-footer a:hover {
+  color: #2b4c7e;
+}
+
+/* Estilos comunes */
+.input-common {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  box-sizing: border-box;
+}
+
+.register-buttons {
+  margin-top: 10px;
+  display: flex; 
+  justify-content: center; 
+}
+
+/* Estilos del modo oscuro */
+/* Botón de cambio de modo oscuro */
+.dark-mode-button {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: #2b4c7e;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Modo oscuro */
+.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+/* Estilos de la tarjeta de registro en modo oscuro */
+.dark-mode .register-card {
+  background: #1e1e1e;
+  box-shadow: 0px 4px 15px #2b4c7e;
+}
+
+/* Título y subtítulo */
+.dark-mode h2 {
+  color: #ffffff;
+}
+
+.dark-mode .subheading {
+  color: #b0b0b0;
+}
+
+/* Estilos de los labels */
+.dark-mode #label-input {
+  color: #567ebb;
+}
+
+/* Estilos de los campos de entrada */
+.dark-mode .register-input {
+  background-color: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.dark-mode .register-input:focus {
+  border-color: #567ebb;
+  box-shadow: 0px 0px 5px rgba(136, 136, 136, 0.5);
+}
+
+/* Estilo para el botón de ver/ocultar contraseña */
+.dark-mode .toggle-password {
+  color: #888;
+}
+
+/* Estilos para el botón de registro */
+.dark-mode .register-button {
+  background: #2b4c7e;
+}
+
+.dark-mode .register-button:hover {
+  background: #567ebb;
+}
+
+/* Mensajes de error */
+.dark-mode .error-message {
+  color: #ff6666;
+}
+
+/* Estilos del pie de página */
+.dark-mode .register-footer {
+  color: #bbb;
+}
+
+.dark-mode .register-footer a {
+  color: #567ebb;
+}
+
+.dark-mode .register-footer a:hover {
+  color: #bbb;
+}
+
+/* Asegurar que los enlaces sean visibles en modo oscuro */
+.dark-mode .register-footer a {
+  color: #567ebb;
+}

@@ -1,161 +1,200 @@
-/* Contenedor principal centrado */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #15202b;
+  background: linear-gradient(135deg, #2b4c7e, #567ebb);
   color: #ffffff;
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
 }
 
-/* Tarjeta de inicio de sesión */
+.login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .login-card {
-  background-color: #1c2732;
+  background: #ffffff;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
   max-width: 400px;
+  width: 100%;
   text-align: center;
 }
 
-/* Logo */
-.login-logo {
-  font-size: 48px;
-  font-weight: bold;
-  color: #1da1f2;
+.logo-container img {
+  max-width: 60%;
   margin-bottom: 1rem;
 }
 
-/* Título */
 h2 {
   font-size: 24px;
+  color: #2b4c7e;
+  margin-bottom: 0.5rem;
+}
+
+.subheading {
+  font-size: 16px;
+  color: #8899a6;
   margin-bottom: 1.5rem;
 }
 
-/* Formulario */
-.login-form {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Estilos de los campos de entrada */
-.login-input {
-  padding: 0.8rem;
+.input-group {
   margin-bottom: 1rem;
-  border-radius: 4px;
-  border: 1px solid #8899a6;
-  background-color: #15202b;
-  color: #ffffff;
-  transition: border 0.3s ease;
-  width: 100%;
+  width: 80%;
 }
 
-.login-input:focus {
-  border: 1px solid #1da1f2;
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #606d80;
+  font-weight: bold;
+}
+
+.login-input,
+.password-input {
+  padding: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  color: #333;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.login-input:focus,
+.password-input:focus {
   outline: none;
+  border-color: #567ebb;
+  box-shadow: 0px 0px 5px rgba(86, 126, 187, 0.5);
 }
 
-/* Contenedor para el input de contraseña con botón de ver/ocultar */
+.same-width {
+  width: 100%;
+  max-width: 300px;
+}
+
+#password-input{
+  color: #2b4c7e;
+}
+
 .password-container {
   position: relative;
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.password-input {
-  width: 93%;
-  padding: 0.8rem;
-  border-radius: 4px;
-  border: 1px solid #8899a6;
-  background-color: #15202b;
-  color: #ffffff;
-  transition: border 0.3s ease;
-}
-
-.password-input:focus {
-  border: 1px solid #1da1f2;
-  outline: none;
 }
 
 .toggle-password {
   position: absolute;
-  top: 50%;
   right: 10px;
+  top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  color: #1da1f2;
+  font-size: 16px;
+  color: #567ebb;
 }
 
-/* Botón de inicio de sesión con animación */
 .login-button {
-  background-color: #1da1f2;
+  padding: 0.8rem;
+  background: #2b4c7e;
   color: #ffffff;
   border: none;
-  border-radius: 4px;
-  padding: 0.8rem;
+  border-radius: 6px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  transition: background 0.3s ease;
 }
 
-.login-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 300%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+.login-button:hover {
+  background: #567ebb;
 }
 
-.login-button:hover::before {
-  left: 100%;
-}
-
-/* Mensaje de error */
 .error-message {
-  color: #f4212e;
-  margin-bottom: 1rem;
+  color: #d9534f;
   font-size: 14px;
+  margin-bottom: 1rem;
 }
 
-/* Footer */
 .login-footer {
   margin-top: 1.5rem;
   font-size: 14px;
-  color: #8899a6;
+  color: #606d80;
 }
 
 .login-footer a {
-  color: #1da1f2;
+  color: #567ebb;
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .login-footer a:hover {
-  text-decoration: underline;
+  color: #2b4c7e;
 }
 
-/* Estilos comunes para los inputs */
-.input-common {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0; 
-  border: 1px solid #ccc; 
-  border-radius: 5px; 
-  box-sizing: border-box;
+/* Estilos del modo oscuro */
+.dark-mode-button {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: #2b4c7e;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.login-buttons, .register-buttons {
-  margin-top: 10px; 
-  display: flex; 
-  justify-content: center; 
+.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+.dark-mode .login-card {
+  background: #1e1e1e;
+  box-shadow: 0px 4px 15px #2b4c7e;
+}
+
+.dark-mode h2 {
+  color: #ffffff;
+}
+
+.dark-mode .subheading {
+  color: #b0b0b0;
+}
+
+.dark-mode #label-input,
+.dark-mode #password-input {
+  color: #567ebb;
+}
+
+.dark-mode .login-input,
+.dark-mode .password-input {
+  background-color: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.dark-mode .login-input:focus,
+.dark-mode .password-input:focus {
+  border-color: #567ebb;
+  box-shadow: 0px 0px 5px rgba(136, 136, 136, 0.5);
+}
+
+.dark-mode .toggle-password {
+  color: #888;
+}
+
+.dark-mode .login-button {
+  background: #2b4c7e;
+}
+
+.dark-mode .login-footer a {
+  color: #567ebb;
+}
+
+.dark-mode .login-footer a:hover {
+  color: #bbb;
 }
