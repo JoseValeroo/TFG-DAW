@@ -1,0 +1,64 @@
+/* Contenedor principal de la página */
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  background: #2b4c7e;
+}
+
+/* Contenedor de las tarjetas */
+.content {
+  display: flex;
+  flex-wrap: nowrap; /* Para que se acomode cuando el ancho sea pequeño */
+  justify-content: space-between; /* Se distribuyen las tarjetas de manera que ocupen el espacio */
+  width: 100%; /* Asegura que ocupe el ancho total */
+}
+
+/* Contenedor de la tarjeta de perfil */
+.profile-card {
+  flex: 1 1 60%; /* 60% del espacio disponible */
+  margin-right: 20px; /* Espacio a la derecha entre el perfil y las otras tarjetas */
+  max-width: 50vh;
+}
+
+/* Contenedor de las tarjetas adicionales */
+.other-cards {
+  flex: 1 1 35%; /* 35% del espacio disponible */
+  display: flex;
+  flex-direction: column; /* Para que las tarjetas se apilen de arriba hacia abajo */
+  gap: 20px; /* Espacio entre las tarjetas */
+}
+
+/* Contenedor de las tarjetas adicionales */
+.mid-cards {
+  display: flex;
+  flex-wrap: wrap; /* Permite que las tarjetas se acomoden en varias líneas si el ancho es pequeño */
+  justify-content: space-between; /* Distribuye las tarjetas de manera que ocupen el espacio disponible */
+  gap: 20px; /* Espacio entre las tarjetas */
+}
+
+/* Estilos para las tarjetas de Logros, Intereses, Estadísticas, y Habilidades */
+.achievements-card,
+.tags-card,
+.stats-card,
+.skills-card {
+  flex: 1 1 calc(50% - 20px); /* Ocupa el 50% del espacio disponible con un margen de 20px */
+}
+
+
+/* Estilo para el contenedor de cerrar sesión */
+.profile-page > .content > div {
+  display: flex;
+  gap: 20px;
+}
+
+/* Ajustes para las tarjetas de logout */
+.profile-page .content .profile-page > .content > div > div {
+  flex: 1;
+}
+
+.media-content-card>.ant-card-body{
+  display: flex;
+  justify-content: center;
+}

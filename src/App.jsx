@@ -48,7 +48,9 @@ function App() {
         <div className="posts">
           {/* Post Simulados */}
           <div className="post">
-            <img src='/src/assets/Image/elomusk.jpg' alt="User" className="avatar" />
+            <a href="profile">
+              <img src='/src/assets/Image/elomusk.jpg' alt="User" className="avatar" />
+            </a>
             <div className="post-content">
               <h3>No estás Registrado...</h3>
               <p>Contenido de tu post de ejemplo, no se si al modificar el contenido de este twit se cambia el contenedor.</p>
