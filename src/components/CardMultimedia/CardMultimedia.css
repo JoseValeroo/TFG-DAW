@@ -1,0 +1,108 @@
+.music-card {
+    background: rgba(255, 255, 255, 0.6);
+    border: none;
+    max-width: 610px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  }
+  
+  .music-card-body {
+    display: flex;
+    padding: 16px;
+  }
+  
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .image-container {
+    flex: 1 1 100%;
+    max-width: 200px;
+  }
+  
+  .album-cover {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .info-container {
+    flex: 2 1 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+  }
+  
+  .title-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .title {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .subtitle {
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .main-title {
+    font-size: 1.2em;
+    font-weight: 500;
+    margin-top: 8px;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    transition: background 0.3s;
+  }
+  
+  .icon-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  .heart-button .filled {
+    fill: currentColor;
+  }
+  
+  .progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .slider {
+    width: 100%;
+  }
+  
+  .time-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .current-time,
+  .total-time {
+    font-size: 0.8em;
+  }
+  
+  .controls-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 16px;
+  }
+  
