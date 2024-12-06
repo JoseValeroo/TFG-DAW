@@ -1,26 +1,52 @@
 .App {
-  background-color: grey;
+  background-color: rgb(90, 90, 90);
   display: flex;
   width: 100%;
-  height: 100vh; /* Aseguramos que ocupe el 100% de la altura de la ventana */
-  margin: 0; /* Eliminamos el margen para evitar desbordamiento */
-  overflow: hidden; /* Evitamos el scroll */
+  height: 100vh; /* Asegura que ocupe el 100% de la altura de la ventana */
+  margin: 0;
+  overflow: hidden; /* Evita el scroll global */
 }
 
 .Mitad_Izquierda {
-  width: 40%; /* Ocupa el 40% del ancho */
-  align-items: center;
+  width: 50%; /* Ocupa el 40% del ancho */
+  display: flex;
   justify-content: center;
-  height: 100%; /* Ocupa el 100% de la altura disponible */
+  align-items: center;
+  height: 100%; /* Ocupa el 100% de la altura */
+
 }
 
 .Mitad_Derecha {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Esto asegura que haya dos columnas */
-  gap: 20px; /* Espacio entre las cards */
-  padding: 0.5%;
-  width: 60%; /* Ancho del contenedor */
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+  gap: 5px; /* Espacio entre las cards */
+  width: 50%; /* Ancho del contenedor */
   height: 100%; /* Altura del contenedor */
+  overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
 }
 
+.card3 {
+  display: grid;
+  grid-template-columns: 1fr; /* Una columna para las tarjetas */
+  gap: 16px; /* Espacio entre las tarjetas */
+  
+  max-height: 100vh; /* Asegura que el contenedor no exceda la altura del viewport */
+  overflow-y: auto; /* Permite desplazamiento vertical si las tarjetas exceden la altura */
+}
+.card3::-webkit-scrollbar {
+  width: 0px; /* Establece el ancho de la barra de desplazamiento a 0 */
+  height: 0px; /* Para el scroll horizontal, también lo ocultamos */
+}
+.card4 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+  grid-template-rows: repeat(2, 1fr); /* 2 filas */
+  gap: 16px;
+ 
+  width: 100%;
+}
 
+.card {
+  max-width: 100%; /* Asegura que las tarjetas no excedan el ancho */
+  height: auto;
+}

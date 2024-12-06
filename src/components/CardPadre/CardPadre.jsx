@@ -18,4 +18,3 @@ const CardPadre = ({ image, title, subtitle, text, date }) => {
 };
 
 export default CardPadre;
-
