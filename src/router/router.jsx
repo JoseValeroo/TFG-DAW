@@ -1,21 +1,19 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import App from '../App'; // Tu componente principal
-import Login from '../pages/login/login';
-import Register from '../pages/register/register';
-import ForgotPassword from '../pages/forgotpass/ForgotPassword';
-import TarjetaMain from '../pages/TarjetaMain/TarjetaMain';
-import ProfilePage from '../pages/profile/profile';
-
+import App from '../App';
+//Páginas Componentes Padre
+import Login from '../pages/login/loginPage'; // Archivo en minúscula, componente con mayúscula
+import RegisterPage from '../pages/register/register';
+import ProfilePage from '../pages/profile/profilePage';
+import CardPadre from '../components/CardPadre/CardPadre';
 
 const AppRouter = ({ handleLoginSuccess }) => (
   <Routes>
-    <Route path="/" element={<App />} /> // Ruta para la página principal
-    <Route path="/TarjetaMain" element={<TarjetaMain />} /> // Ruta para la tarjeta principal
-    <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} /> // Ruta para la página de login
-    <Route path="/register" element={<Register onRegisterSuccess={() => {}} />} /> // Ruta para la página de registro
-    <Route path="/forgot-password" element={<ForgotPassword />} /> // Ruta para la página de recuperación de contraseña 
-    <Route path="/profile" element={<ProfilePage />} />
+    <Route path="/" element={<App />} />
+    <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+    <Route path="/register" element={<RegisterPage onRegisterSuccess={() => {}} />} />
+    <Route path="/profilePage" element={<ProfilePage />} />
+    <Route path="/cardPadre" element={<CardPadre />} />
   </Routes>
 );
 

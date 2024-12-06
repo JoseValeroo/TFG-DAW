@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import './Login.css';
-import 'font-awesome/css/font-awesome.min.css'; // Importamos Font Awesome
+import 'font-awesome/css/font-awesome.min.css';
 
 function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [darkMode, setDarkMode] = useState(false); // Estado para alternar entre claro y oscuro
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();

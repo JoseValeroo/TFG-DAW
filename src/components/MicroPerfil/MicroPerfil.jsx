@@ -1,6 +1,7 @@
 import React from 'react';
 import './MicroPerfil.css'
-function PrimerComponente() {
+
+function MicroPerfil() {
  
   return(
   
@@ -18,4 +19,4 @@ function PrimerComponente() {
   </article>
   )
 }
-export default PrimerComponente;
+export default MicroPerfil;

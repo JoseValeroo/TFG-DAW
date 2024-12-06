@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Register.css';
 import 'font-awesome/css/font-awesome.min.css';
 
-function Register({ onRegisterSuccess, onToggleLogin }) {
+function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -122,4 +122,4 @@ function Register({ onRegisterSuccess, onToggleLogin }) {
   );
 }
 
-export default Register;
+export default RegisterPage;

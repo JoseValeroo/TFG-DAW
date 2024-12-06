@@ -11,7 +11,7 @@ const CardPadre = ({ image, title, subtitle, text, date }) => {
           <p className="subtitle">{subtitle}</p>
           <p className="text">{text}</p>
         </div>
-        <img src={image} alt="article-cover"/>
+       <img src={image} alt="article-cover"/>
       </div>
     </div>
   );
