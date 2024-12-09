@@ -8,7 +8,7 @@
 }
 
 .Mitad_Izquierda {
-  width: 50%; /* Ocupa el 40% del ancho */
+  width: 40%; /* Ocupa el 40% del ancho */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,7 +20,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 columnas */
   gap: 5px; /* Espacio entre las cards */
-  width: 50%; /* Ancho del contenedor */
+  width: 60%; /* Ancho del contenedor */
   height: 100%; /* Altura del contenedor */
   overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
 }
