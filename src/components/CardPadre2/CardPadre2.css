@@ -1,0 +1,88 @@
+.card {
+    width: 100%;
+    height: 100%;  /* La tarjeta ocupa el 100% de su contenedor */
+    border-radius: 0.5rem;  /* Bordes redondeados */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);  /* Sombra */
+    position: relative;
+    overflow: hidden;  /* Asegura que la imagen de fondo no se salga */
+    background-size: cover;
+    background-position: center; /* Asegura que la imagen esté centrada */
+  }
+  
+  .card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover .card-background {
+    transform: scale(1.1);  /* Efecto de zoom al pasar el ratón */
+  }
+  
+  .card-content {
+    position: absolute;
+    bottom: 0;  /* Coloca el contenido en la parte inferior */
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);  /* Fondo oscuro con opacidad */
+    color: white;
+    padding: 1.5rem;  /* Espaciado interno */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    z-index: 10;
+  }
+  
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;  /* Espacio entre elementos */
+  }
+  
+  .date {
+    font-size: 0.875rem;  /* Texto pequeño */
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-family: serif;
+    font-weight: bold;
+  }
+  
+  .subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;  /* Espacio entre elementos */
+  }
+  
+  .text {
+    color: rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  
+  .like {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .thumbs-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+  

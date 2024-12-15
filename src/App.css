@@ -3,19 +3,16 @@
   display: flex;
   width: 100%;
   height: 100vh; /* Asegura que ocupe el 100% de la altura de la ventana */
-  margin: 0;
   overflow: hidden; /* Evita el scroll global */
+  padding: 5px;
 }
 
 .Mitad_Izquierda {
   width: 40%; /* Ocupa el 40% del ancho */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%; /* Ocupa el 100% de la altura */
-
+ display: flex;
+ justify-content: center;
+ margin-right: 5px; /* Espacio entre las cards */
 }
-
 .Mitad_Derecha {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 columnas */
