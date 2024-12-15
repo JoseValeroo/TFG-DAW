@@ -12,7 +12,7 @@ const contentStyle = {
 
 const CarouselComponent = () => (
   <>
-    <Carousel arrows dotPosition="left" infinite={false}>
+    <Carousel arrows dotPosition="left" infinite={false} autoplay >
       {/* Primer slide con imagen y texto */}
       <div>
         <img
