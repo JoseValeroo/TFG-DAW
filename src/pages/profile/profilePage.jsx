@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Avatar, List, Button, Row, Col, Tag } from 'antd';
+import { Card, Avatar, List, Button, Tag, Tabs, Row, Col, Menu, Badge } from 'antd';
 import { 
   MailOutlined, 
   EnvironmentOutlined, 
@@ -8,7 +8,13 @@ import {
   LikeOutlined, 
   CommentOutlined, 
   ShareAltOutlined, 
-  SaveOutlined 
+  SaveOutlined, 
+  SettingOutlined,
+  MessageOutlined,
+  BellOutlined,
+  StopOutlined,
+  UsergroupAddOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import 'antd/dist/reset.css'; // Importa los estilos de Ant Design
 import './profile.css'; // Importa el archivo CSS
@@ -49,11 +55,15 @@ const ProfilePage = () => {
   const seguidores = [
     { id: 1, nombre: 'Juan Pérez', foto: 'https://i.pravatar.cc/150?img=1' },
     { id: 2, nombre: 'María López', foto: 'https://i.pravatar.cc/150?img=2' },
+    { id: 3, nombre: 'María López', foto: 'https://i.pravatar.cc/150?img=2' },
+    { id: 4, nombre: 'María López', foto: 'https://i.pravatar.cc/150?img=2' },
   ];
 
   const seguidos = [
     { id: 1, nombre: 'Ana Martín', foto: 'https://i.pravatar.cc/150?img=4' },
     { id: 2, nombre: 'Pedro Ruiz', foto: 'https://i.pravatar.cc/150?img=5' }, 
+    { id: 3, nombre: 'Pedro Ruiz', foto: 'https://i.pravatar.cc/150?img=5' }, 
+    { id: 4, nombre: 'Ana Martín', foto: 'https://i.pravatar.cc/150?img=4' },
   ];
 
   return (
@@ -62,7 +72,7 @@ const ProfilePage = () => {
         {/* Card 1: Imagen y datos del usuario */}
         <div className="profile-card" style={{ display: 'flex', flexDirection: 'column', height: '50%' }}>
           <Card
-            style={{ height: '100%', width: '100%' }}
+            style={{ height: '100%', width: '100%', marginTop:'-0.5vh'}}
             cover={<img alt="cover" src={profileData.coverPhoto} />}
           >
             <Meta
@@ -131,7 +141,7 @@ const ProfilePage = () => {
                     ]}
                   >
                     <List.Item.Meta
-                      avatar={<Avatar src={post.avatar} />}
+                      avatar={<Avatar src={post.avatar} />} 
                       title={<a href="#!">{post.title}</a>}
                       description={post.description}
                     />
@@ -142,109 +152,141 @@ const ProfilePage = () => {
           </div>
 
           {/* Cards de Multimedia y Seguidores/Seguidos */}
-          <div className="media-content-card" style={{ display: 'flex', gap: '20px' }}>
-            <Card title="Contenido Multimedia" style={{ width: '50%' }}>
-              <video controls style={{ width: '70%', display:'flex'}}>
-                <source src="" type="video/mp4" />
-                Tu navegador no soporta el elemento de video.
-              </video>
-            </Card>
-            <Card title="Seguidores y Seguidos" style={{ width: '50%' }}>
+          <div style={{display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+            <div className="media-content-card" style={{ display: 'flex', gap: '20px', width: '50%' }}>
+              <Card style={{width:'100%'}}>
+                <Tabs defaultActiveKey="1" centered >   
+                  {/* Tab de Seguidores */}
+                  <Tabs.TabPane tab="Seguidores" key="1">
+                    <List
+                      dataSource={seguidores}
+                      renderItem={item => (
+                        <List.Item
+                          actions={[<Button type="primary" shape="round">Seguir</Button>]}
+                        >
+                          <List.Item.Meta
+                            avatar={<Avatar src={item.foto} />}
+                            title={item.nombre}
+                            description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
+                          />
+                        </List.Item>
+                      )}
+                    />
+                  </Tabs.TabPane>
+                  {/* Tab de Seguidos */}
+                  <Tabs.TabPane tab="Seguidos" key="2">
+                    <List
+                      dataSource={seguidos}
+                      renderItem={item => (
+                        <List.Item
+                          actions={[<Button type="default" shape="round">Dejar Seguir</Button>]}
+                        >
+                          <List.Item.Meta
+                            avatar={<Avatar src={item.foto} />}
+                            title={item.nombre}
+                            description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
+                          />
+                        </List.Item>
+                      )}
+                    />
+                  </Tabs.TabPane>
+                </Tabs>
+              </Card>
+            </div>
+
+            {/* Cards de Logros, Intereses y Estadísticas */}
+            <div className="mid-cards" style={{width:'50%', height:'10vh'}}>
               <Row gutter={[16, 16]}>
-                {/* Seguidores */}
-                <Col span={12}>
-                  <h4>Seguidores</h4>
-                  <List
-                    dataSource={seguidores}
-                    renderItem={item => (
-                      <List.Item
-                        actions={[<Button type="primary" shape="round">Seguir</Button>]}
-                      >
-                        <List.Item.Meta
-                          avatar={<Avatar src={item.foto} />}
-                          title={item.nombre}
-                          description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
-                        />
-                      </List.Item>
-                    )}
-                  />
+                <Col xs={24} sm={12} lg={12}>
+                  <div className="achievements-card">
+                    <Card title="Logros">
+                      <ul>
+                        <li>Certificación en AWS</li>
+                        <li>1000+ estrellas en proyectos de GitHub</li>
+                      </ul>
+                    </Card>
+                  </div>
                 </Col>
 
-                {/* Seguidos */}
-                <Col span={12}>
-                  <h4>Seguidos</h4>
-                  <List
-                    dataSource={seguidos}
-                    renderItem={item => (
-                      <List.Item
-                        actions={[<Button type="default" shape="round">Dejar Seguir</Button>]}
-                      >
-                        <List.Item.Meta
-                          avatar={<Avatar src={item.foto} />}
-                          title={item.nombre}
-                          description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
-                        />
-                      </List.Item>
-                    )}
-                  />
+                <Col xs={24} sm={12} lg={12}>
+                  <div className="tags-card">
+                    <Card title="Intereses">
+                      <div>
+                        <Tag color="blue">React</Tag>
+                        <Tag color="green">Node.js</Tag>
+                        <Tag color="purple">Diseño UX</Tag>
+                        <Tag color="gold">Bases de Datos</Tag>
+                        <Tag color="red">DevOps</Tag>
+                        <Tag color="green">Node.js</Tag>
+                        <Tag color="blue">JavaScript</Tag>
+                        <Tag color="green">Python</Tag>
+                        <Tag color="orange">Docker</Tag>
+                        <Tag color="lime">Kubernetes</Tag>
+                        <Tag color="gray">Cybersecurity</Tag>
+                      </div>
+                    </Card>
+                  </div>
+                </Col>
+
+                <Col xs={24} sm={12} lg={12}>
+                  <div className="stats-card">
+                    <Card title="Estadísticas de Actividad">
+                      <ul>
+                        <li>Publicaciones: 35</li>
+                        <li>Comentarios: 120</li>
+                        <li>Interacciones: 500</li>
+                      </ul>
+                    </Card>
+                  </div>
+                </Col>
+
+                <Col xs={24} sm={12} lg={12}>
+                  <div className="skills-card">
+                    <Card title="Habilidades">
+                      <ul>        
+                        <li>React.js</li>
+                        <li>Node.js</li>
+                        <li>MongoDB</li>
+                      </ul>
+                    </Card>
+                  </div>
                 </Col>
               </Row>
-            </Card>
+            </div>
           </div>
-
-          {/* Cards de Logros, Intereses y Estadísticas */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'nowrap' }} className="mid-cards">
-            <div className="achievements-card">
-              <Card title="Logros">
-                <ul>
-                  <li>Certificación en AWS</li>
-                  <li>1000+ estrellas en proyectos de GitHub</li>
-                  <li>Finalista en hackatón de Google</li>
-                </ul>
-              </Card>
-            </div>
-
-            <div className="tags-card">
-              <Card title="Intereses">
-                <div>
-                  <Tag color="blue">React</Tag>
-                  <Tag color="green">Node.js</Tag>
-                  <Tag color="purple">Diseño UX</Tag>
-                  <Tag color="gold">Bases de Datos</Tag>
-                  <Tag color="red">DevOps</Tag>
-                  <Tag color="green">Node.js</Tag>
-                  <Tag color="blue">JavaScript</Tag>
-                  <Tag color="green">Python</Tag>
-                  <Tag color="orange">Docker</Tag>
-                  <Tag color="lime">Kubernetes</Tag>
-                  <Tag color="gray">Cybersecurity</Tag>
-                </div>
-              </Card>
-            </div>
-
-            <div className="stats-card">
-              <Card title="Estadísticas de Actividad">
-                <ul>
-                  <li>Publicaciones: 35</li>
-                  <li>Comentarios: 120</li>
-                  <li>Interacciones: 500</li>
-                </ul>
-              </Card>
-            </div>
-
-            {/* Nueva Card: Habilidades */}
-            <div className="skills-card">
-              <Card title="Habilidades">
-                <ul>
-                  <li>React.js</li>
-                  <li>Node.js</li>
-                  <li>MongoDB</li>
-                </ul>
-              </Card>
-            </div>
+          <div style={{display:'flex', justifyContent:'center'}}>
+            <Menu
+              mode="horizontal"
+              style={{
+                marginTop: '10px',
+                borderRadius: '8px',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                backgroundColor: '#fff',
+                padding: '0 20px',
+              }}
+            >
+              <Menu.Item key="1" icon={<SettingOutlined />}>
+                Configuración
+              </Menu.Item>
+              <Menu.Item key="2" icon={<MessageOutlined />}>
+                Mensajes
+              </Menu.Item>
+              <Menu.Item key="3" icon={<Badge count={1}><BellOutlined /></Badge>}>
+                Notificaciones
+              </Menu.Item>
+              <Menu.Item key="4" icon={<UsergroupAddOutlined />}>
+                Comunidades
+              </Menu.Item>
+              <Menu.Item key="5" icon={<UserOutlined />}>
+                Cuentas
+              </Menu.Item>
+              <Menu.Item key="6" icon={<StopOutlined />}>
+                Cerrar Sesion
+              </Menu.Item>
+            </Menu>
           </div>
         </div>
-      </div>
+      </div>  
     </div>
   );
 };
