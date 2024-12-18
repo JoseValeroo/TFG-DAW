@@ -9,10 +9,11 @@
 
 .Mitad_Izquierda {
   width: 40%; /* Ocupa el 40% del ancho */
- display: flex;
- justify-content: center;
- margin-right: 5px; /* Espacio entre las cards */
+  display: flex;
+  justify-content: center;
+  margin-right: 5px; /* Espacio entre las cards */
 }
+
 .Mitad_Derecha {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 columnas */
@@ -22,28 +23,47 @@
   overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
 }
 
+.card1, .card2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white; /* Fondo blanco para las tarjetas */
+  overflow: hidden; /* Evita el desbordamiento */
+  padding: 0;
+  margin: 0;
+
+}
+
 .card3 {
   display: grid;
   grid-template-columns: 1fr; /* Una columna para las tarjetas */
   gap: 16px; /* Espacio entre las tarjetas */
-  
-  max-height: 100vh; /* Asegura que el contenedor no exceda la altura del viewport */
+  height: 100%; /* Altura del contenedor */
   overflow-y: auto; /* Permite desplazamiento vertical si las tarjetas exceden la altura */
+  scrollbar-width: none; /* Firefox */
 }
-.card3::-webkit-scrollbar {
-  width: 0px; /* Establece el ancho de la barra de desplazamiento a 0 */
-  height: 0px; /* Para el scroll horizontal, también lo ocultamos */
-}
+
 .card4 {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 columnas */
   grid-template-rows: repeat(2, 1fr); /* 2 filas */
   gap: 16px;
- 
   width: 100%;
+  height: 100%;
 }
 
-.card {
-  max-width: 100%; /* Asegura que las tarjetas no excedan el ancho */
-  height: auto;
+.expanded-card { 
+  width: 100%; 
+  height: 100%; 
+  transition: all 0.3s ease-in-out;
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  background-color: rgba(0, 0, 0, 0.8); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 999; /* Asegura que esté por encima de otros elementos */ 
+  color: white;
 }

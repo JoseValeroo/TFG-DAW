@@ -1,9 +1,9 @@
 import React from 'react';
 import './CardPadre.css';
 
-const CardPadre = ({ image, title, subtitle, text, date }) => {
+const CardPadre = ({ onClick, image, title, subtitle, text, date }) => {
   return (
-    <div className="center">
+    <div className="center" onClick={onClick}>
       <div className="article-card">
         <div className="content">
           <p className="date">{date}</p>

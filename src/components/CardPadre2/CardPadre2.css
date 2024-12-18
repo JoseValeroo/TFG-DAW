@@ -5,7 +5,7 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);  /* Sombra */
     position: relative;
     overflow: hidden;  /* Asegura que la imagen de fondo no se salga */
-    background-size: cover;
+    background-size: contain;
     background-position: center; /* Asegura que la imagen esté centrada */
   }
   
