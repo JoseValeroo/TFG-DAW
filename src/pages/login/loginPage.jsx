@@ -28,7 +28,7 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
         <div className="logo-container">
           <img
             src={darkMode ? "/src/assets/Image/LURE-LOGO-WHITE.png" : "/src/assets/Image/LURE-LOGO.png"} 
-            alt="Lure logo" 
+            alt="Luree logo" 
           />
         </div>
 
