@@ -1,64 +1,88 @@
-/* Contenedor principal de la página */
-.profile-page {
+.profile-page, body{
+  background-color: #2b4c7e;
+}
+.content{
+  padding: 30px 20px 40px 20px;
+}
+.profile-page .content {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px;
-  background: #2b4c7e;
-}
-
-/* Contenedor de las tarjetas */
-.content {
-  display: flex;
-  flex-wrap: nowrap; /* Para que se acomode cuando el ancho sea pequeño */
-  justify-content: space-between; /* Se distribuyen las tarjetas de manera que ocupen el espacio */
-  width: 100%; /* Asegura que ocupe el ancho total */
-}
-
-/* Contenedor de la tarjeta de perfil */
-.profile-card {
-  flex: 1 1 60%; /* 60% del espacio disponible */
-  margin-right: 20px; /* Espacio a la derecha entre el perfil y las otras tarjetas */
-  max-width: 50vh;
-}
-
-/* Contenedor de las tarjetas adicionales */
-.other-cards {
-  flex: 1 1 35%; /* 35% del espacio disponible */
-  display: flex;
-  flex-direction: column; /* Para que las tarjetas se apilen de arriba hacia abajo */
-  gap: 20px; /* Espacio entre las tarjetas */
-}
-
-/* Contenedor de las tarjetas adicionales */
-.mid-cards {
-  display: flex;
-  flex-wrap: wrap; /* Permite que las tarjetas se acomoden en varias líneas si el ancho es pequeño */
-  justify-content: space-between; /* Distribuye las tarjetas de manera que ocupen el espacio disponible */
-  gap: 20px; /* Espacio entre las tarjetas */
-}
-
-/* Estilos para las tarjetas de Logros, Intereses, Estadísticas, y Habilidades */
-.achievements-card,
-.tags-card,
-.stats-card,
-.skills-card {
-  flex: 1 1 calc(50% - 20px); /* Ocupa el 50% del espacio disponible con un margen de 20px */
-}
-
-
-/* Estilo para el contenedor de cerrar sesión */
-.profile-page > .content > div {
-  display: flex;
+  justify-content: space-between;
   gap: 20px;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten en varias líneas si es necesario */
 }
 
-/* Ajustes para las tarjetas de logout */
-.profile-page .content .profile-page > .content > div > div {
-  flex: 1;
+.profile-page .profile-card {
+  flex: 0 1 30%; /* Ajusta el ancho del perfil */
+  min-width: 300px; /* Asegura que no se reduzca demasiado el tamaño */
 }
 
-.media-content-card>.ant-card-body{
+.profile-page .other-cards {
+  flex: 1.5;
+  min-width: 300px; /* Asegura que no se reduzca demasiado el tamaño */ 
+}
+
+.profile-page .menu-bar {
+  display: flex; /* Cambiado para que se ajuste al contenido */
+  justify-content: center; /* Centra los elementos del menú */
+  gap: 20px; /* Espacio entre los elementos del menú */
+  margin-top: 5%; /* Espacio entre las cards y el menu */
+}
+
+.ant-card > .ant-card-body {
+  padding: 10px; /* Espaciado dentro de las tarjetas */
+}
+
+
+.profile-page .about-card {
+  margin-top: 2vh; /* Agrega espacio entre la parte superior del profile card y la sección "Sobre mí" */
+}
+
+.post-card {
+  margin-bottom: 2vh;
+}
+
+.media-content {
   display: flex;
-  justify-content: center;
+  gap: 20px; /* Añadimos separación entre los divs dentro de media-content */
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  margin-top: 2vh;
 }
+
+.media-content-card, .mid-cards {
+  width: 50%; /* Ambos ocupan el 50% del espacio disponible */
+}
+
+@media (min-width: 768px) and (max-width: 1000px) {
+  .media-content {
+    flex-direction: column; /* Cambia la dirección a columna */
+  }
+
+  .media-content-card,
+  .mid-cards {
+    width: 100%; /* Ambos divs ocupan el 100% del ancho */
+  }
+}
+
+/* Media query para pantallas menores de 768px */
+@media (max-width: 768px) {
+  .media-content {
+    flex-direction: column; /* Cambia la dirección a columna */
+  }
+
+  .media-content-card,
+  .mid-cards {
+    width: 100%; /* Ambos divs ocupan el 100% del ancho */
+  }
+
+  .profile-page .content {
+    flex-direction: column; /* Cambia la disposición de las cards a columna */
+    align-items: center; /* Alinea los elementos al centro */
+  }
+}
+
+@media (max-width: 515px) {
+  .profile-card{
+    width: 56vh;
+  }
+}
+

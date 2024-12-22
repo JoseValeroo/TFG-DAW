@@ -1,40 +1,61 @@
 import React, { useState } from 'react';
+import Axios from 'axios';
+
 import './Register.css';
 import 'font-awesome/css/font-awesome.min.css';
 
-function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
+function Register({ onRegisterSuccess, onToggleLogin }) {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
-  const [darkMode, setDarkMode] = useState(false); // Estado para alternar entre claro y oscuro
+  const [darkMode, setDarkMode] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!username || !email || !password || !confirmPassword) {
+    if (!username || !password || !confirmPassword) {
       setError('Por favor, completa todos los campos.');
+      setTimeout(() => setError(''), 3000);  // Elimina el mensaje de error después de 3 segundos
       return;
     }
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden.');
+      setTimeout(() => setError(''), 3000);  // Elimina el mensaje de error después de 3 segundos
       return;
     }
-    console.log('Registro exitoso:', { username, email, password });
     setError('');
     onRegisterSuccess();
+    add();  // Llamar a la función de agregar usuario después de la validación
+  };
+
+  const add = () => {
+    Axios.post("http://localhost:3001/create", {
+      username: username,
+      password: password
+    }).then(() => {
+      setSuccessMessage("Usuario creado correctamente");
+      setTimeout(() => setSuccessMessage(''), 3000);  // Elimina el mensaje de éxito después de 3 segundos
+      // Vaciar los campos después de un registro exitoso
+      setUsername('');
+      setPassword('');
+      setConfirmPassword('');
+    }).catch(() => {
+      setError('Hubo un error al crear el usuario');
+      setTimeout(() => setError(''), 3000);  // Elimina el mensaje de error después de 3 segundos
+    });
   };
 
   return (
     <div className={`register-container ${darkMode ? 'dark-mode' : ''}`}>
       <div className="register-card">
         <div className="register-logo">
-        <img
-          src={darkMode ? "/src/assets/Image/LURE-LOGO-WHITE.png" : "/src/assets/Image/LURE-LOGO.png"} 
-          alt="Lure logo" 
-        />
+          <img
+            src={darkMode ? "/src/assets/Image/LURE-LOGO-WHITE.png" : "/src/assets/Image/LURE-LOGO.png"} 
+            alt="Lure logo" 
+          />
         </div>
         <h2>Crea tu cuenta</h2>
         <p className="subheading">Crea una cuenta para continuar</p>
@@ -45,16 +66,6 @@ function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
             placeholder="Nombre de usuario"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="register-input input-common"
-            required
-          />
-
-          <label htmlFor="" id='label-input'>Email</label>
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             className="register-input input-common"
             required
           />
@@ -93,7 +104,7 @@ function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
               className="toggle-password"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {showPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
+              {showConfirmPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
             </button>
           </div>
 
@@ -101,7 +112,10 @@ function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
         </form>
 
         <div className="register-buttons">
-          <button type="submit" className="register-button">Registrarse</button>
+          <button type="submit" className="register-button" onClick={handleSubmit}>Registrarse</button>
+        </div>
+        <div>
+          {successMessage && <p className="success-message">{successMessage}</p>} 
         </div>
         <div className="register-footer">
           <p>¿Ya tienes una cuenta? <a href="login" onClick={onToggleLogin}>Inicia sesión</a></p>
@@ -115,11 +129,9 @@ function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
         >
           {darkMode ? 'Modo Claro' : 'Modo Oscuro'}
         </button>
-
-        
       </div>
     </div>
   );
 }
 
-export default RegisterPage;
+export default Register;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, Avatar, List, Button, Tag, Tabs, Row, Col, Menu, Badge } from 'antd';
 import { 
   MailOutlined, 
@@ -40,6 +41,8 @@ const posts = [
 ];
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
+
   const profileData = {
     avatar: "https://via.placeholder.com/150",
     coverPhoto: "https://via.placeholder.com/300x150",
@@ -49,7 +52,7 @@ const ProfilePage = () => {
     birthday: "15 de agosto de 1990",
     followers: 1200,
     following: 300,
-    email: "john.doe@example.com",
+    email: "john.doe@gmail.com",
   };
 
   const seguidores = [
@@ -66,18 +69,31 @@ const ProfilePage = () => {
     { id: 4, nombre: 'Ana Martín', foto: 'https://i.pravatar.cc/150?img=4' },
   ];
 
+  const handleLogout = async () => {
+    try {
+        await fetch('http://localhost:3001/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        localStorage.removeItem('token');  // Elimina el token
+
+        // Redirige al login
+        navigate('/login');  // Utiliza navigate aquí
+    } catch (error) {
+        console.error("Error al cerrar sesión", error);
+    }
+  };
+
   return (
     <div className="profile-page">
       <div className="content">
         {/* Card 1: Imagen y datos del usuario */}
-        <div className="profile-card" style={{ display: 'flex', flexDirection: 'column', height: '50%' }}>
-          <Card
-            style={{ height: '100%', width: '100%', marginTop:'-0.5vh'}}
-            cover={<img alt="cover" src={profileData.coverPhoto} />}
-          >
+        <div className="profile-card">
+          <Card className="profile-cover-card" cover={<img alt="cover" src={profileData.coverPhoto} />}>
             <Meta
               avatar={<Avatar size={64} src={profileData.avatar} />}
-              title={profileData.name}
+              title={profileData.name}  
               description={profileData.bio}
             />
             <List itemLayout="horizontal">
@@ -92,7 +108,7 @@ const ProfilePage = () => {
                 <List.Item.Meta
                   avatar={<CalendarOutlined />}
                   title="Fecha de nacimiento"
-                  description={profileData.birthday}
+                  description={profileData.birthday}    
                 />
               </List.Item>
               <List.Item>
@@ -123,7 +139,7 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Cards adicionales */}
+        {/* Cards adicionales */}   
         <div className="other-cards">
           {/* Card 4: Posts del usuario */}
           <div className="posts-card">
@@ -152,10 +168,10 @@ const ProfilePage = () => {
           </div>
 
           {/* Cards de Multimedia y Seguidores/Seguidos */}
-          <div style={{display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-            <div className="media-content-card" style={{ display: 'flex', gap: '20px', width: '50%' }}>
-              <Card style={{width:'100%'}}>
-                <Tabs defaultActiveKey="1" centered >   
+          <div className="media-content">
+            <div className="media-content-card">
+              <Card>
+                <Tabs defaultActiveKey="1" centered>
                   {/* Tab de Seguidores */}
                   <Tabs.TabPane tab="Seguidores" key="1">
                     <List
@@ -195,7 +211,7 @@ const ProfilePage = () => {
             </div>
 
             {/* Cards de Logros, Intereses y Estadísticas */}
-            <div className="mid-cards" style={{width:'50%', height:'10vh'}}>
+            <div className="mid-cards">
               <Row gutter={[16, 16]}>
                 <Col xs={24} sm={12} lg={12}>
                   <div className="achievements-card">
@@ -254,39 +270,32 @@ const ProfilePage = () => {
               </Row>
             </div>
           </div>
-          <div style={{display:'flex', justifyContent:'center'}}>
-            <Menu
-              mode="horizontal"
-              style={{
-                marginTop: '10px',
-                borderRadius: '8px',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                backgroundColor: '#fff',
-                padding: '0 20px',
-              }}
-            >
-              <Menu.Item key="1" icon={<SettingOutlined />}>
-                Configuración
-              </Menu.Item>
-              <Menu.Item key="2" icon={<MessageOutlined />}>
-                Mensajes
-              </Menu.Item>
-              <Menu.Item key="3" icon={<Badge count={1}><BellOutlined /></Badge>}>
-                Notificaciones
-              </Menu.Item>
-              <Menu.Item key="4" icon={<UsergroupAddOutlined />}>
-                Comunidades
-              </Menu.Item>
-              <Menu.Item key="5" icon={<UserOutlined />}>
-                Cuentas
-              </Menu.Item>
-              <Menu.Item key="6" icon={<StopOutlined />}>
-                Cerrar Sesion
-              </Menu.Item>
-            </Menu>
+            <div className="menu-bar">
+              <Menu mode="horizontal">
+                <Menu.Item key="1">Inicio</Menu.Item>
+                <Menu.Item key="2">Perfil</Menu.Item>
+                <Menu.Item key="3">Configuración</Menu.Item>
+                <Menu.Item key="4">
+                  <Badge count={5} dot>
+                    <BellOutlined />
+                  </Badge>
+                </Menu.Item>
+                <Menu.Item key="5">
+                  <MessageOutlined />
+                </Menu.Item>
+                <Menu.Item key="6" onClick={handleLogout}>
+                  <StopOutlined />
+                </Menu.Item>
+                <Menu.Item key="7"> 
+                  <UsergroupAddOutlined />
+                </Menu.Item>
+                <Menu.Item key="8">
+                  <SettingOutlined />
+                </Menu.Item>
+              </Menu>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 };

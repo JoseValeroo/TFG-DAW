@@ -114,10 +114,16 @@ h2 {
 }
 
 /* Mensaje de error */
-.error-message {
-  color: #d9534f;
+.success-message {
+  color: green;
+  margin-top: 10px;
   font-size: 14px;
-  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
 }
 
 /* Footer */
