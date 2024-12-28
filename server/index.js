@@ -21,7 +21,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-const SECRET_KEY = "lure"; // Cambia por una clave segura y guárdala en .env
+const SECRET_KEY = "lure"; // clave segura
 
 // Registro de usuario
 app.post("/create", async (req, res) => {
