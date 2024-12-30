@@ -25,16 +25,17 @@ const SECRET_KEY = "lure"; // clave segura
 
 // Registro de usuario
 app.post("/create", async (req, res) => {
-    const { username, password } = req.body;
+    const { user_handle, email_address, first_name, last_name, phone_number, password } = req.body;
+    console.log(req.body); // Asegúrate de que todos los datos lleguen correctamente al backend
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         db.query(
-            "INSERT INTO usuarios (usuario, password) VALUES (?,?)",
-            [username, hashedPassword],
+            "INSERT INTO users (user_handle, email_address, first_name, last_name, phone_number, password) VALUES (?, ?, ?, ?, ?, ?)",
+            [user_handle, email_address, first_name, last_name, phone_number, hashedPassword],
             (err, result) => {
                 if (err) {
-                    console.log(err);
+                    console.log("Error SQL:", err); // Log para detalles
                     res.status(500).send("Error al registrar el usuario");
                 } else {
                     res.send("Usuario registrado correctamente");
@@ -42,18 +43,18 @@ app.post("/create", async (req, res) => {
             }
         );
     } catch (error) {
-        console.log(error);
+        console.log("Error backend:", error);
         res.status(500).send("Error al registrar el usuario");
     }
 });
 
 // Login de usuario
 app.post("/login", (req, res) => {
-    const { username, password } = req.body;
+    const { user_handle, password } = req.body;
 
     db.query(
-        "SELECT * FROM usuarios WHERE usuario = ?",
-        [username],
+        "SELECT * FROM users WHERE user_handle = ?",
+        [user_handle],
         async (err, results) => {
             if (err) {
                 console.log(err);
@@ -68,7 +69,7 @@ app.post("/login", (req, res) => {
                     res.status(401).send("Contraseña incorrecta");
                 } else {
                     const token = jwt.sign(
-                        { id: user.id, username: user.usuario },
+                        { id: user.user_id, user_handle: user.user_handle },
                         SECRET_KEY,
                         { expiresIn: "1h" }
                     );
@@ -98,7 +99,7 @@ app.get("/profile", (req, res) => {
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         console.log("Token decodificado:", decoded); // Verifica la carga útil del token
-        res.send(`Bienvenido, ${decoded.username}`);
+        res.send(`Bienvenido, ${decoded.user_handle}`);
     } catch (err) {
         res.status(401).send("Token inválido");
     }
@@ -111,7 +112,6 @@ app.post("/logout", (req, res) => {
     res.send("Logout exitoso");
 });
 
-
 app.listen(3001, () => {
-    console.log("Server running on port 3001");
+    console.log("Server running on port 3001"); 
 });

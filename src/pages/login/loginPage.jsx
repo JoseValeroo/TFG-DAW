@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importar el hook useNavigate
+import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import './Login.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -10,9 +10,8 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [darkMode, setDarkMode] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const navigate = useNavigate(); // Instanciar el hook useNavigate
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,12 +24,11 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
         try {
             const response = await Axios.post(
                 'http://localhost:3001/login',
-                { username, password },
+                { user_handle: username, password },
                 { withCredentials: true }
             );
 
             if (response.status === 200) {
-                setIsAuthenticated(true);
                 if (onLoginSuccess) {
                     onLoginSuccess();
                 }
@@ -50,60 +48,57 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
                         alt="Lure logo"
                     />
                 </div>
+                <h2>Bienvenido de nuevo</h2>
+                <p className="subheading">Inicia sesión para continuar</p>
 
-                {!isAuthenticated ? (
-                    <>
-                        <h2>Bienvenido de nuevo</h2>
-                        <p className="subheading">Inicia sesión para continuar</p>
+                <form onSubmit={handleSubmit} className="login-form">
+                    <div className="input-group">
+                        <label htmlFor="username">Usuario</label>
+                        <input
+                            id="username"
+                            type="text"
+                            placeholder="Nombre de usuario"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="login-input same-width"
+                            required
+                            autoComplete="username"
+                        />
+                    </div>
 
-                        <form onSubmit={handleSubmit} className="login-form">
-                            <div className="input-group">
-                                <label htmlFor="username" id='label-input'>Usuario</label>
-                                <input
-                                    id="username"
-                                    type="text"
-                                    placeholder="Nombre de usuario"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    className="login-input same-width"
-                                    required
-                                    autoComplete="username"
-                                />
-                            </div>
-
-                            <div className="input-group">
-                                <label htmlFor="password" id='password-input'>Contraseña</label>
-                                <div className="password-container">
-                                    <input
-                                        id="password"
-                                        type={showPassword ? 'text' : 'password'}
-                                        placeholder="Contraseña"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="password-input same-width"
-                                        required
-                                        autoComplete="current-password"
-                                    />
-                                    <button
-                                        type="button"
-                                        className="toggle-password"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                    >
-                                        {showPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {error && <p className="error-message">{error}</p>}
-
-                            <button type="submit" className="login-button same-width">
-                                Iniciar sesión
+                    <div className="input-group">
+                        <label htmlFor="password">Contraseña</label>
+                        <div className="password-container">
+                            <input
+                                id="password"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Contraseña"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="password-input same-width"
+                                required
+                                autoComplete="current-password"
+                            />
+                            <button
+                                type="button"
+                                className="toggle-password"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? (
+                                    <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                                ) : (
+                                    <i className="fa fa-eye" aria-hidden="true"></i>
+                                )}
                             </button>
-                        </form>
-                    </>
-                ) : (
-                    <h1>¡Bienvenido al sistema!</h1>
-                )}
+                        </div>
+                    </div>
+
+                    {error && <p className="error-message">{error}</p>}
+
+                    <button type="submit" className="login-button same-width">
+                        Iniciar sesión
+                    </button>
+                </form>
 
                 <div className="login-footer">
                     <a href="#" onClick={onToggleForgotPassword}>

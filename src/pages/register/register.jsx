@@ -8,6 +8,10 @@ function Register({ onRegisterSuccess, onToggleLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
@@ -16,36 +20,45 @@ function Register({ onRegisterSuccess, onToggleLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!username || !password || !confirmPassword) {
+    if (!username || !password || !confirmPassword || !email || !firstName || !lastName || !phoneNumber) {
       setError('Por favor, completa todos los campos.');
-      setTimeout(() => setError(''), 3000);  // Elimina el mensaje de error después de 3 segundos
+      setTimeout(() => setError(''), 3000);
       return;
     }
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden.');
-      setTimeout(() => setError(''), 3000);  // Elimina el mensaje de error después de 3 segundos
+      setTimeout(() => setError(''), 3000);
       return;
     }
     setError('');
-    onRegisterSuccess();
-    add();  // Llamar a la función de agregar usuario después de la validación
+    add(); // Llamar a la función de agregar usuario después de la validación
   };
 
   const add = () => {
     Axios.post("http://localhost:3001/create", {
-      username: username,
-      password: password
-    }).then(() => {
-      setSuccessMessage("Usuario creado correctamente");
-      setTimeout(() => setSuccessMessage(''), 3000);  // Elimina el mensaje de éxito después de 3 segundos
-      // Vaciar los campos después de un registro exitoso
-      setUsername('');
-      setPassword('');
-      setConfirmPassword('');
-    }).catch(() => {
-      setError('Hubo un error al crear el usuario');
-      setTimeout(() => setError(''), 3000);  // Elimina el mensaje de error después de 3 segundos
-    });
+      user_handle: username,
+      email_address: email,
+      first_name: firstName,
+      last_name: lastName,
+      phone_number: phoneNumber,
+      password: password,
+    })
+      .then(() => {
+        setSuccessMessage("Usuario creado correctamente");
+        setTimeout(() => setSuccessMessage(''), 3000);
+        setUsername('');
+        setPassword('');
+        setConfirmPassword('');
+        setEmail('');
+        setFirstName('');
+        setLastName('');
+        setPhoneNumber('');
+      })
+      .catch((error) => {
+        console.log(error);
+        setError('Hubo un error al crear el usuario');
+        setTimeout(() => setError(''), 3000);
+      });
   };
 
   return (
@@ -60,7 +73,9 @@ function Register({ onRegisterSuccess, onToggleLogin }) {
         <h2>Crea tu cuenta</h2>
         <p className="subheading">Crea una cuenta para continuar</p>
         <form onSubmit={handleSubmit} className="register-form">
-          <label htmlFor="" id='label-input'>Usuario</label>
+          {/* Input fields */}
+          {/* Aquí están las nuevas entradas con los estados correspondientes */}
+          <label htmlFor="">Usuario</label>
           <input
             type="text"
             placeholder="Nombre de usuario"
@@ -70,7 +85,48 @@ function Register({ onRegisterSuccess, onToggleLogin }) {
             required
           />
 
-          <label htmlFor="" id='label-input'>Contraseña</label>
+          <label htmlFor="email">Correo Electrónico</label>
+          <input
+            type="email"
+            placeholder="Correo Electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="register-input input-common"
+            required
+          />
+
+          <label htmlFor="first_name">Nombre</label>
+          <input
+            type="text"
+            placeholder="Nombre"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="register-input input-common"
+            required
+          />
+
+          <label htmlFor="last_name">Apellido</label>
+          <input
+            type="text"
+            placeholder="Apellido"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="register-input input-common"
+            required
+          />
+
+          <label htmlFor="phone_number">Número de Teléfono</label>
+          <input
+            type="text"
+            placeholder="Número de Teléfono"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="register-input input-common"
+            required
+          />
+
+          {/* Contraseñas */}
+          <label htmlFor="">Contraseña</label>
           <div className="password-container">
             <input
               type={showPassword ? 'text' : 'password'}
@@ -85,11 +141,11 @@ function Register({ onRegisterSuccess, onToggleLogin }) {
               className="toggle-password"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
+              {showPassword ? <i className="fa fa-eye-slash" /> : <i className="fa fa-eye" />}
             </button>
           </div>
 
-          <label htmlFor="" id='label-input'>Confirmar Contraseña</label>
+          <label htmlFor="">Confirmar Contraseña</label>
           <div className="password-container">
             <input
               type={showConfirmPassword ? 'text' : 'password'}
@@ -104,24 +160,25 @@ function Register({ onRegisterSuccess, onToggleLogin }) {
               className="toggle-password"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {showConfirmPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
+              {showConfirmPassword ? <i className="fa fa-eye-slash" /> : <i className="fa fa-eye" />}
             </button>
           </div>
 
+          {/* Mensajes de error y éxito */}
           {error && <p className="error-message">{error}</p>}
+          {successMessage && <p className="success-message">{successMessage}</p>}
         </form>
 
+        {/* Botones */}
         <div className="register-buttons">
-          <button type="submit" className="register-button" onClick={handleSubmit}>Registrarse</button>
-        </div>
-        <div>
-          {successMessage && <p className="success-message">{successMessage}</p>} 
+          <button type="submit" className="register-button" onClick={handleSubmit}>
+            Registrarse
+          </button>
         </div>
         <div className="register-footer">
           <p>¿Ya tienes una cuenta? <a href="login" onClick={onToggleLogin}>Inicia sesión</a></p>
           <p><a href="/">Volver al Inicio</a></p>
         </div>
-        
         <button
           type="button"
           onClick={() => setDarkMode(!darkMode)}
