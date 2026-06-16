@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Markdown - OTD Comillas</title>
+    <style>
+        :root {
+            --azul-comillas: #003366;
+            --azul-claro: #e8f4fc;
+            --gris-codigo: #f5f5f5;
+            --borde: #ddd;
+            --exito: #28a745;
+            --warning: #ffc107;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--azul-comillas);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.4em;
+            font-weight: 500;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--exito);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #218838;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--azul-comillas);
+        }
+
+        .btn-secondary:hover {
+            background: var(--azul-claro);
+        }
+
+        .toolbar {
+            background: white;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--borde);
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar button {
+            padding: 8px 12px;
+            border: 1px solid var(--borde);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .toolbar button:hover {
+            background: var(--azul-claro);
+            border-color: var(--azul-comillas);
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            background: var(--borde);
+            margin: 0 10px;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: calc(100vh - 120px);
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--azul-claro);
+            padding: 12px 20px;
+            font-weight: 600;
+            color: var(--azul-comillas);
+            border-bottom: 1px solid var(--borde);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-editor {
+            border-right: 1px solid var(--borde);
+        }
+
+        #editor {
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            border: none;
+            resize: none;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: white;
+            outline: none;
+        }
+
+        #preview {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: white;
+            line-height: 1.6;
+        }
+
+        /* Preview Styles */
+        #preview h1 { font-size: 2em; margin: 0.67em 0; color: var(--azul-comillas); border-bottom: 2px solid var(--azul-comillas); padding-bottom: 10px; }
+        #preview h2 { font-size: 1.5em; margin: 0.83em 0; color: var(--azul-comillas); border-bottom: 1px solid var(--borde); padding-bottom: 8px; }
+        #preview h3 { font-size: 1.17em; margin: 1em 0; color: #444; }
+        #preview h4 { font-size: 1em; margin: 1.33em 0; color: #555; }
+        #preview p { margin: 1em 0; }
+        #preview ul, #preview ol { margin: 1em 0; padding-left: 30px; }
+        #preview li { margin: 0.5em 0; }
+        #preview code { background: var(--gris-codigo); padding: 2px 6px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.9em; }
+        #preview pre { background: var(--gris-codigo); padding: 15px; border-radius: 8px; overflow-x: auto; margin: 1em 0; }
+        #preview pre code { background: none; padding: 0; }
+        #preview blockquote { border-left: 4px solid var(--azul-comillas); margin: 1em 0; padding: 10px 20px; background: var(--azul-claro); color: #555; }
+        #preview table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+        #preview th, #preview td { border: 1px solid var(--borde); padding: 10px; text-align: left; }
+        #preview th { background: var(--azul-comillas); color: white; }
+        #preview tr:nth-child(even) { background: var(--gris-codigo); }
+        #preview hr { border: none; border-top: 2px solid var(--borde); margin: 2em 0; }
+        #preview a { color: var(--azul-comillas); }
+        #preview img { max-width: 100%; }
+
+        .file-info {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .status.show {
+            opacity: 1;
+        }
+
+        .status.success {
+            background: var(--exito);
+        }
+
+        .status.warning {
+            background: var(--warning);
+            color: #333;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: var(--azul-comillas);
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--borde);
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .help-link {
+            font-size: 12px;
+            color: white;
+            opacity: 0.8;
+        }
+
+        .help-link:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+
+            .panel-editor {
+                border-right: none;
+                border-bottom: 1px solid var(--borde);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>Editor Markdown</h1>
+            <a href="GUIA_MARKDOWN.html" target="_blank" class="help-link">Ver guía de sintaxis</a>
+        </div>
+        <div class="header-buttons">
+            <button class="btn btn-secondary" onclick="cargarArchivo()">
+                <span>📂</span> Abrir .md
+            </button>
+            <button class="btn btn-primary" onclick="guardarArchivo()">
+                <span>💾</span> Guardar .md
+            </button>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <button onclick="insertarTexto('# ', '')" title="Título 1">H1</button>
+        <button onclick="insertarTexto('## ', '')" title="Título 2">H2</button>
+        <button onclick="insertarTexto('### ', '')" title="Título 3">H3</button>
+        <div class="toolbar-separator"></div>
+        <button onclick="insertarTexto('**', '**')" title="Negrita"><b>B</b></button>
+        <button onclick="insertarTexto('*', '*')" title="Cursiva"><i>I</i></button>
+        <button onclick="insertarTexto('~~', '~~')" title="Tachado"><s>S</s></button>
+        <div class="toolbar-separator"></div>
+        <button onclick="insertarTexto('- ', '')" title="Lista">• Lista</button>
+        <button onclick="insertarTexto('1. ', '')" title="Lista numerada">1. Lista</button>
+        <button onclick="insertarTexto('- [ ] ', '')" title="Checkbox">☐ Check</button>
+        <div class="toolbar-separator"></div>
+        <button onclick="insertarTexto('[', '](url)')" title="Enlace">🔗 Enlace</button>
+        <button onclick="insertarTexto('`', '`')" title="Código inline">&lt;/&gt; Código</button>
+        <button onclick="insertarBloqueCodigo()" title="Bloque de código">{ } Bloque</button>
+        <div class="toolbar-separator"></div>
+        <button onclick="insertarTexto('> ', '')" title="Cita">❝ Cita</button>
+        <button onclick="insertarTexto('\n---\n', '')" title="Línea horizontal">― Línea</button>
+        <button onclick="insertarTabla()" title="Tabla">▦ Tabla</button>
+    </div>
+
+    <div class="main-container">
+        <div class="panel panel-editor">
+            <div class="panel-header">
+                <span>Editor Markdown</span>
+                <span class="file-info" id="fileInfo">Sin archivo cargado</span>
+            </div>
+            <textarea id="editor" placeholder="Escribe tu contenido en Markdown aquí...
+
+# Ejemplo de título
+
+Este es un párrafo de ejemplo con **negrita** y *cursiva*.
+
+## Lista de tareas
+
+- [ ] Primera tarea
+- [x] Segunda tarea completada
+- [ ] Tercera tarea
+
+## Tabla de ejemplo
+
+| Columna 1 | Columna 2 |
+|-----------|-----------|
+| Dato 1    | Dato 2    |
+"></textarea>
+        </div>
+        <div class="panel panel-preview">
+            <div class="panel-header">
+                <span>Vista Previa</span>
+                <span class="file-info">Actualización en tiempo real</span>
+            </div>
+            <div id="preview"></div>
+        </div>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <!-- Modal para nombre de archivo -->
+    <div class="modal-overlay" id="modalGuardar">
+        <div class="modal">
+            <h2>Guardar archivo</h2>
+            <input type="text" id="nombreArchivo" placeholder="nombre_archivo.md" value="">
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="confirmarGuardado()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const editor = document.getElementById('editor');
+        const preview = document.getElementById('preview');
+        const fileInfo = document.getElementById('fileInfo');
+        let nombreArchivoActual = '';
+
+        // Actualizar preview en tiempo real
+        editor.addEventListener('input', actualizarPreview);
+
+        // Inicializar
+        actualizarPreview();
+
+        function actualizarPreview() {
+            let md = editor.value;
+            let html = convertirMarkdown(md);
+            preview.innerHTML = html;
+        }
+
+        function convertirMarkdown(md) {
+            // Escapar HTML
+            md = md.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Bloques de código (antes que todo)
+            md = md.replace(/```(\w*)\n([\s\S]*?)```/g, function(match, lang, code) {
+                return '<pre><code class="language-' + lang + '">' + code.trim() + '</code></pre>';
+            });
+
+            // Código inline
+            md = md.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+            // Títulos
+            md = md.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+            md = md.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+            md = md.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+            md = md.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+            // Líneas horizontales
+            md = md.replace(/^---$/gm, '<hr>');
+
+            // Negrita y cursiva
+            md = md.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+            md = md.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            md = md.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            md = md.replace(/~~(.+?)~~/g, '<del>$1</del>');
+
+            // Enlaces
+            md = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+            // Checkboxes
+            md = md.replace(/^- \[x\] (.+)$/gm, '<p>☑ $1</p>');
+            md = md.replace(/^- \[ \] (.+)$/gm, '<p>☐ $1</p>');
+
+            // Listas no ordenadas
+            md = md.replace(/^- (.+)$/gm, '<li>$1</li>');
+            md = md.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+
+            // Listas ordenadas
+            md = md.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+            // Citas
+            md = md.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+            md = md.replace(/<\/blockquote>\n<blockquote>/g, '<br>');
+
+            // Tablas
+            md = md.replace(/^\|(.+)\|$/gm, function(match, content) {
+                if (content.match(/^[\s\-:|]+$/)) {
+                    return '<!--separator-->';
+                }
+                let cells = content.split('|').map(c => c.trim());
+                return '<tr>' + cells.map(c => '<td>' + c + '</td>').join('') + '</tr>';
+            });
+            md = md.replace(/(<tr>.*<\/tr>\n?)+/g, function(match) {
+                let rows = match.replace(/<!--separator-->\n?/g, '');
+                // Primera fila como header
+                rows = rows.replace(/<tr>(.*?)<\/tr>/, function(m, content) {
+                    return '<tr>' + content.replace(/<td>/g, '<th>').replace(/<\/td>/g, '</th>') + '</tr>';
+                });
+                return '<table>' + rows + '</table>';
+            });
+            md = md.replace(/<!--separator-->/g, '');
+
+            // Párrafos
+            md = md.replace(/^(?!<[hupbolt]|<\/|<li|<hr|<pre|<code|<table|<tr|☐|☑)(.+)$/gm, '<p>$1</p>');
+
+            // Limpiar líneas vacías extra
+            md = md.replace(/<p><\/p>/g, '');
+
+            return md;
+        }
+
+        function insertarTexto(antes, despues) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const texto = editor.value;
+            const seleccion = texto.substring(start, end) || 'texto';
+
+            editor.value = texto.substring(0, start) + antes + seleccion + despues + texto.substring(end);
+
+            // Posicionar cursor
+            const nuevaPos = start + antes.length + seleccion.length + despues.length;
+            editor.setSelectionRange(start + antes.length, start + antes.length + seleccion.length);
+            editor.focus();
+
+            actualizarPreview();
+        }
+
+        function insertarBloqueCodigo() {
+            const start = editor.selectionStart;
+            const texto = editor.value;
+            const bloque = '```csharp\n// Tu código aquí\n```\n';
+
+            editor.value = texto.substring(0, start) + bloque + texto.substring(start);
+            editor.setSelectionRange(start + 10, start + 28);
+            editor.focus();
+
+            actualizarPreview();
+        }
+
+        function insertarTabla() {
+            const start = editor.selectionStart;
+            const texto = editor.value;
+            const tabla = '\n| Columna 1 | Columna 2 | Columna 3 |\n|-----------|-----------|-----------|\n| Dato 1    | Dato 2    | Dato 3    |\n';
+
+            editor.value = texto.substring(0, start) + tabla + texto.substring(start);
+            editor.focus();
+
+            actualizarPreview();
+        }
+
+        function cargarArchivo() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.md,.markdown,.txt';
+
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    nombreArchivoActual = file.name;
+                    fileInfo.textContent = file.name;
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        editor.value = e.target.result;
+                        actualizarPreview();
+                        mostrarStatus('Archivo cargado: ' + file.name, 'success');
+                    };
+                    reader.readAsText(file);
+                }
+            };
+
+            input.click();
+        }
+
+        function guardarArchivo() {
+            document.getElementById('nombreArchivo').value = nombreArchivoActual || 'documento.md';
+            document.getElementById('modalGuardar').classList.add('show');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalGuardar').classList.remove('show');
+        }
+
+        function confirmarGuardado() {
+            let nombre = document.getElementById('nombreArchivo').value.trim();
+            if (!nombre) nombre = 'documento.md';
+            if (!nombre.endsWith('.md')) nombre += '.md';
+
+            const blob = new Blob([editor.value], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nombre;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            nombreArchivoActual = nombre;
+            fileInfo.textContent = nombre;
+
+            cerrarModal();
+            mostrarStatus('Archivo guardado: ' + nombre, 'success');
+        }
+
+        function mostrarStatus(mensaje, tipo) {
+            const status = document.getElementById('status');
+            status.textContent = mensaje;
+            status.className = 'status ' + tipo + ' show';
+
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 3000);
+        }
+
+        // Atajos de teclado
+        editor.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        guardarArchivo();
+                        break;
+                    case 'b':
+                        e.preventDefault();
+                        insertarTexto('**', '**');
+                        break;
+                    case 'i':
+                        e.preventDefault();
+                        insertarTexto('*', '*');
+                        break;
+                }
+            }
+        });
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cerrarModal();
+            }
+        });
+    </script>
+</body>
+</html>

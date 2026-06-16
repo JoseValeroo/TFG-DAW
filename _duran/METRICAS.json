@@ -1,0 +1,38 @@
+{
+    "version":  "1.0.0",
+    "sesiones":  [
+                     {
+                         "archivosModificados":  64,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          ".gitignore",
+                                          ".vite/deps/_metadata.json",
+                                          ".vite/deps/package.json",
+                                          "LICENSE",
+                                          "eslint.config.js",
+                                          "index.html",
+                                          "package-lock.json",
+                                          "package.json",
+                                          "public/vite.svg",
+                                          "src/App.css",
+                                          "src/App.jsx",
+                                          "src/assets/Icons/EyeClosed.svg",
+                                          "src/assets/Icons/EyeOpen.svg",
+                                          "src/assets/Icons/Logo.svg",
+                                          "src/assets/Image/colourful-gradient-abstract-logo-template.zip",
+                                          "src/assets/Image/comunidades.png",
+                                          "src/assets/Image/comunidaes.jpg",
+                                          "src/assets/Image/elomusk.jpg",
+                                          "src/assets/Image/news.png",
+                                          "src/assets/Image/perfil.webp"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-16 10:49:17"
+                     }
+                 ]
+}

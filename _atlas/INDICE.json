@@ -1,0 +1,347 @@
+﻿{
+  "_comentario": "Manifiesto ATLAS - Indice de toda la documentacion de referencia STIC.IA",
+  "_version": "3.0.0",
+  "_generado": "2026-02-11",
+  "_uso_futuro": "Preparado para consumo por servidor MCP de busqueda semantica",
+
+  "categorias": {
+    "estructura-tecnica": {
+      "descripcion": "Infraestructura, seguridad, arquitectura y stack tecnologico",
+      "documentos": [
+        {
+          "ruta": "Documentos_Base/01_Estructura_Tecnica/ESTRUCTURA_TECNICA.md",
+          "titulo": "Estructura Tecnica STIC",
+          "tipo": "guia",
+          "tags": ["infraestructura", "seguridad", "owasp", "key-vault", "blob-storage", "redis", "docker", "application-insights", "legacy"],
+          "descripcion": "Documento CRITICO: seguridad OWASP, infraestructura balanceada, Key Vault, Blob Storage, Redis, Docker Compose, App Insights"
+        },
+        {
+          "ruta": "Documentos_Base/01_Estructura_Tecnica/GUIA_ARQUITECTURA.md",
+          "titulo": "Guia de Arquitectura",
+          "tipo": "guia",
+          "tags": ["clean-architecture", "mediator", "mediatR", "perfiles", "basico", "estandar", "avanzado"],
+          "descripcion": "Perfiles de arquitectura (BASICO/ESTANDAR/AVANZADO), migracion MediatR a Mediator, patrones por capa"
+        },
+        {
+          "ruta": "Documentos_Base/01_Estructura_Tecnica/EDITOR_ESTRUCTURA_TECNICA.html",
+          "titulo": "Editor HTML de Estructura Tecnica",
+          "tipo": "plantilla",
+          "tags": ["editor", "html", "estructura-tecnica"],
+          "descripcion": "Editor interactivo para personalizar ESTRUCTURA_TECNICA.md"
+        }
+      ]
+    },
+
+    "diseno-usabilidad": {
+      "descripcion": "Guias de estilos UI, colores Comillas, accesibilidad",
+      "documentos": [
+        {
+          "ruta": "Documentos_Base/02_Diseno_Usabilidad/GUIA_ESTILOS.md",
+          "titulo": "Guia de Estilos Comillas",
+          "tipo": "guia",
+          "tags": ["ui", "css", "colores", "comillas", "accesibilidad", "wcag", "responsive"],
+          "descripcion": "Paleta de colores corporativos, tipografia, componentes UI, accesibilidad WCAG 2.1 AA"
+        },
+        {
+          "ruta": "Documentos_Base/02_Diseno_Usabilidad/EDITOR_GUIA_ESTILOS.html",
+          "titulo": "Editor HTML de Guia de Estilos",
+          "tipo": "plantilla",
+          "tags": ["editor", "html", "estilos"],
+          "descripcion": "Editor interactivo para personalizar GUIA_ESTILOS.md"
+        }
+      ]
+    },
+
+    "consideraciones-comunes": {
+      "descripcion": "RGPD, normativa, consideraciones legales y tecnicas transversales",
+      "documentos": [
+        {
+          "ruta": "Documentos_Base/03_Consideraciones_Comunes/CONSIDERACIONES.md",
+          "titulo": "Consideraciones Comunes",
+          "tipo": "guia",
+          "tags": ["rgpd", "normativa", "legal", "accesibilidad", "rendimiento", "internacionalizacion"],
+          "descripcion": "RGPD, normativa, accesibilidad, rendimiento y consideraciones transversales"
+        },
+        {
+          "ruta": "Documentos_Base/03_Consideraciones_Comunes/EDITOR_CONSIDERACIONES.html",
+          "titulo": "Editor HTML de Consideraciones",
+          "tipo": "plantilla",
+          "tags": ["editor", "html", "consideraciones"],
+          "descripcion": "Editor interactivo para personalizar CONSIDERACIONES.md"
+        }
+      ]
+    },
+
+    "plantillas-documentacion": {
+      "descripcion": "Plantillas para documentacion tecnica y funcional",
+      "documentos": [
+        {
+          "ruta": "Documentos_Base/04_Plantillas_Documentacion/PLANTILLA_DOC_TECNICA.md",
+          "titulo": "Plantilla Documentacion Tecnica",
+          "tipo": "plantilla",
+          "tags": ["documentacion", "tecnica", "plantilla", "adr"],
+          "descripcion": "Plantilla para generar documentacion tecnica de proyectos"
+        },
+        {
+          "ruta": "Documentos_Base/04_Plantillas_Documentacion/PLANTILLA_DOC_FUNCIONAL.md",
+          "titulo": "Plantilla Documentacion Funcional",
+          "tipo": "plantilla",
+          "tags": ["documentacion", "funcional", "plantilla", "usuario"],
+          "descripcion": "Plantilla para generar documentacion funcional/usuario"
+        },
+        {
+          "ruta": "Documentos_Base/04_Plantillas_Documentacion/SISTEMA_duran_CLAUDE.md",
+          "titulo": "Sistema de Contexto Claude",
+          "tipo": "guia",
+          "tags": ["contexto", "duran", "atlas", "claude", "sistema"],
+          "descripcion": "Explicacion del sistema DURAN/ATLAS y como Claude gestiona el contexto"
+        }
+      ]
+    },
+
+    "plantillas-sql": {
+      "descripcion": "Plantillas SQL Server para stored procedures, funciones, tablas y vistas",
+      "documentos": [
+        {
+          "ruta": "Documentos_Base/05_Plantillas_SQL/PLANTILLA_STORED_PROCEDURE.sql",
+          "titulo": "Plantilla Stored Procedure",
+          "tipo": "plantilla",
+          "tags": ["sql", "stored-procedure", "t-sql"],
+          "descripcion": "Plantilla estandar para stored procedures con manejo de errores"
+        },
+        {
+          "ruta": "Documentos_Base/05_Plantillas_SQL/PLANTILLA_FUNCION.sql",
+          "titulo": "Plantilla Funcion SQL",
+          "tipo": "plantilla",
+          "tags": ["sql", "funcion", "t-sql", "escalar", "tabla"],
+          "descripcion": "Plantilla para funciones escalares y con valor de tabla"
+        },
+        {
+          "ruta": "Documentos_Base/05_Plantillas_SQL/PLANTILLA_TABLA.sql",
+          "titulo": "Plantilla Tabla SQL",
+          "tipo": "plantilla",
+          "tags": ["sql", "tabla", "ddl", "create-table"],
+          "descripcion": "Plantilla para creacion de tablas con convenciones Comillas"
+        },
+        {
+          "ruta": "Documentos_Base/05_Plantillas_SQL/PLANTILLA_TABLA_CATALOGO.sql",
+          "titulo": "Plantilla Tabla Catalogo",
+          "tipo": "plantilla",
+          "tags": ["sql", "catalogo", "lookup", "tabla"],
+          "descripcion": "Plantilla para tablas de catalogo/lookup"
+        },
+        {
+          "ruta": "Documentos_Base/05_Plantillas_SQL/PLANTILLA_VISTA.sql",
+          "titulo": "Plantilla Vista SQL",
+          "tipo": "plantilla",
+          "tags": ["sql", "vista", "view"],
+          "descripcion": "Plantilla para vistas con convenciones vw_"
+        },
+        {
+          "ruta": "Documentos_Base/05_Plantillas_SQL/PLANTILLA_MIGRACION.sql",
+          "titulo": "Plantilla Migracion SQL",
+          "tipo": "plantilla",
+          "tags": ["sql", "migracion", "alter", "schema-change"],
+          "descripcion": "Plantilla para scripts de migracion de esquema"
+        },
+        {
+          "ruta": "Documentos_Base/05_Plantillas_SQL/CONVENCION_SCHEMAS.sql",
+          "titulo": "Convencion de Schemas",
+          "tipo": "guia",
+          "tags": ["sql", "schema", "convencion", "nomenclatura"],
+          "descripcion": "Convenciones de nomenclatura de schemas SQL Server"
+        }
+      ]
+    },
+
+    "observabilidad": {
+      "descripcion": "OpenTelemetry, Serilog, metricas, trazas y logging estructurado",
+      "documentos": [
+        {
+          "ruta": "Documentos_Base/06_Observabilidad/GUIA_OBSERVABILIDAD.md",
+          "titulo": "Guia de Observabilidad",
+          "tipo": "guia",
+          "tags": ["opentelemetry", "serilog", "metricas", "trazas", "logging", "application-insights", "telemetria"],
+          "descripcion": "Configuracion OpenTelemetry .NET 10, Serilog estructurado, metricas custom, App Insights"
+        }
+      ]
+    },
+
+    "resiliencia": {
+      "descripcion": "Polly v8+, Health Checks, Circuit Breaker, Retry, Graceful Shutdown",
+      "documentos": [
+        {
+          "ruta": "Documentos_Base/07_Resiliencia/GUIA_RESILIENCIA.md",
+          "titulo": "Guia de Resiliencia",
+          "tipo": "guia",
+          "tags": ["polly", "health-checks", "circuit-breaker", "retry", "timeout", "graceful-shutdown", "resiliencia"],
+          "descripcion": "Polly v8+ policies, Health Checks con /health /ready /live, Graceful Shutdown"
+        }
+      ]
+    },
+
+    "reglas-condicionales": {
+      "descripcion": "Reglas que Claude aplica segun el tipo de archivo o proyecto",
+      "documentos": [
+        {
+          "ruta": ".claude/rules/api.md",
+          "titulo": "Reglas para APIs REST",
+          "tipo": "regla",
+          "tags": ["api", "rest", "controlador", "openapi", "swagger", "validacion"],
+          "descripcion": "Controladores, OpenAPI, validacion FluentValidation, manejo de errores"
+        },
+        {
+          "ruta": ".claude/rules/application.md",
+          "titulo": "Reglas para Capa de Aplicacion",
+          "tipo": "regla",
+          "tags": ["cqrs", "mediator", "commands", "queries", "behaviours", "dtos"],
+          "descripcion": "CQRS, Mediator, Commands/Queries, Pipeline Behaviours, DTOs"
+        },
+        {
+          "ruta": ".claude/rules/blazor.md",
+          "titulo": "Reglas para Blazor",
+          "tipo": "regla",
+          "tags": ["blazor", "wasm", "server", "ssr", "componentes", "razor"],
+          "descripcion": "Modos de renderizado, componentes, formularios, autenticacion"
+        },
+        {
+          "ruta": ".claude/rules/console.md",
+          "titulo": "Reglas para Consola y Workers",
+          "tipo": "regla",
+          "tags": ["console", "worker", "servicio-windows", "hosted-service", "background"],
+          "descripcion": "Worker Service, BackgroundService, tareas programadas, graceful shutdown"
+        },
+        {
+          "ruta": ".claude/rules/database.md",
+          "titulo": "Reglas para Base de Datos",
+          "tipo": "regla",
+          "tags": ["sql", "t-sql", "stored-procedure", "nomenclatura", "rendimiento"],
+          "descripcion": "Convenciones SQL Server Comillas, nomenclatura, plantillas, rendimiento"
+        },
+        {
+          "ruta": ".claude/rules/domain.md",
+          "titulo": "Reglas para Capa de Dominio",
+          "tipo": "regla",
+          "tags": ["ddd", "entidades", "value-objects", "eventos-dominio", "excepciones"],
+          "descripcion": "Entidades ricas, Value Objects, eventos de dominio, factory pattern"
+        },
+        {
+          "ruta": ".claude/rules/infrastructure.md",
+          "titulo": "Reglas para Infraestructura",
+          "tipo": "regla",
+          "tags": ["ef-core", "repositorio", "dbcontext", "migraciones", "connection-string"],
+          "descripcion": "EF Core, repositorios, configuracion Fluent API, migraciones"
+        },
+        {
+          "ruta": ".claude/rules/tests.md",
+          "titulo": "Reglas para Testing",
+          "tipo": "regla",
+          "tags": ["xunit", "testing", "moq", "fluent-assertions", "integracion", "cobertura"],
+          "descripcion": "xUnit, FluentAssertions, Moq, tests de integracion, cobertura"
+        },
+        {
+          "ruta": ".claude/rules/tfvc.md",
+          "titulo": "Reglas para TFVC",
+          "tipo": "regla",
+          "tags": ["tfvc", "tfs", "control-versiones", "checkin", "shelveset"],
+          "descripcion": "Adaptaciones para proyectos con Team Foundation Version Control"
+        },
+        {
+          "ruta": ".claude/rules/webapp.md",
+          "titulo": "Reglas para Aplicaciones Web",
+          "tipo": "regla",
+          "tags": ["webapp", "asp-net", "mvc", "program-cs", "middleware", "css", "javascript"],
+          "descripcion": "Configuracion ASP.NET por version, estilos Comillas, accesibilidad"
+        }
+      ]
+    },
+
+    "skills": {
+      "descripcion": "Skills de Claude con auto-invocacion y patrones especializados",
+      "documentos": [
+        {
+          "ruta": ".claude/skills/analisis-arquitectura/SKILL.md",
+          "titulo": "Skill: Analisis de Arquitectura",
+          "tipo": "patron",
+          "tags": ["arquitectura", "analisis", "diagramas", "dependencias", "calidad"]
+        },
+        {
+          "ruta": ".claude/skills/azure-config/SKILL.md",
+          "titulo": "Skill: Configuracion Azure",
+          "tipo": "patron",
+          "tags": ["azure", "key-vault", "blob-storage", "redis", "app-insights"]
+        },
+        {
+          "ruta": ".claude/skills/documentacion-tecnica/SKILL.md",
+          "titulo": "Skill: Documentacion Tecnica",
+          "tipo": "patron",
+          "tags": ["documentacion", "readme", "adr", "diagramas", "api"]
+        },
+        {
+          "ruta": ".claude/skills/generador-crud/SKILL.md",
+          "titulo": "Skill: Generador CRUD",
+          "tipo": "patron",
+          "tags": ["crud", "controlador", "servicio", "repositorio", "dtos", "validacion"]
+        },
+        {
+          "ruta": ".claude/skills/nugets-management/SKILL.md",
+          "titulo": "Skill: Gestion NuGet",
+          "tipo": "patron",
+          "tags": ["nuget", "dependencias", "vulnerabilidades", "central-package-management"]
+        },
+        {
+          "ruta": ".claude/skills/observability-patterns/SKILL.md",
+          "titulo": "Skill: Patrones de Observabilidad",
+          "tipo": "patron",
+          "tags": ["opentelemetry", "serilog", "metricas", "trazas", "telemetria"]
+        },
+        {
+          "ruta": ".claude/skills/resilience-patterns/SKILL.md",
+          "titulo": "Skill: Patrones de Resiliencia",
+          "tipo": "patron",
+          "tags": ["polly", "retry", "circuit-breaker", "health-checks", "timeout"]
+        },
+        {
+          "ruta": ".claude/skills/security-audit/SKILL.md",
+          "titulo": "Skill: Auditoria de Seguridad",
+          "tipo": "patron",
+          "tags": ["seguridad", "owasp", "owasp-2025", "secrets", "key-vault", "headers", "xss", "xxe", "jwt", "csrf", "ssrf", "path-traversal", "mass-assignment", "clickjacking", "cvss", "cwe", "wstg", "mastg", "mobile", "llm", "sast", "semgrep"]
+        },
+        {
+          "ruta": ".claude/skills/testing-patterns/SKILL.md",
+          "titulo": "Skill: Patrones de Testing",
+          "tipo": "patron",
+          "tags": ["testing", "xunit", "moq", "integracion", "cobertura"]
+        },
+        {
+          "ruta": ".claude/skills/user-documentation/SKILL.md",
+          "titulo": "Skill: Documentacion de Usuario",
+          "tipo": "patron",
+          "tags": ["documentacion", "usuario", "api", "guia-uso", "postman"]
+        },
+        {
+          "ruta": ".claude/skills/webapp-layout/SKILL.md",
+          "titulo": "Skill: Layout Web Comillas",
+          "tipo": "patron",
+          "tags": ["layout", "header", "footer", "sidebar", "css", "responsive"]
+        },
+        {
+          "ruta": ".claude/skills/postman-collection/SKILL.md",
+          "titulo": "Skill: Coleccion Postman",
+          "tipo": "patron",
+          "tags": ["postman", "api", "coleccion", "testing-api"]
+        }
+      ]
+    }
+  },
+
+  "estadisticas": {
+    "total_documentos": 45,
+    "por_tipo": {
+      "guia": 10,
+      "plantilla": 13,
+      "regla": 10,
+      "patron": 12
+    }
+  }
+}

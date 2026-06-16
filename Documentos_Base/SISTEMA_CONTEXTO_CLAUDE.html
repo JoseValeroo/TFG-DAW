@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Contexto Claude - STIC v2.2.0</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p { color: #a0a0a0; font-size: 1.1em; }
+        
+        .version-badge {
+            display: inline-block;
+            background: #7b2cbf;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        .card-anchor .icon { background: #7b2cbf; }
+        .card-context .icon { background: #00d4ff; }
+        .card-commands .icon { background: #00c853; }
+        .card-modes .icon { background: #ff9100; }
+        .card-vs .icon { background: #5c2d91; }
+
+        .file-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .file-list li {
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-list .file-name {
+            font-family: 'Consolas', monospace;
+            color: #00d4ff;
+        }
+
+        .file-list .file-desc {
+            font-size: 0.85em;
+            color: #a0a0a0;
+        }
+
+        .badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .badge-setup { background: #ff9100; color: #000; }
+        .badge-dev { background: #00c853; color: #000; }
+        .badge-maint { background: #00d4ff; color: #000; }
+        .badge-support { background: #f44336; color: #fff; }
+
+        .mode-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .mode-card h4 {
+            margin-bottom: 5px;
+        }
+
+        .mode-card p {
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+
+        /* Flujo de instalación */
+        .install-flow {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .install-flow h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #00d4ff;
+        }
+
+        .install-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .install-step {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .install-step.step-1 { border-color: #7b2cbf; }
+        .install-step.step-2 { border-color: #00d4ff; }
+        .install-step.step-3 { border-color: #00c853; }
+        .install-step.step-4 { border-color: #5c2d91; }
+
+        .install-step .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .step-1 .step-number { background: #7b2cbf; }
+        .step-2 .step-number { background: #00d4ff; color: #000; }
+        .step-3 .step-number { background: #00c853; color: #000; }
+        .step-4 .step-number { background: #5c2d91; }
+
+        .install-step h3 {
+            font-size: 1em;
+            margin: 10px 0;
+        }
+
+        .install-step code {
+            display: block;
+            background: rgba(0,0,0,0.4);
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #00c853;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .install-step p {
+            font-size: 0.85em;
+            color: #a0a0a0;
+        }
+
+        .install-arrow {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            color: #666;
+        }
+
+        /* Flujo de navegacion */
+        .flow-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .flow-section h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flow-step {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px 25px;
+            text-align: center;
+            border: 2px solid #7b2cbf;
+            min-width: 250px;
+        }
+
+        .flow-step h3 { font-size: 1em; margin-bottom: 5px; }
+        .flow-step p { font-size: 0.85em; color: #a0a0a0; }
+
+        .flow-step.start { border-color: #7b2cbf; }
+        .flow-step.read { border-color: #00d4ff; }
+        .flow-step.decision { border-color: #ff9100; }
+        .flow-step.action { border-color: #00c853; }
+
+        .flow-arrow {
+            font-size: 1.5em;
+            color: #666;
+        }
+
+        .flow-branches {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .flow-branch {
+            flex: 1;
+            min-width: 150px;
+            max-width: 200px;
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .command-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .command-item:hover {
+            background: rgba(0,212,255,0.1);
+            border-color: #00d4ff;
+        }
+
+        .command-item code {
+            display: block;
+            font-size: 1.1em;
+            color: #00c853;
+            margin-bottom: 5px;
+        }
+
+        .command-item span {
+            font-size: 0.8em;
+            color: #a0a0a0;
+        }
+
+        .command-item.highlight {
+            border-color: #ff9100;
+            background: rgba(255,145,0,0.1);
+        }
+
+        .questions-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .questions-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .question-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .question-tab {
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            border-radius: 25px;
+            color: #e8e8e8;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .question-tab.active, .question-tab:hover {
+            background: #7b2cbf;
+        }
+
+        .question-content {
+            display: none;
+        }
+
+        .question-content.active {
+            display: block;
+        }
+
+        .question-list {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .question-list h4 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .question-list ul {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .question-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .question-list li::before {
+            content: "?";
+            position: absolute;
+            left: 0;
+            color: #ff9100;
+            font-weight: bold;
+        }
+
+        /* Visual Studio Integration */
+        .vs-folders {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .vs-folder {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vs-folder .folder-icon {
+            font-size: 1.5em;
+        }
+
+        .vs-folder .folder-name {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .vs-folder .folder-path {
+            font-size: 0.75em;
+            color: #a0a0a0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.6em; }
+            .grid { grid-template-columns: 1fr; }
+            .flow-branches { flex-direction: column; align-items: center; }
+            .install-steps { flex-direction: column; }
+            .install-arrow { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Contexto Inteligente</h1>
+            <p>Como Claude Code navega y entiende los proyectos STIC</p>
+            <span class="version-badge">v2.2.0 - Enero 2026</span>
+        </header>
+
+        <!-- Flujo de Instalación -->
+        <div class="install-flow">
+            <h2>🚀 Flujo de Instalación y Onboarding</h2>
+            
+            <div class="install-steps">
+                <div class="install-step step-1">
+                    <span class="step-number">1</span>
+                    <h3>📦 arranque.ps1</h3>
+                    <code>irm .../arranque.ps1 | iex</code>
+                    <p>Descarga plantilla y crea estructura de carpetas</p>
+                </div>
+                
+                <div class="install-arrow">→</div>
+                
+                <div class="install-step step-2">
+                    <span class="step-number">2</span>
+                    <h3>💬 /onboarding</h3>
+                    <code>/onboarding</code>
+                    <p>8 fases de preguntas + crea archivos _duran/</p>
+                </div>
+                
+                <div class="install-arrow">→</div>
+                
+                <div class="install-step step-3">
+                    <span class="step-number">3</span>
+                    <h3>⚙️ integracion-vs.ps1</h3>
+                    <code>.\.claude\commands\integracion-vs.ps1</code>
+                    <p>Añade 8 Solution Folders al .sln</p>
+                </div>
+                
+                <div class="install-arrow">→</div>
+                
+                <div class="install-step step-4">
+                    <span class="step-number">4</span>
+                    <h3>🎯 Visual Studio</h3>
+                    <code>Abrir .sln</code>
+                    <p>Ver carpetas de documentación en el proyecto</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arquitectura -->
+        <div class="grid">
+            <div class="card card-anchor">
+                <h2><span class="icon">A</span> Punto de Anclaje</h2>
+                <p>Claude lee automaticamente <strong>CLAUDE.md</strong> al iniciar cada sesion.</p>
+                <ul class="file-list">
+                    <li>
+                        <span class="file-name">CLAUDE.md</span>
+                        <span class="file-desc">Instrucciones principales</span>
+                    </li>
+                </ul>
+                <p style="margin-top:15px; font-size:0.9em; color:#a0a0a0;">
+                    Contiene: modos de operacion, comandos disponibles, reglas de desarrollo,
+                    preguntas proactivas obligatorias.
+                </p>
+            </div>
+
+            <div class="card card-context">
+                <h2><span class="icon">M</span> Memoria del Proyecto</h2>
+                <p>Carpeta <strong>_duran/</strong> con informacion dinamica del proyecto.</p>
+                <ul class="file-list">
+                    <li>
+                        <span class="file-name">ESTADO_PROYECTO.json</span>
+                        <span class="file-desc">Modo, fase, version</span>
+                    </li>
+                    <li>
+                        <span class="file-name">FUNCIONALIDADES.md</span>
+                        <span class="file-desc">Que hace la app</span>
+                    </li>
+                    <li>
+                        <span class="file-name">DEPENDENCIAS.md</span>
+                        <span class="file-desc">Que puede romperse</span>
+                    </li>
+                    <li>
+                        <span class="file-name">DEUDA_TECNICA.md</span>
+                        <span class="file-desc">Bugs y deuda</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-commands">
+                <h2><span class="icon">/</span> Comandos</h2>
+                <p>Comandos personalizados en <strong>.claude/commands/</strong></p>
+                <div class="command-grid">
+                    <div class="command-item highlight">
+                        <code>/onboarding</code>
+                        <span>Config 8 fases + VS</span>
+                    </div>
+                    <div class="command-item">
+                        <code>/analizar</code>
+                        <span>Analisis profundo</span>
+                    </div>
+                    <div class="command-item">
+                        <code>/commit</code>
+                        <span>Commit con checks</span>
+                    </div>
+                    <div class="command-item">
+                        <code>/estado</code>
+                        <span>Ver dashboard</span>
+                    </div>
+                    <div class="command-item">
+                        <code>/actualizar</code>
+                        <span>Actualizar paquete</span>
+                    </div>
+                    <div class="command-item">
+                        <code>/sos</code>
+                        <span>Ayuda</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-vs">
+                <h2><span class="icon">VS</span> Integracion Visual Studio</h2>
+                <p>El script <strong>integracion-vs.ps1</strong> añade 8 Solution Folders:</p>
+                <div class="vs-folders">
+                    <div class="vs-folder">
+                        <span class="folder-icon">📂</span>
+                        <div>
+                            <div class="folder-name">Contexto Claude</div>
+                            <div class="folder-path">_duran/</div>
+                        </div>
+                    </div>
+                    <div class="vs-folder">
+                        <span class="folder-icon">📂</span>
+                        <div>
+                            <div class="folder-name">Especificaciones</div>
+                            <div class="folder-path">_duran/specs/</div>
+                        </div>
+                    </div>
+                    <div class="vs-folder">
+                        <span class="folder-icon">📂</span>
+                        <div>
+                            <div class="folder-name">Diagramas</div>
+                            <div class="folder-path">01_Diseno/</div>
+                        </div>
+                    </div>
+                    <div class="vs-folder">
+                        <span class="folder-icon">📂</span>
+                        <div>
+                            <div class="folder-name">Gestion</div>
+                            <div class="folder-path">00_Gestion/</div>
+                        </div>
+                    </div>
+                    <div class="vs-folder">
+                        <span class="folder-icon">📂</span>
+                        <div>
+                            <div class="folder-name">Pruebas</div>
+                            <div class="folder-path">04_Pruebas/</div>
+                        </div>
+                    </div>
+                    <div class="vs-folder">
+                        <span class="folder-icon">📂</span>
+                        <div>
+                            <div class="folder-name">CI-CD</div>
+                            <div class="folder-path">05_CICD/</div>
+                        </div>
+                    </div>
+                    <div class="vs-folder">
+                        <span class="folder-icon">📂</span>
+                        <div>
+                            <div class="folder-name">Documentacion</div>
+                            <div class="folder-path">06_Documentacion/</div>
+                        </div>
+                    </div>
+                    <div class="vs-folder">
+                        <span class="folder-icon">📂</span>
+                        <div>
+                            <div class="folder-name">UAP</div>
+                            <div class="folder-path">07_UAP/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modos de operación -->
+        <div class="grid">
+            <div class="card card-modes" style="grid-column: span 2;">
+                <h2><span class="icon">M</span> Modos de Operacion</h2>
+                <p>El comportamiento de Claude cambia segun el modo configurado en ESTADO_PROYECTO.json</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div class="mode-card">
+                        <h4><span class="badge badge-setup">puesta_a_punto</span></h4>
+                        <p>Proyecto nuevo incorporandose. Claude no modifica codigo, solo hace preguntas con /onboarding.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h4><span class="badge badge-dev">desarrollo</span></h4>
+                        <p>Desarrollo activo. Claude lee contexto, hace preguntas proactivas, implementa y documenta.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h4><span class="badge badge-maint">mantenimiento</span></h4>
+                        <p>Solo correcciones. Modo conservador, cambios minimos, siempre verifica tests.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h4><span class="badge badge-support">soporte_uap</span></h4>
+                        <p>En produccion. Consulta runbooks, prioriza resolucion rapida, documenta incidencias.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flujo de navegacion -->
+        <div class="flow-section">
+            <h2>Flujo de Navegacion de Claude</h2>
+
+            <div class="flow-diagram">
+                <div class="flow-step start">
+                    <h3>Inicio de Sesion</h3>
+                    <p>Claude Code se inicia</p>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step read">
+                    <h3>Lectura Automatica</h3>
+                    <p>Lee CLAUDE.md + ESTADO_PROYECTO.json</p>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step decision">
+                    <h3>Detecta Modo</h3>
+                    <p>¿En que modo esta el proyecto?</p>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-branches">
+                    <div class="flow-branch">
+                        <div class="flow-step" style="border-color: #ff9100;">
+                            <h3>puesta_a_punto</h3>
+                            <p>Invita a /onboarding<br>NO modifica codigo</p>
+                        </div>
+                    </div>
+                    <div class="flow-branch">
+                        <div class="flow-step" style="border-color: #00c853;">
+                            <h3>desarrollo</h3>
+                            <p>Lee contexto completo<br>Preguntas proactivas</p>
+                        </div>
+                    </div>
+                    <div class="flow-branch">
+                        <div class="flow-step" style="border-color: #00d4ff;">
+                            <h3>mantenimiento</h3>
+                            <p>Modo conservador<br>Cambios minimos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step action">
+                    <h3>Tarea Solicitada</h3>
+                    <p>Identifica tipo: Nueva / Modificacion / Bug</p>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step read">
+                    <h3>Consulta Contexto</h3>
+                    <p>Lee FUNCIONALIDADES, DEPENDENCIAS, reuniones segun aplique</p>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step action">
+                    <h3>Preguntas Proactivas</h3>
+                    <p>"He detectado dependencias con [X]. ¿Analizo impacto?"</p>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step" style="border-color: #7b2cbf;">
+                    <h3>Implementacion</h3>
+                    <p>Siguiendo Documentos_Base y patrones existentes</p>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #7b2cbf;"></div>
+                    <span>Inicio/Fin</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00d4ff;"></div>
+                    <span>Lectura</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff9100;"></div>
+                    <span>Decision</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00c853;"></div>
+                    <span>Accion</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preguntas por situacion -->
+        <div class="questions-section">
+            <h2>Preguntas Proactivas por Situacion</h2>
+
+            <div class="question-tabs">
+                <button class="question-tab active" onclick="showQuestions('new')">Nueva Funcionalidad</button>
+                <button class="question-tab" onclick="showQuestions('mod')">Modificacion</button>
+                <button class="question-tab" onclick="showQuestions('bug')">Bug Fix</button>
+                <button class="question-tab" onclick="showQuestions('onboard')">Onboarding</button>
+            </div>
+
+            <div id="q-new" class="question-content active">
+                <div class="question-list">
+                    <h4>Entendimiento</h4>
+                    <ul>
+                        <li>¿Cual es el objetivo de negocio de esta funcionalidad?</li>
+                        <li>¿Quien es el usuario final?</li>
+                        <li>¿Es parte de un desarrollo mayor o es independiente?</li>
+                    </ul>
+                    <h4>Ubicacion</h4>
+                    <ul>
+                        <li>¿En que modulo deberia ubicarse?</li>
+                        <li>¿Sigue el patron de alguna funcionalidad existente?</li>
+                    </ul>
+                    <h4>Datos</h4>
+                    <ul>
+                        <li>¿Requiere nuevas tablas o modificacion de existentes?</li>
+                        <li>¿Maneja datos sensibles (personales, economicos)?</li>
+                    </ul>
+                    <h4>Seguridad</h4>
+                    <ul>
+                        <li>¿Que roles/permisos tendran acceso?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="q-mod" class="question-content">
+                <div class="question-list">
+                    <h4>Contexto</h4>
+                    <ul>
+                        <li>¿Hay decisiones previas sobre esta funcionalidad que deba respetar?</li>
+                        <li>¿Hubo problemas anteriores con esta area del codigo?</li>
+                    </ul>
+                    <h4>Impacto</h4>
+                    <ul>
+                        <li>He detectado dependencias con [X,Y,Z]. ¿Quieres que analice el impacto?</li>
+                        <li>¿Hay tests existentes que deba conocer?</li>
+                    </ul>
+                    <h4>Integraciones</h4>
+                    <ul>
+                        <li>¿Esta funcionalidad se integra con sistemas externos?</li>
+                        <li>¿Hay procesos batch o jobs que dependan de esto?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="q-bug" class="question-content">
+                <div class="question-list">
+                    <h4>Reproduccion</h4>
+                    <ul>
+                        <li>¿Puedes indicarme los pasos para reproducir el error?</li>
+                        <li>¿En que entorno ocurre (dev, staging, produccion)?</li>
+                    </ul>
+                    <h4>Urgencia</h4>
+                    <ul>
+                        <li>¿Cual es la severidad? (critica, alta, media, baja)</li>
+                        <li>¿Hay workaround temporal?</li>
+                    </ul>
+                    <h4>Origen</h4>
+                    <ul>
+                        <li>¿Cuando empezo a fallar? ¿Hubo cambios recientes?</li>
+                        <li>¿Afecta a todos los usuarios o solo a algunos?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="q-onboard" class="question-content">
+                <div class="question-list">
+                    <h4>Informacion General (Fase 1)</h4>
+                    <ul>
+                        <li>¿Cual es el nombre oficial del proyecto?</li>
+                        <li>¿Quien es el owner (departamento propietario)?</li>
+                        <li>¿Quien es el jefe de proyecto (JP)?</li>
+                        <li>¿Quien es el lider tecnico (LT)?</li>
+                        <li>¿Quien es el responsable tecnico (RT)?</li>
+                    </ul>
+                    <h4>Stack Tecnologico (Fase 2)</h4>
+                    <ul>
+                        <li>¿Que version de .NET se usa?</li>
+                        <li>¿Que framework web y ORM?</li>
+                        <li>¿Que motor de base de datos?</li>
+                    </ul>
+                    <h4>Equipo y Escalado (Fase 8)</h4>
+                    <ul>
+                        <li>¿Quienes son los desarrolladores del equipo?</li>
+                        <li>¿Contacto de escalado tecnico?</li>
+                        <li>¿Contacto de escalado funcional?</li>
+                        <li>¿Hay bugs conocidos o deuda tecnica?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Sistema de Contexto Inteligente - STIC - Universidad Pontificia Comillas</p>
+            <p>Version 2.2.0 - Enero 2026</p>
+            <p style="margin-top:10px;">
+                <a href="SISTEMA_duran_CLAUDE.md" style="color:#00d4ff;">Ver documentacion completa (.md)</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function showQuestions(type) {
+            document.querySelectorAll('.question-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.question-tab').forEach(el => el.classList.remove('active'));
+
+            document.getElementById('q-' + type).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

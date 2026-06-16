@@ -1,0 +1,111 @@
+# Docker Compose para entorno de desarrollo
+# Versión SQL Server: 2017 (14.0) - Compatible con producción
+#
+# USO:
+#   1. Copiar .env.example a .env y configurar variables
+#   2. Ejecutar: docker-compose up -d
+#   3. Verificar: docker-compose ps
+#
+# IMPORTANTE: No commitear el archivo .env con credenciales reales
+
+version: '3.8'
+
+services:
+  # ============================================
+  # SQL Server 2017 - Base de datos principal
+  # ============================================
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: ${PROJECT_NAME:-proyecto}_sqlserver
+    hostname: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${SA_PASSWORD:-DevPassword123!}
+      - MSSQL_COLLATION=SQL_Latin1_General_CP1250_CI_AS
+      - MSSQL_MEMORY_LIMIT_MB=${SQL_MEMORY_LIMIT:-2048}
+    ports:
+      - "${SQL_PORT:-1433}:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./Scripts/SQL:/scripts:ro
+    networks:
+      - dev_network
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD:-DevPassword123!}" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  # ============================================
+  # Redis - Caché distribuida
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: ${PROJECT_NAME:-proyecto}_redis
+    hostname: redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - dev_network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # ============================================
+  # Azurite - Emulador Azure Storage
+  # ============================================
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: ${PROJECT_NAME:-proyecto}_azurite
+    hostname: azurite
+    ports:
+      - "${AZURITE_BLOB_PORT:-10000}:10000"   # Blob Storage
+      - "${AZURITE_QUEUE_PORT:-10001}:10001"  # Queue Storage
+      - "${AZURITE_TABLE_PORT:-10002}:10002"  # Table Storage
+    volumes:
+      - azurite_data:/data
+    networks:
+      - dev_network
+    command: azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --location /data --debug /data/debug.log
+    restart: unless-stopped
+
+  # ============================================
+  # Mailhog - Servidor SMTP de pruebas
+  # ============================================
+  mailhog:
+    image: mailhog/mailhog
+    container_name: ${PROJECT_NAME:-proyecto}_mailhog
+    hostname: mailhog
+    ports:
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"  # SMTP
+      - "${MAILHOG_WEB_PORT:-8025}:8025"   # Web UI
+    networks:
+      - dev_network
+    restart: unless-stopped
+
+# ============================================
+# Volúmenes persistentes
+# ============================================
+volumes:
+  sqlserver_data:
+    name: ${PROJECT_NAME:-proyecto}_sqlserver_data
+  redis_data:
+    name: ${PROJECT_NAME:-proyecto}_redis_data
+  azurite_data:
+    name: ${PROJECT_NAME:-proyecto}_azurite_data
+
+# ============================================
+# Red de desarrollo
+# ============================================
+networks:
+  dev_network:
+    name: ${PROJECT_NAME:-proyecto}_network
+    driver: bridge

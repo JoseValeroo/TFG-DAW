@@ -1,0 +1,68 @@
+{
+  "_comentario": "Configuracion opt-in para auth-config-guard.ps1 v2.0.0 (item J2 ADR-034).",
+  "_documentacion": [
+    "Este archivo es OPCIONAL. Si no existe, auth-config-guard solo aplica reglas Azure AD hardcoded.",
+    "Si existe, anade reglas extra para providers OAuth2 especificos del proyecto.",
+    "Copialo a _duran/oauth-providers.json y customiza por proyecto.",
+    "Schema:",
+    "  providers[] = { name, description, rules[] }",
+    "  rules[] = { pattern (regex), severity ('block'|'warn'), message }"
+  ],
+
+  "providers": [
+    {
+      "name": "OracleCloud",
+      "description": "Oracle HCM Cloud OAuth2 - validar ClientSecret en Key Vault",
+      "rules": [
+        {
+          "pattern": "\"Oracle[.][A-Za-z]*ClientSecret\"\\s*:\\s*\"(?!@Microsoft[.]KeyVault).*\"",
+          "severity": "block",
+          "message": "Oracle ClientSecret debe usar referencia Key Vault: \"@Microsoft.KeyVault(SecretUri=...)\""
+        },
+        {
+          "pattern": "\"Oracle[.][A-Za-z]*Endpoint\"\\s*:\\s*\"http://",
+          "severity": "block",
+          "message": "Oracle endpoint sin HTTPS - usar HTTPS obligatorio"
+        },
+        {
+          "pattern": "Oracle[.]HCM.*timeout\\s*=\\s*[0-9]{3,}",
+          "severity": "warn",
+          "message": "Timeout >100s en HCM call - revisar (HCM rate-limits a 30s recomendado)"
+        }
+      ]
+    },
+    {
+      "name": "Banner",
+      "description": "Banner academic API - patrones especificos Comillas",
+      "rules": [
+        {
+          "pattern": "\"Banner[.]ApiKey\"\\s*:\\s*\"[A-Za-z0-9]{20,}\"",
+          "severity": "block",
+          "message": "Banner ApiKey hardcoded - usar Key Vault o user-secrets"
+        }
+      ]
+    },
+    {
+      "name": "EWP",
+      "description": "Erasmus Without Paper (mTLS cert-based)",
+      "rules": [
+        {
+          "pattern": "EWP.*Manifest.*http://",
+          "severity": "block",
+          "message": "EWP Manifest URL sin HTTPS - obligatorio HTTPS para mTLS"
+        }
+      ]
+    },
+    {
+      "name": "Sigma",
+      "description": "Sigma nominas (legacy SOAP/REST)",
+      "rules": [
+        {
+          "pattern": "Sigma.*Password\\s*=\\s*\"[^\"]+\"",
+          "severity": "block",
+          "message": "Sigma Password hardcoded - usar IConfiguration con user-secrets o Key Vault"
+        }
+      ]
+    }
+  ]
+}

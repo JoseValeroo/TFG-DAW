@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Markdown - OTD Comillas</title>
+    <style>
+        :root {
+            --azul-comillas: #003366;
+            --azul-claro: #e8f4fc;
+            --gris-codigo: #f5f5f5;
+            --borde: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+        }
+
+        header {
+            background: var(--azul-comillas);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+
+        header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        h2 {
+            color: var(--azul-comillas);
+            border-bottom: 2px solid var(--azul-comillas);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 30px;
+        }
+
+        .ejemplo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ejemplo-codigo {
+            background: var(--gris-codigo);
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            border-right: 1px solid var(--borde);
+        }
+
+        .ejemplo-resultado {
+            padding: 15px;
+            background: white;
+        }
+
+        .ejemplo-header {
+            display: flex;
+            background: var(--azul-claro);
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .ejemplo-header span {
+            flex: 1;
+            padding: 8px 15px;
+        }
+
+        .ejemplo-header span:first-child {
+            border-right: 1px solid var(--borde);
+        }
+
+        code {
+            background: var(--gris-codigo);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--gris-codigo);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid var(--borde);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--azul-comillas);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: var(--gris-codigo);
+        }
+
+        .tip {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-title {
+            font-weight: bold;
+            color: #721c24;
+            margin-bottom: 5px;
+        }
+
+        .toc {
+            background: var(--azul-claro);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: var(--azul-comillas);
+        }
+
+        .toc ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .toc li {
+            margin: 8px 0;
+        }
+
+        .toc a {
+            color: var(--azul-comillas);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--borde);
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .ejemplo {
+                grid-template-columns: 1fr;
+            }
+
+            .ejemplo-codigo {
+                border-right: none;
+                border-bottom: 1px solid var(--borde);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Guía de Markdown</h1>
+        <p>Referencia rápida para editar documentos de la OTD</p>
+    </header>
+
+    <div class="toc">
+        <h3>Contenido</h3>
+        <ul>
+            <li><a href="#titulos">Títulos y encabezados</a></li>
+            <li><a href="#texto">Formato de texto</a></li>
+            <li><a href="#listas">Listas</a></li>
+            <li><a href="#enlaces">Enlaces</a></li>
+            <li><a href="#tablas">Tablas</a></li>
+            <li><a href="#codigo">Código</a></li>
+            <li><a href="#citas">Citas y notas</a></li>
+            <li><a href="#lineas">Líneas horizontales</a></li>
+            <li><a href="#checklist">Checklists</a></li>
+        </ul>
+    </div>
+
+    <h2 id="titulos">Títulos y Encabezados</h2>
+    <p>Usa el símbolo <code>#</code> seguido de un espacio. Más <code>#</code> = título más pequeño.</p>
+
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo"># Título Principal
+
+## Sección
+
+### Subsección
+
+#### Apartado</div>
+        <div class="ejemplo-resultado">
+            <h1 style="margin:0;font-size:1.8em;">Título Principal</h1>
+            <h2 style="margin:10px 0;border:none;font-size:1.4em;">Sección</h2>
+            <h3 style="margin:10px 0;font-size:1.2em;">Subsección</h3>
+            <h4 style="margin:10px 0;font-size:1em;">Apartado</h4>
+        </div>
+    </div>
+
+    <h2 id="texto">Formato de Texto</h2>
+
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">Texto normal
+
+**Texto en negrita**
+
+*Texto en cursiva*
+
+***Negrita y cursiva***
+
+~~Texto tachado~~</div>
+        <div class="ejemplo-resultado">
+            <p>Texto normal</p>
+            <p><strong>Texto en negrita</strong></p>
+            <p><em>Texto en cursiva</em></p>
+            <p><strong><em>Negrita y cursiva</em></strong></p>
+            <p><del>Texto tachado</del></p>
+        </div>
+    </div>
+
+    <div class="tip">
+        <div class="tip-title">Consejo</div>
+        Para crear un nuevo párrafo, deja una línea en blanco entre textos.
+    </div>
+
+    <h2 id="listas">Listas</h2>
+
+    <h3>Lista con viñetas</h3>
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">- Primer elemento
+- Segundo elemento
+- Tercer elemento
+  - Sub-elemento (2 espacios antes del guión)
+  - Otro sub-elemento</div>
+        <div class="ejemplo-resultado">
+            <ul>
+                <li>Primer elemento</li>
+                <li>Segundo elemento</li>
+                <li>Tercer elemento
+                    <ul>
+                        <li>Sub-elemento</li>
+                        <li>Otro sub-elemento</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>Lista numerada</h3>
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">1. Primer paso
+2. Segundo paso
+3. Tercer paso
+   1. Sub-paso (3 espacios antes)
+   2. Otro sub-paso</div>
+        <div class="ejemplo-resultado">
+            <ol>
+                <li>Primer paso</li>
+                <li>Segundo paso</li>
+                <li>Tercer paso
+                    <ol>
+                        <li>Sub-paso</li>
+                        <li>Otro sub-paso</li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <h2 id="enlaces">Enlaces</h2>
+
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">[Texto del enlace](https://ejemplo.com)
+
+[Enlace a sección](#titulos)</div>
+        <div class="ejemplo-resultado">
+            <p><a href="#">Texto del enlace</a></p>
+            <p><a href="#titulos">Enlace a sección</a></p>
+        </div>
+    </div>
+
+    <h2 id="tablas">Tablas</h2>
+
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">| Columna 1 | Columna 2 | Columna 3 |
+|-----------|-----------|-----------|
+| Dato 1    | Dato 2    | Dato 3    |
+| Dato 4    | Dato 5    | Dato 6    |</div>
+        <div class="ejemplo-resultado">
+            <table>
+                <tr><th>Columna 1</th><th>Columna 2</th><th>Columna 3</th></tr>
+                <tr><td>Dato 1</td><td>Dato 2</td><td>Dato 3</td></tr>
+                <tr><td>Dato 4</td><td>Dato 5</td><td>Dato 6</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="tip">
+        <div class="tip-title">Consejo</div>
+        No es necesario alinear perfectamente las columnas, solo que tengan el separador <code>|</code>
+    </div>
+
+    <h2 id="codigo">Código</h2>
+
+    <h3>Código en línea</h3>
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">Usa el comando `dotnet build` para compilar.</div>
+        <div class="ejemplo-resultado">
+            Usa el comando <code>dotnet build</code> para compilar.
+        </div>
+    </div>
+
+    <h3>Bloque de código</h3>
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">```csharp
+public class Ejemplo
+{
+    public string Nombre { get; set; }
+}
+```</div>
+        <div class="ejemplo-resultado">
+            <pre style="margin:0;"><code>public class Ejemplo
+{
+    public string Nombre { get; set; }
+}</code></pre>
+        </div>
+    </div>
+
+    <p>Lenguajes comunes: <code>csharp</code>, <code>sql</code>, <code>json</code>, <code>bash</code>, <code>html</code>, <code>css</code></p>
+
+    <h2 id="citas">Citas y Notas</h2>
+
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">> Esta es una cita o nota importante.
+> Puede tener varias líneas.
+
+> **Nota:** Texto destacado.</div>
+        <div class="ejemplo-resultado">
+            <blockquote style="border-left:4px solid #ccc;margin:0;padding-left:15px;color:#666;">
+                Esta es una cita o nota importante.
+                Puede tener varias líneas.
+            </blockquote>
+            <br>
+            <blockquote style="border-left:4px solid #ccc;margin:0;padding-left:15px;color:#666;">
+                <strong>Nota:</strong> Texto destacado.
+            </blockquote>
+        </div>
+    </div>
+
+    <h2 id="lineas">Líneas Horizontales</h2>
+
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">Texto antes
+
+---
+
+Texto después</div>
+        <div class="ejemplo-resultado">
+            <p>Texto antes</p>
+            <hr>
+            <p>Texto después</p>
+        </div>
+    </div>
+
+    <h2 id="checklist">Checklists</h2>
+
+    <div class="ejemplo">
+        <div class="ejemplo-header">
+            <span>Escribes</span>
+            <span>Resultado</span>
+        </div>
+        <div class="ejemplo-codigo">- [ ] Tarea pendiente
+- [x] Tarea completada
+- [ ] Otra tarea pendiente</div>
+        <div class="ejemplo-resultado">
+            <p>☐ Tarea pendiente</p>
+            <p>☑ Tarea completada</p>
+            <p>☐ Otra tarea pendiente</p>
+        </div>
+    </div>
+
+    <h2>Resumen Rápido</h2>
+
+    <table>
+        <tr>
+            <th>Elemento</th>
+            <th>Sintaxis</th>
+        </tr>
+        <tr>
+            <td>Título</td>
+            <td><code># Título</code></td>
+        </tr>
+        <tr>
+            <td>Negrita</td>
+            <td><code>**texto**</code></td>
+        </tr>
+        <tr>
+            <td>Cursiva</td>
+            <td><code>*texto*</code></td>
+        </tr>
+        <tr>
+            <td>Lista viñetas</td>
+            <td><code>- elemento</code></td>
+        </tr>
+        <tr>
+            <td>Lista numerada</td>
+            <td><code>1. elemento</code></td>
+        </tr>
+        <tr>
+            <td>Enlace</td>
+            <td><code>[texto](url)</code></td>
+        </tr>
+        <tr>
+            <td>Código inline</td>
+            <td><code>`código`</code></td>
+        </tr>
+        <tr>
+            <td>Bloque código</td>
+            <td><code>```lenguaje ... ```</code></td>
+        </tr>
+        <tr>
+            <td>Cita</td>
+            <td><code>> texto</code></td>
+        </tr>
+        <tr>
+            <td>Línea horizontal</td>
+            <td><code>---</code></td>
+        </tr>
+        <tr>
+            <td>Checkbox</td>
+            <td><code>- [ ] tarea</code></td>
+        </tr>
+    </table>
+
+    <div class="warning">
+        <div class="warning-title">Importante</div>
+        Después de editar un archivo <code>.md</code>, avisa a Claude Code para que regenere el HTML visual correspondiente.
+    </div>
+
+    <footer>
+        <p><strong>Oficina de Transformación Digital - Universidad Pontificia Comillas</strong></p>
+        <p>Versión 1.0 | Diciembre 2025</p>
+    </footer>
+</body>
+</html>

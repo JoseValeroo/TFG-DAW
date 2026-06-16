@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor - Guía de Estilos | OTD Comillas</title>
+    <style>
+        :root {
+            --azul-comillas: #003366;
+            --azul-claro: #e8f4fc;
+            --gris-codigo: #f5f5f5;
+            --borde: #ddd;
+            --exito: #28a745;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--azul-comillas);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 { font-size: 1.3em; font-weight: 500; }
+        header small { opacity: 0.8; font-size: 0.85em; }
+
+        .header-buttons { display: flex; gap: 10px; }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary { background: var(--exito); color: white; }
+        .btn-primary:hover { background: #218838; }
+        .btn-secondary { background: white; color: var(--azul-comillas); }
+        .btn-secondary:hover { background: var(--azul-claro); }
+
+        .toolbar {
+            background: white;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--borde);
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar button {
+            padding: 8px 12px;
+            border: 1px solid var(--borde);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .toolbar button:hover { background: var(--azul-claro); }
+        .toolbar-separator { width: 1px; background: var(--borde); margin: 0 10px; }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: calc(100vh - 110px);
+        }
+
+        .panel { display: flex; flex-direction: column; overflow: hidden; }
+
+        .panel-header {
+            background: var(--azul-claro);
+            padding: 12px 20px;
+            font-weight: 600;
+            color: var(--azul-comillas);
+            border-bottom: 1px solid var(--borde);
+        }
+
+        .panel-editor { border-right: 1px solid var(--borde); }
+
+        #editor {
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            border: none;
+            resize: none;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: white;
+            outline: none;
+        }
+
+        #preview {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: white;
+            line-height: 1.6;
+        }
+
+        #preview h1 { font-size: 1.8em; margin: 0.5em 0; color: var(--azul-comillas); border-bottom: 2px solid var(--azul-comillas); padding-bottom: 10px; }
+        #preview h2 { font-size: 1.4em; margin: 0.8em 0; color: var(--azul-comillas); border-bottom: 1px solid var(--borde); padding-bottom: 8px; }
+        #preview h3 { font-size: 1.15em; margin: 0.8em 0; color: #444; }
+        #preview h4 { font-size: 1em; margin: 0.8em 0; color: #555; }
+        #preview p { margin: 0.8em 0; }
+        #preview ul, #preview ol { margin: 0.8em 0; padding-left: 25px; }
+        #preview li { margin: 0.3em 0; }
+        #preview code { background: var(--gris-codigo); padding: 2px 6px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.9em; }
+        #preview pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 1em 0; }
+        #preview pre code { background: none; padding: 0; color: inherit; }
+        #preview blockquote { border-left: 4px solid var(--azul-comillas); margin: 1em 0; padding: 10px 20px; background: var(--azul-claro); }
+        #preview table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.9em; }
+        #preview th, #preview td { border: 1px solid var(--borde); padding: 8px 10px; text-align: left; }
+        #preview th { background: var(--azul-comillas); color: white; }
+        #preview tr:nth-child(even) { background: var(--gris-codigo); }
+        #preview hr { border: none; border-top: 2px solid var(--borde); margin: 1.5em 0; }
+
+        .status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: var(--exito);
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .status.show { opacity: 1; }
+
+        @media (max-width: 900px) {
+            .main-container { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+            .panel-editor { border-right: none; border-bottom: 1px solid var(--borde); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>Guía de Diseño y Usabilidad</h1>
+            <small>Archivo: GUIA_ESTILOS.md</small>
+        </div>
+        <div class="header-buttons">
+            <a href="../GUIA_MARKDOWN.html" target="_blank" class="btn btn-secondary">Ver guía MD</a>
+            <button class="btn btn-primary" onclick="guardarArchivo()">Guardar .md</button>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <button onclick="insertarTexto('# ', '')">H1</button>
+        <button onclick="insertarTexto('## ', '')">H2</button>
+        <button onclick="insertarTexto('### ', '')">H3</button>
+        <div class="toolbar-separator"></div>
+        <button onclick="insertarTexto('**', '**')"><b>B</b></button>
+        <button onclick="insertarTexto('*', '*')"><i>I</i></button>
+        <div class="toolbar-separator"></div>
+        <button onclick="insertarTexto('- ', '')">Lista</button>
+        <button onclick="insertarTexto('- [ ] ', '')">Check</button>
+        <button onclick="insertarTexto('`', '`')">Código</button>
+        <button onclick="insertarBloqueCodigo()">Bloque CSS</button>
+        <button onclick="insertarTabla()">Tabla</button>
+        <div class="toolbar-separator"></div>
+        <button onclick="insertarColor()">Color</button>
+    </div>
+
+    <div class="main-container">
+        <div class="panel panel-editor">
+            <div class="panel-header">Editor Markdown</div>
+            <textarea id="editor"></textarea>
+        </div>
+        <div class="panel">
+            <div class="panel-header">Vista Previa</div>
+            <div id="preview"></div>
+        </div>
+    </div>
+
+    <div class="status" id="status">Archivo guardado</div>
+
+    <script>
+        const editor = document.getElementById('editor');
+        const preview = document.getElementById('preview');
+
+        const contenidoInicial = `# Guía de Diseño y Usabilidad
+
+Estándares visuales y de experiencia de usuario para aplicaciones de la OTD - Universidad Pontificia Comillas.
+
+---
+
+## 1. Identidad Visual
+
+### 1.1 Logos
+
+| Logo | Uso | Ubicación |
+|------|-----|-----------|
+| **Comillas (principal)** | Header de aplicaciones | \`assets/logo_comillas.svg\` |
+| **OTD** | Footer o secundario | \`assets/logo_otd.svg\` |
+
+**Reglas de uso:**
+- Logo de Comillas siempre visible en header
+- Espacio mínimo alrededor del logo: altura del logo
+- No deformar, rotar ni cambiar colores
+
+### 1.2 Paleta de Colores
+
+#### Colores Primarios (Corporativos)
+
+| Nombre | HEX | RGB | Uso |
+|--------|-----|-----|-----|
+| **Azul Comillas** | \`#003366\` | rgb(0, 51, 102) | Headers, botones primarios |
+| **Azul Claro** | \`#0066CC\` | rgb(0, 102, 204) | Enlaces, acentos |
+| **Blanco** | \`#FFFFFF\` | rgb(255, 255, 255) | Fondos, texto sobre oscuro |
+
+#### Colores Secundarios
+
+| Nombre | HEX | RGB | Uso |
+|--------|-----|-----|-----|
+| **Gris Oscuro** | \`#333333\` | rgb(51, 51, 51) | Texto principal |
+| **Gris Medio** | \`#666666\` | rgb(102, 102, 102) | Texto secundario |
+| **Gris Claro** | \`#F5F5F5\` | rgb(245, 245, 245) | Fondos alternos |
+| **Borde** | \`#DDDDDD\` | rgb(221, 221, 221) | Líneas, separadores |
+
+#### Colores de Estado
+
+| Estado | HEX | Uso |
+|--------|-----|-----|
+| **Éxito** | \`#28A745\` | Confirmaciones, completado |
+| **Advertencia** | \`#FFC107\` | Alertas, pendiente |
+| **Error** | \`#DC3545\` | Errores, eliminación |
+| **Información** | \`#17A2B8\` | Información, ayuda |
+
+#### Variables CSS
+
+\`\`\`css
+:root {
+    /* Primarios */
+    --color-primary: #003366;
+    --color-primary-light: #0066CC;
+    --color-white: #FFFFFF;
+
+    /* Secundarios */
+    --color-text: #333333;
+    --color-text-secondary: #666666;
+    --color-background: #F5F5F5;
+    --color-border: #DDDDDD;
+
+    /* Estados */
+    --color-success: #28A745;
+    --color-warning: #FFC107;
+    --color-error: #DC3545;
+    --color-info: #17A2B8;
+}
+\`\`\`
+
+---
+
+## 2. Tipografía
+
+### 2.1 Fuentes
+
+| Tipo | Fuente | Fallback | Uso |
+|------|--------|----------|-----|
+| **Principal** | Segoe UI | Tahoma, sans-serif | Todo el texto |
+| **Código** | Consolas | Monaco, monospace | Código, datos técnicos |
+
+### 2.2 Escala Tipográfica
+
+| Elemento | Tamaño | Peso | Line-height |
+|----------|--------|------|-------------|
+| H1 | 2rem (32px) | 600 | 1.2 |
+| H2 | 1.5rem (24px) | 600 | 1.3 |
+| H3 | 1.25rem (20px) | 600 | 1.4 |
+| H4 | 1rem (16px) | 600 | 1.4 |
+| Cuerpo | 1rem (16px) | 400 | 1.6 |
+| Pequeño | 0.875rem (14px) | 400 | 1.5 |
+
+---
+
+## 3. Componentes UI
+
+### 3.1 Botones
+
+| Tipo | Uso | Estilo |
+|------|-----|--------|
+| **Primario** | Acción principal | Fondo azul, texto blanco |
+| **Secundario** | Acciones alternativas | Borde azul, fondo blanco |
+| **Peligro** | Eliminar, cancelar | Fondo rojo |
+| **Deshabilitado** | No disponible | Gris, cursor not-allowed |
+
+\`\`\`css
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-light);
+}
+\`\`\`
+
+### 3.2 Formularios
+
+\`\`\`css
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
+}
+\`\`\`
+
+### 3.3 Tablas
+
+\`\`\`css
+.table th {
+    background: var(--color-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.table tr:nth-child(even) {
+    background: #F9F9F9;
+}
+
+.table tr:hover {
+    background: #E3F2FD;
+}
+\`\`\`
+
+---
+
+## 4. Responsive Design
+
+### 4.1 Breakpoints
+
+| Nombre | Ancho | Dispositivo |
+|--------|-------|-------------|
+| **xs** | < 576px | Móvil vertical |
+| **sm** | >= 576px | Móvil horizontal |
+| **md** | >= 768px | Tablet |
+| **lg** | >= 992px | Desktop |
+| **xl** | >= 1200px | Desktop grande |
+
+---
+
+## 5. Accesibilidad (WCAG 2.1 AA)
+
+### 5.1 Contraste de Color
+
+| Combinación | Ratio Mínimo | Estado |
+|-------------|--------------|--------|
+| Texto normal sobre fondo | 4.5:1 | Obligatorio |
+| Texto grande (18px+) sobre fondo | 3:1 | Obligatorio |
+| Elementos UI | 3:1 | Obligatorio |
+
+### 5.2 Checklist de Accesibilidad
+
+- [ ] Todas las imágenes tienen \`alt\` descriptivo
+- [ ] Formularios tienen \`label\` asociados
+- [ ] Navegación por teclado funcional
+- [ ] Focus visible en elementos interactivos
+- [ ] Textos de enlace descriptivos
+- [ ] Estructura de encabezados jerárquica
+
+---
+
+**Versión:** 1.0
+**Fecha:** Diciembre 2025
+**Responsable:** Comité Técnico OTD`;
+
+        editor.value = contenidoInicial;
+        actualizarPreview();
+
+        editor.addEventListener('input', actualizarPreview);
+
+        function actualizarPreview() {
+            let md = editor.value;
+            let html = convertirMarkdown(md);
+            preview.innerHTML = html;
+        }
+
+        function convertirMarkdown(md) {
+            md = md.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            md = md.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => '<pre><code>' + code.trim() + '</code></pre>');
+            md = md.replace(/`([^`]+)`/g, '<code>$1</code>');
+            md = md.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+            md = md.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+            md = md.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+            md = md.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+            md = md.replace(/^---$/gm, '<hr>');
+            md = md.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            md = md.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            md = md.replace(/^- \[x\] (.+)$/gm, '<p>☑ $1</p>');
+            md = md.replace(/^- \[ \] (.+)$/gm, '<p>☐ $1</p>');
+            md = md.replace(/^- (.+)$/gm, '<li>$1</li>');
+            md = md.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+            md = md.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+            md = md.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+            md = md.replace(/^\|(.+)\|$/gm, function(match, content) {
+                if (content.match(/^[\s\-:|]+$/)) return '<!--sep-->';
+                let cells = content.split('|').map(c => c.trim());
+                return '<tr>' + cells.map(c => '<td>' + c + '</td>').join('') + '</tr>';
+            });
+            md = md.replace(/(<tr>.*<\/tr>\n?)+/g, function(match) {
+                let rows = match.replace(/<!--sep-->\n?/g, '');
+                rows = rows.replace(/<tr>(.*?)<\/tr>/, (m, c) => '<tr>' + c.replace(/<td>/g, '<th>').replace(/<\/td>/g, '</th>') + '</tr>');
+                return '<table>' + rows + '</table>';
+            });
+            md = md.replace(/<!--sep-->/g, '');
+            md = md.replace(/^(?!<[hupbolt]|<\/|<li|<hr|<pre|<table|<tr|☐|☑)(.+)$/gm, '<p>$1</p>');
+            return md;
+        }
+
+        function insertarTexto(antes, despues) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const texto = editor.value;
+            const sel = texto.substring(start, end) || 'texto';
+            editor.value = texto.substring(0, start) + antes + sel + despues + texto.substring(end);
+            editor.setSelectionRange(start + antes.length, start + antes.length + sel.length);
+            editor.focus();
+            actualizarPreview();
+        }
+
+        function insertarBloqueCodigo() {
+            const start = editor.selectionStart;
+            const texto = editor.value;
+            const bloque = '```css\n.clase {\n    propiedad: valor;\n}\n```\n';
+            editor.value = texto.substring(0, start) + bloque + texto.substring(start);
+            editor.focus();
+            actualizarPreview();
+        }
+
+        function insertarTabla() {
+            const start = editor.selectionStart;
+            const texto = editor.value;
+            const tabla = '\n| Columna 1 | Columna 2 |\n|-----------|----------|\n| Dato 1    | Dato 2   |\n';
+            editor.value = texto.substring(0, start) + tabla + texto.substring(start);
+            editor.focus();
+            actualizarPreview();
+        }
+
+        function insertarColor() {
+            const start = editor.selectionStart;
+            const texto = editor.value;
+            const color = '| **Nombre** | `#HEXVAL` | rgb(R, G, B) | Uso |';
+            editor.value = texto.substring(0, start) + color + texto.substring(start);
+            editor.focus();
+            actualizarPreview();
+        }
+
+        function guardarArchivo() {
+            const blob = new Blob([editor.value], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'GUIA_ESTILOS.md';
+            a.click();
+            URL.revokeObjectURL(url);
+            mostrarStatus();
+        }
+
+        function mostrarStatus() {
+            const status = document.getElementById('status');
+            status.classList.add('show');
+            setTimeout(() => status.classList.remove('show'), 2000);
+        }
+
+        editor.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                guardarArchivo();
+            }
+        });
+    </script>
+</body>
+</html>

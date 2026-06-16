@@ -1,0 +1,44 @@
+{
+  "proyecto": {
+    "nombre": "[NOMBRE_DEL_PROYECTO]",
+    "version": "1.0.0",
+    "descripcion": "[Descripción breve del proyecto]",
+    "fecha_inicio": "YYYY-MM-DD",
+    "cliente": "[Nombre del cliente]"
+  },
+  "tecnologias": {
+    "framework": ".NET 8",
+    "lenguaje": "C#",
+    "base_datos": "SQL Server",
+    "cloud": "Azure",
+    "acceso_datos": "Dapper (recomendado) / ADO.NET"
+  },
+  "equipo": {
+    "jefe_proyecto": "[Nombre]",
+    "desarrolladores": [
+      "[Desarrollador 1]",
+      "[Desarrollador 2]"
+    ],
+    "qa": "[Nombre QA]"
+  },
+  "repositorio": {
+    "url": "[URL del repositorio Git]",
+    "rama_principal": "main",
+    "rama_desarrollo": "develop"
+  },
+  "ia_tools": {
+    "claude_code": {
+      "habilitado": true,
+      "uso": "Análisis, diseño, documentación, revisión"
+    },
+    "github_copilot": {
+      "habilitado": true,
+      "uso": "Autocompletado, generación de código"
+    }
+  },
+  "configuracion": {
+    "registrar_prompts": true,
+    "code_review_obligatorio": true,
+    "documentacion_automatica": true
+  }
+}

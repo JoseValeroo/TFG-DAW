@@ -1,0 +1,5 @@
+{
+  "_comentario": "Historico de auditorias NuGet. Se actualiza con /nugets --audit. Claude lee este archivo para detectar regresiones.",
+  "ultimaAuditoria": null,
+  "auditorias": []
+}
