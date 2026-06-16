@@ -33,16 +33,18 @@ Este archivo guía a Claude Code (claude.ai/code) cuando trabaja con código en 
 | Campo | Valor |
 |-------|-------|
 | **Nombre** | TFG-DAW (`paquete-tfg`) — red social / portal multimedia "Lure" |
-| **Versión** | 0.0.0 (desarrollo, fase temprana) |
-| **Tipo** | SPA Frontend (React). Backend MySQL en desarrollo (rama `feat/bbdd-back`) |
-| **Framework** | React 18.3 + Vite 5.4 — JavaScript/JSX, `type: module` |
+| **Versión** | 0.0.0 (desarrollo) |
+| **Tipo** | App full-stack: SPA React (frontend) + API REST NestJS/MySQL (backend) |
+| **Framework** | Frontend: React 18.3 + Vite 8 (JS/JSX). Backend: NestJS 11 + TypeORM + MySQL (TypeScript) |
 
 > ⚠️ **CRÍTICO para Claude**: este **NO es un proyecto .NET**, pese a que la plantilla base
 > (`CLAUDE_BASE_COMILLAS.md`, `.claude/rules/*.md`, los comandos) está orientada a .NET/C#.
-> El código real es **React + Vite** y vive en **`03_Desarrollo/`**. Las reglas .NET, los
-> comandos `dotnet`, Clean Architecture y SQL Server **no aplican** al frontend. La `src/` que
-> git muestra como *deleted* en la raíz fue **movida a `03_Desarrollo/`** (reorganización a la
-> estructura de carpetas STIC); el árbol de código vivo es el de **`03_Desarrollo/`**.
+> Las reglas .NET, los comandos `dotnet`, Clean Architecture y SQL Server **no aplican**.
+> El código vivo está en **`03_Desarrollo/`**, dividido en dos proyectos:
+> - **`03_Desarrollo/frontend/`** — SPA React + Vite (JavaScript).
+> - **`03_Desarrollo/backend/`** — API REST NestJS + TypeORM + **MySQL** (TypeScript).
+>
+> La `src/` que git muestra como *deleted* en la raíz se movió a `03_Desarrollo/frontend/`.
 
 ---
 
@@ -53,7 +55,7 @@ Este archivo guía a Claude Code (claude.ai/code) cuando trabaja con código en 
 
 | Término | Definición | Ejemplo de uso |
 |---------|------------|----------------|
-| Lure | Marca/nombre de la aplicación (aparece en logos `LURE-LOGO*.png` y login) | "El logo de Lure cambia en modo oscuro" |
+| Lure | Marca/nombre de la aplicación (logo `Logo.svg`, login/register) | "El logo de Lure aparece en el login" |
 | CardPadre | Componente de tarjeta de artículo/noticia reutilizable (imagen + título + texto + fecha) | "El feed se compone de varios `CardPadre`" |
 | CardPadre2 | Variante de tarjeta destacada (artículo principal de la columna izquierda) | "La `Mitad_Izquierda` muestra un `CardPadre2`" |
 | MicroPerfil | Componente de mini-perfil de usuario | "El sidebar incluye un `MicroPerfil`" |
@@ -84,20 +86,34 @@ CATEGORÍAS COMUNES:
 
 ## Comandos Comunes
 
-### Frontend (React + Vite) — ejecutar SIEMPRE desde `03_Desarrollo/`
+> ⚠️ Node está instalado en `C:\Program Files\nodejs` pero **no en el PATH** de las shells.
+> Para `npm` en PowerShell: `$env:Path = "C:\Program Files\nodejs;" + $env:Path`.
+
+### Frontend (React + Vite) — desde `03_Desarrollo/frontend/`
 
 ```bash
-cd 03_Desarrollo
-
-npm install                # Instalar dependencias (genera node_modules/)
-npm run dev                # Servidor de desarrollo Vite (HMR) — http://localhost:5173
+cd 03_Desarrollo/frontend
+npm install
+npm run dev                # Vite dev server (HMR) — http://localhost:5173
 npm run build              # Build de producción a dist/
-npm run preview            # Servir el build de producción localmente
-npm run lint               # ESLint sobre todo el proyecto (eslint .)
+npm run preview            # Servir el build localmente
+npm run lint               # ESLint (0 errores; 1 warning fast-refresh conocido)
 ```
 
-> **No hay script de tests** definido en `package.json` (no existe suite de tests todavía).
-> No usar `dotnet` ni `docker-compose`: el proyecto no los usa actualmente.
+### Backend (NestJS + MySQL) — desde `03_Desarrollo/backend/`
+
+```bash
+cd 03_Desarrollo/backend
+npm install
+cp .env.example .env       # editar credenciales MySQL + JWT_SECRET
+# crear la BD una vez:  CREATE DATABASE lure CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+npm run start:dev          # API en http://localhost:3000/api (hot reload)
+npm run build              # Compila a dist/ (nest build)
+```
+
+> **No hay suite de tests** todavía (ni front ni back). No usar `dotnet`.
+> El backend necesita **MySQL corriendo** + base de datos `lure` (las tablas las crea
+> TypeORM solo con `DB_SYNCHRONIZE=true` en desarrollo).
 
 ---
 
@@ -211,39 +227,48 @@ TFG-DAW/
 ├── CLAUDE.md, README.md       ← Plantilla STIC.IA (este archivo y docs base)
 ├── _duran/ _atlas/ .claude/   ← Ecosistema STIC.IA (memoria, conocimiento, comandos/reglas)
 ├── Documentos_Base/ 0X_*/     ← Carpetas de gestión/diseño/pruebas/CICD/doc del estándar STIC
-└── 03_Desarrollo/             ← ⭐ PROYECTO REACT REAL
-    ├── package.json           # Scripts npm (dev/build/lint/preview) y dependencias
-    ├── vite.config.js         # Vite + plugin React; inyecta CSS de NextUI global
-    ├── eslint.config.js       # ESLint flat config (react, react-hooks, react-refresh)
-    ├── index.html             # Punto de entrada HTML (monta #root)
-    └── src/
-        ├── main.jsx           # Bootstrap: <Router> + <NextUIProvider> + <AppRouter>
-        ├── router/router.jsx  # Rutas react-router-dom v6 (/, /login, /register, /profilePage, /cardPadre)
-        ├── App.jsx            # Página principal: grid de tarjetas con expansión al click
-        ├── pages/             # Vistas por ruta: login, register, profile, forgotpass, TarjetaMain
-        ├── components/        # UI reutilizable: CardPadre, CardPadre2, CardMultimedia, Carrousel, MicroPerfil, boton
-        ├── context/           # AuthContext.jsx (estado de sesión global)
-        ├── hooks/ services/   # vacíos — pendientes (data-fetching / API MySQL en feat/bbdd-back)
-        └── assets/            # Iconos SVG e imágenes
+└── 03_Desarrollo/             ← ⭐ CÓDIGO REAL (full-stack)
+    ├── frontend/              # SPA React + Vite (JavaScript)
+    │   ├── package.json vite.config.js eslint.config.js index.html
+    │   ├── public/           # assets servidos en raíz (logo.svg = favicon)
+    │   └── src/
+    │       ├── main.jsx           # Bootstrap: <Router> + <AuthProvider> + <AppRouter>
+    │       ├── router/router.jsx  # Rutas v6 + <ProtectedRoute> (/profilePage protegida)
+    │       ├── App.jsx            # Home: grid de tarjetas (datos + .map), expansión al click
+    │       ├── pages/             # login, register, profile, forgotpass, TarjetaMain
+    │       ├── components/        # CardPadre, CardPadre2, CardMultimedia, Carrousel, MicroPerfil, boton
+    │       ├── context/AuthContext.jsx  # sesión global (token JWT + user en localStorage)
+    │       ├── services/api.js          # cliente fetch a la API (VITE_API_URL)
+    │       └── assets/                  # iconos SVG e imágenes (WebP optimizadas)
+    └── backend/              # API REST NestJS + TypeORM + MySQL (TypeScript)
+        ├── .env(.example)    # config DB + JWT (.env gitignored)
+        └── src/
+            ├── main.ts             # prefijo /api, CORS, ValidationPipe
+            ├── app.module.ts       # ConfigModule + TypeOrm(MySQL) + Users + Auth
+            ├── users/              # User entity + service (tabla users)
+            └── auth/               # register/login/me, bcrypt, JWT, Passport
 ```
 
 ### Arquitectura del frontend
 
-- **SPA con React Router v6**: `main.jsx` envuelve la app en `BrowserRouter` + `NextUIProvider`;
-  `router/router.jsx` declara las rutas. `App.jsx` es a la vez la ruta `/` y la home con feed de tarjetas.
-- **Componentes**: cada componente vive en su carpeta con su `.jsx` + `.css` co-localizados
-  (CSS plano por componente, no CSS Modules). Patrón funcional con props y `useState` para estado local
-  (p. ej. `expandedCard` en `App.jsx`, formularios controlados en `loginPage.jsx`).
-- **UI libraries (coexisten)**: NextUI, Ant Design (`antd`), Bootstrap, Tailwind, Framer Motion,
-  lucide-react / react-icons / @ant-design/icons. Antes de añadir UI, revisa cuál se usa en el componente vecino.
-- **Estado de auth (provisional)**: hay un `AuthContext` (`src/context/AuthContext.jsx`) con
-  `login`/`logout`/`isAuthenticated` y persistencia en `localStorage`. La **validación de credenciales
-  sigue siendo un MOCK en cliente** (`admin`/`admin` en `loginPage.jsx`): cuando exista el backend
-  (`feat/bbdd-back`, MySQL), `login()` deberá llamar a la API y guardar un JWT. La ruta `/profilePage`
-  está protegida vía `<ProtectedRoute>` en `router.jsx`.
-- **Carga de imágenes**: importar siempre los assets como módulos ES (`import x from '../assets/...'`),
-  nunca como string `"src/assets/..."` (eso rompe en `npm run build`). Los assets de `public/` (p. ej.
-  `public/logo.svg` usado como favicon) se referencian con ruta absoluta `/logo.svg`.
+- **SPA con React Router v6**: `main.jsx` → `BrowserRouter` + `AuthProvider` + `AppRouter`.
+  `App.jsx` es la ruta `/` (home con feed de tarjetas). `/profilePage` está protegida con `<ProtectedRoute>`.
+- **Componentes**: una carpeta por componente con `.jsx` + `.css` co-localizados (CSS plano, no Modules).
+  Patrón funcional con props + `useState`; datos en arrays + `.map()` (ver `App.jsx`).
+- **Una sola librería UI: Ant Design** (`antd` + `@ant-design/icons`) + **lucide-react** para iconos.
+  (Se eliminaron NextUI, Bootstrap, Tailwind, Framer Motion, Font Awesome: no se usaban.)
+- **Autenticación real**: `AuthContext` expone `login`/`register`/`logout`/`isAuthenticated`;
+  `services/api.js` llama a la API NestJS y guarda el **JWT** + user en `localStorage`.
+- **Carga de imágenes**: importar siempre como módulos ES (`import x from '../assets/...'`),
+  nunca como string `"src/assets/..."` (rompe en `build`). Assets de `public/` → ruta absoluta (`/logo.svg`).
+
+### Arquitectura del backend
+
+- **NestJS modular**: `AuthModule` (controlador + servicio + estrategia JWT) usa `UsersModule`.
+  TypeORM con MySQL; `synchronize` solo en desarrollo. Config por `.env` vía `@nestjs/config`.
+- **Auth**: contraseñas con **bcrypt**, **JWT** firmado (`JWT_SECRET`), validación con `class-validator`.
+  Endpoints: `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me` (protegido).
+- Ver `03_Desarrollo/backend/README.md` para puesta en marcha y ejemplos `curl`.
 
 ---
 

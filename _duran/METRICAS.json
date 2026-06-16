@@ -113,6 +113,62 @@
                                       ],
                          "versionProyecto":  "0.0.0",
                          "fecha":  "2026-06-16 12:41:24"
+                     },
+                     {
+                         "archivosModificados":  10,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/package-lock.json",
+                                          "03_Desarrollo/package.json",
+                                          "03_Desarrollo/src/App.jsx",
+                                          "03_Desarrollo/src/assets/Image/comunidades.png",
+                                          "03_Desarrollo/src/assets/Image/comunidaes.jpg",
+                                          "03_Desarrollo/src/main.jsx",
+                                          "03_Desarrollo/src/pages/login/loginPage.jsx",
+                                          "03_Desarrollo/src/pages/register/register.jsx",
+                                          "03_Desarrollo/vite.config.js",
+                                          "03_Desarrollo/src/assets/Image/comunidades.webp"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-16 12:50:06"
+                     },
+                     {
+                         "archivosModificados":  51,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/.gitignore",
+                                          "03_Desarrollo/.vite/deps/_metadata.json",
+                                          "03_Desarrollo/.vite/deps/package.json",
+                                          "03_Desarrollo/LICENSE",
+                                          "03_Desarrollo/eslint.config.js",
+                                          "03_Desarrollo/index.html",
+                                          "03_Desarrollo/package-lock.json",
+                                          "03_Desarrollo/package.json",
+                                          "03_Desarrollo/public/logo.svg",
+                                          "03_Desarrollo/public/vite.svg",
+                                          "03_Desarrollo/src/App.css",
+                                          "03_Desarrollo/src/App.jsx",
+                                          "03_Desarrollo/src/assets/Icons/EyeClosed.svg",
+                                          "03_Desarrollo/src/assets/Icons/EyeOpen.svg",
+                                          "03_Desarrollo/src/assets/Icons/Logo.svg",
+                                          "03_Desarrollo/src/assets/Image/comunidades.png",
+                                          "03_Desarrollo/src/assets/Image/comunidaes.jpg",
+                                          "03_Desarrollo/src/assets/Image/elomusk.jpg",
+                                          "03_Desarrollo/src/assets/Image/news.png",
+                                          "03_Desarrollo/src/assets/Image/perfil.webp"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-16 13:17:36"
                      }
                  ]
 }
