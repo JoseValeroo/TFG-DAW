@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import './Register.css';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './register.css';
 import 'font-awesome/css/font-awesome.min.css';
+import lureLogo from '../../assets/Icons/Logo.svg';
 
-function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
+function RegisterPage() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,7 +12,9 @@ function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
-  const [darkMode, setDarkMode] = useState(false); // Estado para alternar entre claro y oscuro
+  const [darkMode, setDarkMode] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,92 +26,100 @@ function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
       setError('Las contraseñas no coinciden.');
       return;
     }
-    console.log('Registro exitoso:', { username, email, password });
     setError('');
-    onRegisterSuccess();
+    // MOCK: aquí irá la llamada al backend (POST /register) en feat/bbdd-back.
+    navigate('/login');
   };
 
   return (
     <div className={`register-container ${darkMode ? 'dark-mode' : ''}`}>
       <div className="register-card">
         <div className="register-logo">
-        <img
-          src={darkMode ? "/src/assets/Image/LURE-LOGO-WHITE.png" : "/src/assets/Image/LURE-LOGO.png"} 
-          alt="Lure logo" 
-        />
+          <img src={lureLogo} alt="Lure logo" />
         </div>
         <h2>Crea tu cuenta</h2>
         <p className="subheading">Crea una cuenta para continuar</p>
         <form onSubmit={handleSubmit} className="register-form">
-          <label htmlFor="" id='label-input'>Usuario</label>
+          <label htmlFor="reg-username" id="label-input">Usuario</label>
           <input
+            id="reg-username"
             type="text"
             placeholder="Nombre de usuario"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="register-input input-common"
             required
+            autoComplete="username"
           />
 
-          <label htmlFor="" id='label-input'>Email</label>
+          <label htmlFor="reg-email">Email</label>
           <input
+            id="reg-email"
             type="email"
             placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="register-input input-common"
             required
+            autoComplete="email"
           />
 
-          <label htmlFor="" id='label-input'>Contraseña</label>
+          <label htmlFor="reg-password">Contraseña</label>
           <div className="password-container">
             <input
+              id="reg-password"
               type={showPassword ? 'text' : 'password'}
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="register-input input-common"
               required
+              autoComplete="new-password"
             />
             <button
               type="button"
               className="toggle-password"
               onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             >
               {showPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
             </button>
           </div>
 
-          <label htmlFor="" id='label-input'>Confirmar Contraseña</label>
+          <label htmlFor="reg-confirm">Confirmar Contraseña</label>
           <div className="password-container">
             <input
+              id="reg-confirm"
               type={showConfirmPassword ? 'text' : 'password'}
               placeholder="Confirmar contraseña"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="register-input input-common"
               required
+              autoComplete="new-password"
             />
             <button
               type="button"
               className="toggle-password"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              aria-label={showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             >
-              {showPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
+              {showConfirmPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
             </button>
           </div>
 
           {error && <p className="error-message">{error}</p>}
+
+          <div className="register-buttons">
+            <button type="submit" className="register-button">Registrarse</button>
+          </div>
         </form>
 
-        <div className="register-buttons">
-          <button type="submit" className="register-button">Registrarse</button>
-        </div>
         <div className="register-footer">
-          <p>¿Ya tienes una cuenta? <a href="login" onClick={onToggleLogin}>Inicia sesión</a></p>
-          <p><a href="/">Volver al Inicio</a></p>
+          <p>¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link></p>
+          <p><Link to="/">Volver al Inicio</Link></p>
         </div>
-        
+
         <button
           type="button"
           onClick={() => setDarkMode(!darkMode)}
@@ -115,8 +127,6 @@ function RegisterPage({ onRegisterSuccess, onToggleLogin }) {
         >
           {darkMode ? 'Modo Claro' : 'Modo Oscuro'}
         </button>
-
-        
       </div>
     </div>
   );

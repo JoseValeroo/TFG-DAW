@@ -1,5 +1,4 @@
-import React from 'react';
-import './MicroPerfil.css'
+import './MicroPerfil.css';
 
 function MicroPerfil() {
  

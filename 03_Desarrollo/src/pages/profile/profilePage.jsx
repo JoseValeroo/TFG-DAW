@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Avatar, List, Button, Tag, Tabs, Row, Col, Menu, Badge } from 'antd';
 import { 
   MailOutlined, 
@@ -18,6 +17,8 @@ import {
 } from '@ant-design/icons';
 import 'antd/dist/reset.css'; // Importa los estilos de Ant Design
 import './profile.css'; // Importa el archivo CSS
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const { Meta } = Card;
 
@@ -40,6 +41,14 @@ const posts = [
 ];
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   const profileData = {
     avatar: "https://via.placeholder.com/150",
     coverPhoto: "https://via.placeholder.com/300x150",
@@ -134,10 +143,10 @@ const ProfilePage = () => {
                 renderItem={(post) => (
                   <List.Item
                     actions={[
-                      <Button type="text" icon={<LikeOutlined />} />,
-                      <Button type="text" icon={<CommentOutlined />} />,
-                      <Button type="text" icon={<ShareAltOutlined />} />,
-                      <Button type="text" icon={<SaveOutlined />} />,
+                      <Button key="like" type="text" icon={<LikeOutlined />} />,
+                      <Button key="comment" type="text" icon={<CommentOutlined />} />,
+                      <Button key="share" type="text" icon={<ShareAltOutlined />} />,
+                      <Button key="save" type="text" icon={<SaveOutlined />} />,
                     ]}
                   >
                     <List.Item.Meta
@@ -162,7 +171,7 @@ const ProfilePage = () => {
                       dataSource={seguidores}
                       renderItem={item => (
                         <List.Item
-                          actions={[<Button type="primary" shape="round">Seguir</Button>]}
+                          actions={[<Button key="seguir" type="primary" shape="round">Seguir</Button>]}
                         >
                           <List.Item.Meta
                             avatar={<Avatar src={item.foto} />}
@@ -179,7 +188,7 @@ const ProfilePage = () => {
                       dataSource={seguidos}
                       renderItem={item => (
                         <List.Item
-                          actions={[<Button type="default" shape="round">Dejar Seguir</Button>]}
+                          actions={[<Button key="dejar" type="default" shape="round">Dejar Seguir</Button>]}
                         >
                           <List.Item.Meta
                             avatar={<Avatar src={item.foto} />}
@@ -280,7 +289,7 @@ const ProfilePage = () => {
               <Menu.Item key="5" icon={<UserOutlined />}>
                 Cuentas
               </Menu.Item>
-              <Menu.Item key="6" icon={<StopOutlined />}>
+              <Menu.Item key="6" icon={<StopOutlined />} onClick={handleLogout}>
                 Cerrar Sesion
               </Menu.Item>
             </Menu>

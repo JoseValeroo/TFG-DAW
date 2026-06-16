@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import './Login.css';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './login.css';
 import 'font-awesome/css/font-awesome.min.css';
+import lureLogo from '../../assets/Icons/Logo.svg';
+import { useAuth } from '../../context/AuthContext';
 
-function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
+function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [darkMode, setDarkMode] = useState(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,8 +21,10 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
       setError('Por favor, completa todos los campos.');
       return;
     }
+    // MOCK: credenciales validadas en cliente hasta que exista el backend.
     if (username === 'admin' && password === 'admin') {
-      onLoginSuccess();
+      login({ username });
+      navigate('/profilePage');
     } else {
       setError('Credenciales incorrectas.');
     }
@@ -26,10 +34,7 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
     <div className={`login-container ${darkMode ? 'dark-mode' : ''}`}>
       <div className="login-card">
         <div className="logo-container">
-          <img
-            src={darkMode ? "/src/assets/Image/LURE-LOGO-WHITE.png" : "/src/assets/Image/LURE-LOGO.png"} 
-            alt="Lure logo" 
-          />
+          <img src={lureLogo} alt="Lure logo" />
         </div>
 
         <h2>Bienvenido de nuevo</h2>
@@ -37,7 +42,7 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
-            <label htmlFor="username" id='label-input'>Usuario</label>
+            <label htmlFor="username" id="label-input">Usuario</label>
             <input
               id="username"
               type="text"
@@ -51,7 +56,7 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
           </div>
 
           <div className="input-group">
-            <label htmlFor="password" id='password-input'>Contraseña</label>
+            <label htmlFor="password" id="password-input">Contraseña</label>
             <div className="password-container">
               <input
                 id="password"
@@ -67,6 +72,7 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
                 type="button"
                 className="toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               >
                 {showPassword ? <i className="fa fa-eye-slash" aria-hidden="true"></i> : <i className="fa fa-eye" aria-hidden="true"></i>}
               </button>
@@ -81,17 +87,13 @@ function Login({ onLoginSuccess, onToggleRegister, onToggleForgotPassword }) {
         </form>
 
         <div className="login-footer">
-          <a href="#" onClick={onToggleForgotPassword}>
-            ¿Olvidaste tu contraseña?
-          </a>
+          <Link to="/forgot">¿Olvidaste tu contraseña?</Link>
           <p>
             ¿No tienes una cuenta?{' '}
-            <a href="register" onClick={onToggleRegister}>
-              Regístrate
-            </a>
+            <Link to="/register">Regístrate</Link>
           </p>
           <p>
-            <a href="/">Volver al inicio</a>
+            <Link to="/">Volver al inicio</Link>
           </p>
         </div>
 

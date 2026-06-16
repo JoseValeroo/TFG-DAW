@@ -1,6 +1,5 @@
-import React from 'react';
-import { Clock, ThumbsUp } from 'lucide-react';
-import './CardPadre2.css';  // Asegúrate de importar el archivo CSS
+import { ThumbsUp } from 'lucide-react';
+import './CardPadre2.css';
 
 const CardPadre2 = ({ image, title, subtitle, text, date }) => {
   

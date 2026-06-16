@@ -222,8 +222,8 @@ TFG-DAW/
         ├── App.jsx            # Página principal: grid de tarjetas con expansión al click
         ├── pages/             # Vistas por ruta: login, register, profile, forgotpass, TarjetaMain
         ├── components/        # UI reutilizable: CardPadre, CardPadre2, CardMultimedia, Carrousel, MicroPerfil, boton
-        ├── context/ hooks/    # (placeholders .cs vacíos — pendientes de implementar como .js)
-        ├── services/          # InteraccionBBDD.cs (placeholder: integración MySQL pendiente)
+        ├── context/           # AuthContext.jsx (estado de sesión global)
+        ├── hooks/ services/   # vacíos — pendientes (data-fetching / API MySQL en feat/bbdd-back)
         └── assets/            # Iconos SVG e imágenes
 ```
 
@@ -236,12 +236,14 @@ TFG-DAW/
   (p. ej. `expandedCard` en `App.jsx`, formularios controlados en `loginPage.jsx`).
 - **UI libraries (coexisten)**: NextUI, Ant Design (`antd`), Bootstrap, Tailwind, Framer Motion,
   lucide-react / react-icons / @ant-design/icons. Antes de añadir UI, revisa cuál se usa en el componente vecino.
-- **Estado de auth (provisional)**: el login está **mockeado** (`admin`/`admin` en `loginPage.jsx`);
-  no hay backend ni persistencia real todavía. La integración con MySQL es el trabajo en curso de `feat/bbdd-back`.
-
-> Los archivos `src/context/context.cs`, `src/hooks/hooks.cs` y `src/services/InteraccionBBDD.cs`
-> tienen extensión `.cs` por error y están **vacíos o con un placeholder** (`InteraccionBBDD.cs` solo
-> contiene `MYSQL`). Al implementarlos, renómbralos a `.js`/`.jsx`.
+- **Estado de auth (provisional)**: hay un `AuthContext` (`src/context/AuthContext.jsx`) con
+  `login`/`logout`/`isAuthenticated` y persistencia en `localStorage`. La **validación de credenciales
+  sigue siendo un MOCK en cliente** (`admin`/`admin` en `loginPage.jsx`): cuando exista el backend
+  (`feat/bbdd-back`, MySQL), `login()` deberá llamar a la API y guardar un JWT. La ruta `/profilePage`
+  está protegida vía `<ProtectedRoute>` en `router.jsx`.
+- **Carga de imágenes**: importar siempre los assets como módulos ES (`import x from '../assets/...'`),
+  nunca como string `"src/assets/..."` (eso rompe en `npm run build`). Los assets de `public/` (p. ej.
+  `public/logo.svg` usado como favicon) se referencian con ruta absoluta `/logo.svg`.
 
 ---
 

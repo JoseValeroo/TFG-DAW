@@ -1,4 +1,3 @@
-import React from 'react';
 import { Carousel } from 'antd';
 
 // Estilos para el contenido dentro de cada slide

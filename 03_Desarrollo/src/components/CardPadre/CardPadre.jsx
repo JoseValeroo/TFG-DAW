@@ -1,4 +1,3 @@
-import React from 'react';
 import './CardPadre.css';
 
 const CardPadre = ({ onClick, image, title, subtitle, text, date }) => {
