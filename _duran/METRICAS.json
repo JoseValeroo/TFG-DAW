@@ -169,6 +169,147 @@
                                       ],
                          "versionProyecto":  "0.0.0",
                          "fecha":  "2026-06-16 13:17:36"
+                     },
+                     {
+                         "archivosModificados":  7,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/frontend/src/context/AuthContext.jsx",
+                                          "03_Desarrollo/frontend/src/pages/login/loginPage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/profile/profilePage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/register/register.jsx",
+                                          "03_Desarrollo/frontend/src/router/router.jsx",
+                                          "03_Desarrollo/frontend/.env.example",
+                                          "03_Desarrollo/frontend/src/context/auth-context.js"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-16 13:43:13"
+                     },
+                     {
+                         "archivosModificados":  9,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/frontend/src/context/AuthContext.jsx",
+                                          "03_Desarrollo/frontend/src/pages/login/loginPage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/profile/profilePage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/register/register.jsx",
+                                          "03_Desarrollo/frontend/src/router/router.jsx",
+                                          "_duran/ESTADO_PROYECTO.json",
+                                          "_duran/METRICAS.json",
+                                          "03_Desarrollo/frontend/.env.example",
+                                          "03_Desarrollo/frontend/src/context/auth-context.js"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-16 13:51:48"
+                     },
+                     {
+                         "archivosModificados":  24,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/backend/package-lock.json",
+                                          "03_Desarrollo/backend/package.json",
+                                          "03_Desarrollo/backend/test/app.e2e-spec.ts",
+                                          "03_Desarrollo/frontend/package-lock.json",
+                                          "03_Desarrollo/frontend/package.json",
+                                          "03_Desarrollo/frontend/src/context/AuthContext.jsx",
+                                          "03_Desarrollo/frontend/src/pages/login/loginPage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/profile/profilePage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/register/register.jsx",
+                                          "03_Desarrollo/frontend/src/router/router.jsx",
+                                          "03_Desarrollo/frontend/vite.config.js",
+                                          "CLAUDE.md",
+                                          "_duran/ESTADO_PROYECTO.json",
+                                          "_duran/METRICAS.json",
+                                          "03_Desarrollo/backend/src/auth/auth.service.spec.ts",
+                                          "03_Desarrollo/backend/src/users/users.service.spec.ts",
+                                          "03_Desarrollo/backend/test/auth.e2e-spec.ts",
+                                          "03_Desarrollo/frontend/.env.example",
+                                          "03_Desarrollo/frontend/src/components/CardPadre/CardPadre.test.jsx",
+                                          "03_Desarrollo/frontend/src/context/auth-context.js"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-16 14:05:28"
+                     },
+                     {
+                         "archivosModificados":  24,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/backend/package-lock.json",
+                                          "03_Desarrollo/backend/package.json",
+                                          "03_Desarrollo/backend/test/app.e2e-spec.ts",
+                                          "03_Desarrollo/frontend/package-lock.json",
+                                          "03_Desarrollo/frontend/package.json",
+                                          "03_Desarrollo/frontend/src/context/AuthContext.jsx",
+                                          "03_Desarrollo/frontend/src/pages/login/loginPage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/profile/profilePage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/register/register.jsx",
+                                          "03_Desarrollo/frontend/src/router/router.jsx",
+                                          "03_Desarrollo/frontend/vite.config.js",
+                                          "CLAUDE.md",
+                                          "_duran/ESTADO_PROYECTO.json",
+                                          "_duran/METRICAS.json",
+                                          "03_Desarrollo/backend/src/auth/auth.service.spec.ts",
+                                          "03_Desarrollo/backend/src/users/users.service.spec.ts",
+                                          "03_Desarrollo/backend/test/auth.e2e-spec.ts",
+                                          "03_Desarrollo/frontend/.env.example",
+                                          "03_Desarrollo/frontend/src/components/CardPadre/CardPadre.test.jsx",
+                                          "03_Desarrollo/frontend/src/context/auth-context.js"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-16 14:33:35"
+                     },
+                     {
+                         "archivosModificados":  27,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/backend/package-lock.json",
+                                          "03_Desarrollo/backend/package.json",
+                                          "03_Desarrollo/backend/test/app.e2e-spec.ts",
+                                          "03_Desarrollo/frontend/package-lock.json",
+                                          "03_Desarrollo/frontend/package.json",
+                                          "03_Desarrollo/frontend/src/components/CardPadre/CardPadre.jsx",
+                                          "03_Desarrollo/frontend/src/components/Carrousel/CarouselComponent.jsx",
+                                          "03_Desarrollo/frontend/src/context/AuthContext.jsx",
+                                          "03_Desarrollo/frontend/src/pages/login/loginPage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/profile/profilePage.jsx",
+                                          "03_Desarrollo/frontend/src/pages/register/register.jsx",
+                                          "03_Desarrollo/frontend/src/router/router.jsx",
+                                          "03_Desarrollo/frontend/vite.config.js",
+                                          "CLAUDE.md",
+                                          "_duran/ESTADO_PROYECTO.json",
+                                          "_duran/METRICAS.json",
+                                          "03_Desarrollo/backend/src/auth/auth.service.spec.ts",
+                                          "03_Desarrollo/backend/src/users/users.service.spec.ts",
+                                          "03_Desarrollo/backend/test/auth.e2e-spec.ts",
+                                          "03_Desarrollo/frontend/.env.example"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-16 14:39:36"
                      }
                  ]
 }

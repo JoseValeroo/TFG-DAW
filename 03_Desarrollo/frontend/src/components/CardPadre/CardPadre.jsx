@@ -10,7 +10,7 @@ const CardPadre = ({ onClick, image, title, subtitle, text, date }) => {
           <p className="subtitle">{subtitle}</p>
           <p className="text">{text}</p>
         </div>
-       <img src={image} alt="article-cover"/>
+       <img src={image} alt="article-cover" loading="lazy" decoding="async" />
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
 import { authApi } from '../services/api';
-
-const AuthContext = createContext(null);
+import { AuthContext } from './auth-context';
 
 const TOKEN_KEY = 'lure_token';
 const USER_KEY = 'lure_user';
@@ -53,12 +52,4 @@ export function AuthProvider({ children }) {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === null) {
-    throw new Error('useAuth debe usarse dentro de <AuthProvider>');
-  }
-  return context;
 }

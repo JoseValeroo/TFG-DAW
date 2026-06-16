@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import './register.css';
 import lureLogo from '../../assets/Icons/Logo.svg';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/auth-context';
 
 function RegisterPage() {
   const [username, setUsername] = useState('');

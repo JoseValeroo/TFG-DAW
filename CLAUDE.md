@@ -97,7 +97,9 @@ npm install
 npm run dev                # Vite dev server (HMR) — http://localhost:5173
 npm run build              # Build de producción a dist/
 npm run preview            # Servir el build localmente
-npm run lint               # ESLint (0 errores; 1 warning fast-refresh conocido)
+npm run lint               # ESLint (0 errores, 0 warnings)
+npm test                   # Vitest (jsdom + React Testing Library)
+npm run test:watch         # Vitest en modo watch
 ```
 
 ### Backend (NestJS + MySQL) — desde `03_Desarrollo/backend/`
@@ -109,11 +111,14 @@ cp .env.example .env       # editar credenciales MySQL + JWT_SECRET
 # crear la BD una vez:  CREATE DATABASE lure CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 npm run start:dev          # API en http://localhost:3000/api (hot reload)
 npm run build              # Compila a dist/ (nest build)
+npm test                   # Jest — tests unitarios (sin BD)
+npm run test:e2e           # Jest e2e — flujo auth con SQLite en memoria (sin MySQL)
 ```
 
-> **No hay suite de tests** todavía (ni front ni back). No usar `dotnet`.
-> El backend necesita **MySQL corriendo** + base de datos `lure` (las tablas las crea
-> TypeORM solo con `DB_SYNCHRONIZE=true` en desarrollo).
+> **Tests**: backend con Jest (unit + e2e sobre SQLite en memoria), frontend con Vitest +
+> React Testing Library. El e2e de auth **no requiere MySQL**. No usar `dotnet`.
+> Para `start:dev`/producción el backend necesita **MySQL corriendo** + base de datos `lure`
+> (las tablas las crea TypeORM solo con `DB_SYNCHRONIZE=true` en desarrollo).
 
 ---
 

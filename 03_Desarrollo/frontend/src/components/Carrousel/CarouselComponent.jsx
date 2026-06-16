@@ -1,70 +1,77 @@
-import { Carousel } from 'antd';
+import { useState, useEffect, useCallback } from 'react';
+import './CarouselComponent.css';
 
-// Estilos para el contenido dentro de cada slide
-const contentStyle = {
-  height: '160px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79',
+const slides = [
+  { id: 1, color: '#FF5733', title: 'Imagen 1', text: 'Este es el primer slide.' },
+  { id: 2, color: '#33C4FF', title: 'Imagen 2', text: 'Este es el segundo slide.' },
+  { id: 3, color: '#75FF33', title: 'Imagen 3', text: 'Este es el tercer slide.' },
+  { id: 4, color: '#9C33FF', title: 'Imagen 4', text: 'Este es el cuarto slide.' },
+];
+
+// Carrusel ligero sin dependencias (antes usaba antd Carousel, que arrastraba
+// toda la librería al bundle de la home). Auto-avanza y permite navegar.
+const CarouselComponent = () => {
+  const [index, setIndex] = useState(0);
+
+  const goTo = useCallback((i) => {
+    setIndex((i + slides.length) % slides.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="carousel">
+      <div
+        className="carousel-track"
+        style={{ transform: `translateX(-${index * 100}%)` }}
+      >
+        {slides.map((slide) => (
+          <div
+            key={slide.id}
+            className="carousel-slide"
+            style={{ background: slide.color }}
+          >
+            <h3>{slide.title}</h3>
+            <p>{slide.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        className="carousel-arrow prev"
+        onClick={() => goTo(index - 1)}
+        aria-label="Slide anterior"
+      >
+        ‹
+      </button>
+      <button
+        type="button"
+        className="carousel-arrow next"
+        onClick={() => goTo(index + 1)}
+        aria-label="Slide siguiente"
+      >
+        ›
+      </button>
+
+      <div className="carousel-dots">
+        {slides.map((slide, i) => (
+          <button
+            key={slide.id}
+            type="button"
+            className={`carousel-dot ${i === index ? 'active' : ''}`}
+            onClick={() => goTo(i)}
+            aria-label={`Ir al slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
 };
-
-const CarouselComponent = () => (
-  <>
-    <Carousel arrows dotPosition="left" infinite={false} autoplay >
-      {/* Primer slide con imagen y texto */}
-      <div>
-        <img
-          src="https://via.placeholder.com/800x300/FF5733/FFFFFF?text=Slide+1"
-          alt="Slide 1"
-          style={{ width: '100%', height: '160px', objectFit: 'cover' }}
-        />
-        <div style={contentStyle}>
-          <h3>Imagen 1</h3>
-          <p>Este es el primer slide con una imagen.</p>
-        </div>
-      </div>
-
-      {/* Segundo slide con imagen y texto */}
-      <div>
-        <img
-          src="https://via.placeholder.com/800x300/33C4FF/FFFFFF?text=Slide+2"
-          alt="Slide 2"
-          style={{ width: '100%', height: '160px', objectFit: 'cover' }}
-        />
-        <div style={contentStyle}>
-          <h3>Imagen 2</h3>
-          <p>Este es el segundo slide con una imagen.</p>
-        </div>
-      </div>
-
-      {/* Tercer slide con imagen y texto */}
-      <div>
-        <img
-          src="https://via.placeholder.com/800x300/75FF33/FFFFFF?text=Slide+3"
-          alt="Slide 3"
-          style={{ width: '100%', height: '160px', objectFit: 'cover' }}
-        />
-        <div style={contentStyle}>
-          <h3>Imagen 3</h3>
-          <p>Este es el tercer slide con una imagen.</p>
-        </div>
-      </div>
-
-      {/* Cuarto slide con imagen y texto */}
-      <div>
-        <img
-          src="https://via.placeholder.com/800x300/9C33FF/FFFFFF?text=Slide+4"
-          alt="Slide 4"
-          style={{ width: '100%', height: '160px', objectFit: 'cover' }}
-        />
-        <div style={contentStyle}>
-          <h3>Imagen 4</h3>
-          <p>Este es el cuarto slide con una imagen.</p>
-        </div>
-      </div>
-    </Carousel>
-  </>
-);
 
 export default CarouselComponent;

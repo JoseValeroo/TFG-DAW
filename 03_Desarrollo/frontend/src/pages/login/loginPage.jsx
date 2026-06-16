@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import './login.css';
 import lureLogo from '../../assets/Icons/Logo.svg';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/auth-context';
 
 function Login() {
   const [username, setUsername] = useState('');

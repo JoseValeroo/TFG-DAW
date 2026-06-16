@@ -18,7 +18,7 @@ import {
 import 'antd/dist/reset.css'; // Importa los estilos de Ant Design
 import './profile.css'; // Importa el archivo CSS
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/auth-context';
 
 const { Meta } = Card;
 
@@ -42,7 +42,7 @@ const posts = [
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -52,13 +52,14 @@ const ProfilePage = () => {
   const profileData = {
     avatar: "https://via.placeholder.com/150",
     coverPhoto: "https://via.placeholder.com/300x150",
-    name: "John Doe",
+    // Datos reales del usuario autenticado (el resto sigue siendo de ejemplo).
+    name: user?.username ?? "Usuario",
     bio: "Full Stack Developer",
     location: "San Francisco, CA",
     birthday: "15 de agosto de 1990",
     followers: 1200,
     following: 300,
-    email: "john.doe@example.com",
+    email: user?.email ?? "",
   };
 
   const seguidores = [
@@ -164,42 +165,52 @@ const ProfilePage = () => {
           <div style={{display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'space-between' }}>
             <div className="media-content-card" style={{ display: 'flex', gap: '20px', width: '50%' }}>
               <Card style={{width:'100%'}}>
-                <Tabs defaultActiveKey="1" centered >   
-                  {/* Tab de Seguidores */}
-                  <Tabs.TabPane tab="Seguidores" key="1">
-                    <List
-                      dataSource={seguidores}
-                      renderItem={item => (
-                        <List.Item
-                          actions={[<Button key="seguir" type="primary" shape="round">Seguir</Button>]}
-                        >
-                          <List.Item.Meta
-                            avatar={<Avatar src={item.foto} />}
-                            title={item.nombre}
-                            description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
-                          />
-                        </List.Item>
-                      )}
-                    />
-                  </Tabs.TabPane>
-                  {/* Tab de Seguidos */}
-                  <Tabs.TabPane tab="Seguidos" key="2">
-                    <List
-                      dataSource={seguidos}
-                      renderItem={item => (
-                        <List.Item
-                          actions={[<Button key="dejar" type="default" shape="round">Dejar Seguir</Button>]}
-                        >
-                          <List.Item.Meta
-                            avatar={<Avatar src={item.foto} />}
-                            title={item.nombre}
-                            description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
-                          />
-                        </List.Item>
-                      )}
-                    />
-                  </Tabs.TabPane>
-                </Tabs>
+                <Tabs
+                  defaultActiveKey="1"
+                  centered
+                  items={[
+                    {
+                      key: '1',
+                      label: 'Seguidores',
+                      children: (
+                        <List
+                          dataSource={seguidores}
+                          renderItem={(item) => (
+                            <List.Item
+                              actions={[<Button key="seguir" type="primary" shape="round">Seguir</Button>]}
+                            >
+                              <List.Item.Meta
+                                avatar={<Avatar src={item.foto} />}
+                                title={item.nombre}
+                                description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
+                              />
+                            </List.Item>
+                          )}
+                        />
+                      ),
+                    },
+                    {
+                      key: '2',
+                      label: 'Seguidos',
+                      children: (
+                        <List
+                          dataSource={seguidos}
+                          renderItem={(item) => (
+                            <List.Item
+                              actions={[<Button key="dejar" type="default" shape="round">Dejar Seguir</Button>]}
+                            >
+                              <List.Item.Meta
+                                avatar={<Avatar src={item.foto} />}
+                                title={item.nombre}
+                                description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
+                              />
+                            </List.Item>
+                          )}
+                        />
+                      ),
+                    },
+                  ]}
+                />
               </Card>
             </div>
 
@@ -266,6 +277,7 @@ const ProfilePage = () => {
           <div style={{display:'flex', justifyContent:'center'}}>
             <Menu
               mode="horizontal"
+              selectable={false}
               style={{
                 marginTop: '10px',
                 borderRadius: '8px',
@@ -273,26 +285,15 @@ const ProfilePage = () => {
                 backgroundColor: '#fff',
                 padding: '0 20px',
               }}
-            >
-              <Menu.Item key="1" icon={<SettingOutlined />}>
-                Configuración
-              </Menu.Item>
-              <Menu.Item key="2" icon={<MessageOutlined />}>
-                Mensajes
-              </Menu.Item>
-              <Menu.Item key="3" icon={<Badge count={1}><BellOutlined /></Badge>}>
-                Notificaciones
-              </Menu.Item>
-              <Menu.Item key="4" icon={<UsergroupAddOutlined />}>
-                Comunidades
-              </Menu.Item>
-              <Menu.Item key="5" icon={<UserOutlined />}>
-                Cuentas
-              </Menu.Item>
-              <Menu.Item key="6" icon={<StopOutlined />} onClick={handleLogout}>
-                Cerrar Sesion
-              </Menu.Item>
-            </Menu>
+              items={[
+                { key: '1', icon: <SettingOutlined />, label: 'Configuración' },
+                { key: '2', icon: <MessageOutlined />, label: 'Mensajes' },
+                { key: '3', icon: <Badge count={1}><BellOutlined /></Badge>, label: 'Notificaciones' },
+                { key: '4', icon: <UsergroupAddOutlined />, label: 'Comunidades' },
+                { key: '5', icon: <UserOutlined />, label: 'Cuentas' },
+                { key: '6', icon: <StopOutlined />, label: 'Cerrar Sesión', onClick: handleLogout },
+              ]}
+            />
           </div>
         </div>
       </div>  
