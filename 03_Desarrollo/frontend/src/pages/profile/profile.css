@@ -1,101 +1,256 @@
-/* Contenedor principal de la página */
+/* ===========================================================
+   Página de perfil — estilo oscuro moderno con degradados
+   (inspirado en Decimal): tarjetas bento, glows y acentos.
+   =========================================================== */
+
 .profile-page {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px;
-  background: #2b4c7e;
+  min-height: 100vh;
+  padding: 28px 24px 56px;
+  color: #e7e9ea;
+  background:
+    radial-gradient(900px 480px at 12% -8%, rgba(124, 92, 255, 0.18), transparent 60%),
+    radial-gradient(820px 460px at 96% 0%, rgba(0, 184, 217, 0.14), transparent 60%),
+    radial-gradient(760px 520px at 60% 115%, rgba(255, 110, 64, 0.10), transparent 60%),
+    #0a0a0c;
 }
 
-/* Contenedor de las tarjetas */
 .content {
   display: flex;
-  flex-wrap: nowrap; /* Para que se acomode cuando el ancho sea pequeño */
-  justify-content: space-between; /* Se distribuyen las tarjetas de manera que ocupen el espacio */
-  width: 100%; /* Asegura que ocupe el ancho total */
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Contenedor de la tarjeta de perfil */
 .profile-card {
-  flex: 1 1 60%; /* 60% del espacio disponible */
-  margin-right: 20px; /* Espacio a la derecha entre el perfil y las otras tarjetas */
-  max-width: 50vh;
-}
-
-/* Contenedor de las tarjetas adicionales */
-.other-cards {
-  flex: 1 1 35%; /* 35% del espacio disponible */
+  flex: 1 1 58%;
+  max-width: 58%;
   display: flex;
-  flex-direction: column; /* Para que las tarjetas se apilen de arriba hacia abajo */
-  gap: 20px; /* Espacio entre las tarjetas */
-}
-
-/* Contenedor de las tarjetas adicionales */
-.mid-cards {
-  display: flex;
-  flex-wrap: wrap; /* Permite que las tarjetas se acomoden en varias líneas si el ancho es pequeño */
-  justify-content: space-between; /* Distribuye las tarjetas de manera que ocupen el espacio disponible */
-  gap: 20px; /* Espacio entre las tarjetas */
-}
-
-/* Estilos para las tarjetas de Logros, Intereses, Estadísticas, y Habilidades */
-.achievements-card,
-.tags-card,
-.stats-card,
-.skills-card {
-  flex: 1 1 calc(50% - 20px); /* Ocupa el 50% del espacio disponible con un margen de 20px */
-}
-
-
-/* Estilo para el contenedor de cerrar sesión */
-.profile-page > .content > div {
-  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
-/* Ajustes para las tarjetas de logout */
-.profile-page .content .profile-page > .content > div > div {
-  flex: 1;
-}
-
-.media-content-card>.ant-card-body{
-  display: flex;
-  justify-content: center;
-}
-
-/* Layout movido desde estilos inline del JSX (para poder hacerlo responsive) */
-.profile-card {
+.other-cards {
+  flex: 1 1 40%;
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
+/* ---------- Tarjetas base ---------- */
+.profile-page .ant-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+    #121316;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.profile-page .ant-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124, 92, 255, 0.45);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.5);
+}
+.profile-page .ant-card-head {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 52px;
+}
+.profile-page .ant-card-head-title {
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+}
+
+/* Acento de color (línea superior) por sección — variedad estilo Decimal */
+.posts-card .ant-card::before,
+.media-content-card .ant-card::before,
+.achievements-card .ant-card::before,
+.tags-card .ant-card::before,
+.stats-card .ant-card::before,
+.skills-card .ant-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2;
+}
+.posts-card .ant-card::before { background: linear-gradient(90deg, #4f8cff, #00b8d9); }
+.media-content-card .ant-card::before { background: linear-gradient(90deg, #00b8d9, #2dd4bf); }
+.achievements-card .ant-card::before { background: linear-gradient(90deg, #7c5cff, #4f8cff); }
+.tags-card .ant-card::before { background: linear-gradient(90deg, #f472b6, #7c5cff); }
+.stats-card .ant-card::before { background: linear-gradient(90deg, #ff7e5f, #f472b6); }
+.skills-card .ant-card::before { background: linear-gradient(90deg, #2dd4bf, #4f8cff); }
+
+/* ---------- Cabecera de usuario: cover + avatar ---------- */
+.profile-cover {
+  position: relative;
+  height: 130px;
+  background: linear-gradient(120deg, #7c5cff 0%, #4f8cff 45%, #00b8d9 100%);
+}
+.profile-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(420px 130px at 78% 0%, rgba(255, 255, 255, 0.28), transparent 70%);
+}
+
+.profile-avatar.ant-avatar {
+  margin-top: -46px;
+  width: 76px;
+  height: 76px;
+  line-height: 76px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #7c5cff, #00b8d9);
+  border: 4px solid #121316;
+  box-shadow: 0 10px 28px rgba(124, 92, 255, 0.5);
+}
+
+.profile-page .ant-card-meta-title {
+  color: #fff !important;
+  font-size: 22px;
+  font-weight: 800;
+}
+.profile-page .ant-card-meta-description {
+  color: #9aa0a6 !important;
+}
+
+/* ---------- Lista de datos (ubicación, fecha, correo...) ---------- */
+.profile-page .ant-list-item {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  padding-inline: 0;
+}
+.profile-page .ant-list-item-meta-title {
+  color: #8b9099 !important;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.profile-page .ant-list-item-meta-description {
+  color: #e7e9ea !important;
+  font-size: 15px;
+}
+.profile-page .ant-list-item-meta-description a {
+  color: #7aa7ff;
+}
+.profile-page .ant-list-item-meta-avatar .anticon {
+  font-size: 18px;
+  color: #7c5cff;
+}
+
+/* ---------- "Sobre mí" ---------- */
+.about-card p {
+  color: #c7cbd1;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ---------- Posts ---------- */
+.posts-card .ant-list-item-meta-title a {
+  color: #e7e9ea;
+  font-weight: 600;
+}
+.posts-card .ant-list-item-meta-title a:hover {
+  color: #7c5cff;
+}
+.posts-card .ant-list-item-meta-description {
+  color: #9aa0a6 !important;
+}
+.posts-card .ant-btn-text {
+  color: #8b9099;
+}
+.posts-card .ant-btn-text:hover {
+  color: #7c5cff;
+  background: rgba(124, 92, 255, 0.12);
+}
+
+/* ---------- Tabs seguidores/seguidos ---------- */
+.profile-page .ant-tabs-tab-btn { color: #9aa0a6; }
+.profile-page .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn { color: #fff !important; }
+.profile-page .ant-tabs-ink-bar { background: linear-gradient(90deg, #7c5cff, #00b8d9); }
+
+/* ---------- Tags (Intereses): pills redondeados ---------- */
+.tags-card .ant-tag {
+  border-radius: 9999px;
+  padding: 3px 12px;
+  margin: 0 8px 8px 0;
+  font-weight: 600;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Botones con degradado ---------- */
+.profile-page .ant-btn-primary {
+  background: linear-gradient(135deg, #7c5cff, #4f8cff);
+  border: none;
+  box-shadow: 0 6px 18px rgba(124, 92, 255, 0.35);
+}
+.profile-page .ant-btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+/* ---------- Listas de logros / estadísticas / habilidades ---------- */
+.achievements-card ul,
+.stats-card ul,
+.skills-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #c7cbd1;
+}
+.achievements-card li,
+.stats-card li,
+.skills-card li {
+  margin-bottom: 6px;
+}
+
+/* ---------- Layout interno ---------- */
 .profile-row {
   display: flex;
   gap: 20px;
   align-items: flex-start;
   justify-content: space-between;
 }
-
 .media-content-card {
   display: flex;
   gap: 20px;
   width: 50%;
 }
-
 .mid-cards {
   width: 50%;
 }
 
-/* ============ Responsive ============ */
+/* ---------- Menú inferior ---------- */
+.profile-menu-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+.profile-menu.ant-menu {
+  background: #121316;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 4px 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+.profile-menu.ant-menu .ant-menu-item:hover {
+  color: #7c5cff !important;
+}
 
-/* Tablet y por debajo: la columna de perfil y la de tarjetas se apilan */
+/* ===========================================================
+   Responsive
+   =========================================================== */
 @media (max-width: 992px) {
   .content { flex-wrap: wrap; }
   .profile-card {
     flex: 1 1 100%;
     max-width: 100%;
-    margin-right: 0;
-    margin-bottom: 20px;
   }
   .other-cards { flex: 1 1 100%; }
   .profile-row { flex-direction: column; }
@@ -103,11 +258,11 @@
   .mid-cards { width: 100%; }
 }
 
-/* Móvil: menos padding y tarjetas internas a ancho completo */
 @media (max-width: 600px) {
-  .profile-page { padding: 10px; }
+  .profile-page { padding: 16px 12px 40px; }
   .achievements-card,
   .tags-card,
   .stats-card,
   .skills-card { flex: 1 1 100%; }
+  .profile-menu.ant-menu { width: 100%; justify-content: center; }
 }

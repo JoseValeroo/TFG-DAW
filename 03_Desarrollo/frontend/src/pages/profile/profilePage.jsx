@@ -1,4 +1,4 @@
-import { Card, Avatar, List, Button, Tag, Tabs, Row, Col, Menu, Badge } from 'antd';
+import { Card, Avatar, List, Button, Tag, Tabs, Row, Col, Menu, Badge, ConfigProvider, theme } from 'antd';
 import { 
   MailOutlined, 
   EnvironmentOutlined, 
@@ -77,16 +77,28 @@ const ProfilePage = () => {
   ];
 
   return (
+    <ConfigProvider
+      theme={{
+        algorithm: theme.darkAlgorithm,
+        token: {
+          colorPrimary: '#7c5cff',
+          colorBgContainer: '#121316',
+          colorBorderSecondary: 'rgba(255,255,255,0.07)',
+          colorText: '#e7e9ea',
+          borderRadius: 16,
+        },
+      }}
+    >
     <div className="profile-page">
       <div className="content">
         {/* Card 1: Imagen y datos del usuario */}
         <div className="profile-card">
           <Card
-            style={{ height: '100%', width: '100%', marginTop:'-0.5vh'}}
-            cover={<img alt="cover" src={profileData.coverPhoto} />}
+            style={{ height: '100%', width: '100%' }}
+            cover={<div className="profile-cover" />}
           >
             <Meta
-              avatar={<Avatar size={64} src={profileData.avatar} />}
+              avatar={<Avatar size={68} className="profile-avatar">{(profileData.name || '?').charAt(0).toUpperCase()}</Avatar>}
               title={profileData.name}
               description={profileData.bio}
             />
@@ -274,17 +286,11 @@ const ProfilePage = () => {
               </Row>
             </div>
           </div>
-          <div style={{display:'flex', justifyContent:'center'}}>
+          <div className="profile-menu-wrap">
             <Menu
+              className="profile-menu"
               mode="horizontal"
               selectable={false}
-              style={{
-                marginTop: '10px',
-                borderRadius: '8px',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                backgroundColor: '#fff',
-                padding: '0 20px',
-              }}
               items={[
                 { key: '1', icon: <SettingOutlined />, label: 'Configuración' },
                 { key: '2', icon: <MessageOutlined />, label: 'Mensajes' },
@@ -296,8 +302,9 @@ const ProfilePage = () => {
             />
           </div>
         </div>
-      </div>  
+      </div>
     </div>
+    </ConfigProvider>
   );
 };
 
