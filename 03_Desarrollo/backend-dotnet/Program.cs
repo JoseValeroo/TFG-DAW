@@ -1,6 +1,7 @@
 using System.Text;
 using Lure.Api.Auth;
 using Lure.Api.Data;
+using Lure.Api.Feed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<LureDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFeedService, FeedService>();
 
 // Autenticación JWT.
 var jwt = builder.Configuration.GetSection("Jwt");

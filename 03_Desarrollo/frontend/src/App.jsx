@@ -1,94 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Repeat2, Heart, BarChart2, Share, Image, Smile } from 'lucide-react';
 import Sidebar from './components/layout/Sidebar';
 import RightSidebar from './components/layout/RightSidebar';
+import { feedApi } from './services/api';
+import { useAuth } from './context/auth-context';
 import './App.css';
 
-const postsParaTi = [
-  {
-    id: 1,
-    name: 'Vite',
-    handle: '@vite_js',
-    time: '2h',
-    text: 'Vite 8 ya está aquí: builds aún más rápidos con Rolldown. ⚡',
-    stats: { comments: 128, retweets: 512, likes: '3,4 mil', views: '120 mil' },
-  },
-  {
-    id: 2,
-    name: 'React',
-    handle: '@reactjs',
-    time: '5h',
-    text: 'Los Server Components y Suspense hacen que dividir tu app en chunks sea trivial. Tu bundle inicial lo agradece.',
-    stats: { comments: 89, retweets: 240, likes: '1,9 mil', views: '88 mil' },
-  },
-  {
-    id: 3,
-    name: 'José Valero',
-    handle: '@josevalero',
-    time: '8h',
-    text: '¡Mi red social Lure ya conecta el frontend React con un backend .NET + SQL Server! 🚀 #TFG #DAW',
-    stats: { comments: 42, retweets: 96, likes: 730, views: '21 mil' },
-  },
-  {
-    id: 4,
-    name: 'GitHub',
-    handle: '@github',
-    time: '12h',
-    text: 'Recordatorio: un buen README y unos tests verdes valen más que mil palabras en tu portfolio.',
-    stats: { comments: 210, retweets: 1500, likes: '9,1 mil', views: '340 mil' },
-  },
-];
+// Tiempo relativo simple a partir de una fecha ISO.
+function timeAgo(iso) {
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (Number.isNaN(diff)) return '';
+  if (diff < 60) return `${diff}s`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}m`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+  if (diff < 604800) return `${Math.floor(diff / 86400)}d`;
+  return new Date(iso).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+}
 
-const postsSiguiendo = [
-  {
-    id: 101,
-    name: '.NET',
-    handle: '@dotnet',
-    time: '1h',
-    text: '.NET 10 LTS: rendimiento, Minimal APIs y EF Core mejor que nunca. Conecta con LocalDB en segundos.',
-    stats: { comments: 64, retweets: 320, likes: '2,2 mil', views: '95 mil' },
-  },
-  {
-    id: 102,
-    name: 'Lure',
-    handle: '@lure',
-    time: '3h',
-    text: 'Bienvenido a tu feed de "Siguiendo". Aquí verás los posts de las cuentas que sigues. 👀',
-    stats: { comments: 12, retweets: 30, likes: 180, views: '4.200' },
-  },
-];
-
-function Post({ name, handle, time, text, stats }) {
+function Post({ author, text, createdAt, likes, retweets, comments }) {
   return (
     <article className="x-post">
-      <span className="x-avatar">{name.charAt(0)}</span>
+      <span className="x-avatar">{(author?.name || '?').charAt(0).toUpperCase()}</span>
       <div className="x-post-body">
         <div className="x-post-head">
-          <strong>{name}</strong>
-          <span className="x-muted">{handle}</span>
-          <span className="x-muted">· {time}</span>
+          <strong>{author?.name}</strong>
+          <span className="x-muted">@{author?.handle}</span>
+          <span className="x-muted">· {timeAgo(createdAt)}</span>
         </div>
         <p className="x-post-text">{text}</p>
         <div className="x-post-actions">
-          <button type="button" className="x-action comment">
-            <MessageCircle size={18} />
-            <span>{stats.comments}</span>
-          </button>
-          <button type="button" className="x-action retweet">
-            <Repeat2 size={18} />
-            <span>{stats.retweets}</span>
-          </button>
-          <button type="button" className="x-action like">
-            <Heart size={18} />
-            <span>{stats.likes}</span>
-          </button>
-          <button type="button" className="x-action views">
-            <BarChart2 size={18} />
-            <span>{stats.views}</span>
-          </button>
-          <button type="button" className="x-action share" aria-label="Compartir">
-            <Share size={18} />
-          </button>
+          <button type="button" className="x-action comment"><MessageCircle size={18} /><span>{comments}</span></button>
+          <button type="button" className="x-action retweet"><Repeat2 size={18} /><span>{retweets}</span></button>
+          <button type="button" className="x-action like"><Heart size={18} /><span>{likes}</span></button>
+          <button type="button" className="x-action views"><BarChart2 size={18} /><span>{Math.max(likes, retweets, comments) * 7}</span></button>
+          <button type="button" className="x-action share" aria-label="Compartir"><Share size={18} /></button>
         </div>
       </div>
     </article>
@@ -98,11 +44,58 @@ function Post({ name, handle, time, text, stats }) {
 function App() {
   const [tab, setTab] = useState('paraTi');
   const [draft, setDraft] = useState('');
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [posting, setPosting] = useState(false);
 
-  const posts = tab === 'paraTi' ? postsParaTi : postsSiguiendo;
+  const { isAuthenticated, token, user } = useAuth();
+  const navigate = useNavigate();
 
-  const handlePost = () => {
-    setDraft('');
+  const loadFeed = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      if (tab === 'siguiendo') {
+        if (!isAuthenticated) {
+          setPosts([]);
+          setError('Inicia sesión para ver los posts de las cuentas que sigues.');
+          return;
+        }
+        setPosts(await feedApi.following(token));
+      } else {
+        setPosts(await feedApi.forYou());
+      }
+    } catch {
+      setError('No se pudo cargar el feed. ¿Está el backend en marcha?');
+    } finally {
+      setLoading(false);
+    }
+  }, [tab, isAuthenticated, token]);
+
+  useEffect(() => {
+    loadFeed();
+  }, [loadFeed]);
+
+  const handlePost = async () => {
+    const text = draft.trim();
+    if (!text) return;
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    setPosting(true);
+    try {
+      const newTweet = await feedApi.create(text, token);
+      setDraft('');
+      if (tab === 'paraTi') {
+        setPosts((prev) => [newTweet, ...prev]);
+      }
+    } catch (err) {
+      setError(err.message || 'No se pudo publicar el tweet.');
+    } finally {
+      setPosting(false);
+    }
   };
 
   return (
@@ -131,12 +124,13 @@ function App() {
         </header>
 
         <div className="x-compose">
-          <span className="x-avatar">L</span>
+          <span className="x-avatar">{(user?.username || 'L').charAt(0).toUpperCase()}</span>
           <div className="x-compose-body">
             <textarea
-              placeholder="¿Qué está pasando?"
+              placeholder={isAuthenticated ? '¿Qué está pasando?' : 'Inicia sesión para publicar…'}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
+              maxLength={200}
               rows={2}
             />
             <div className="x-compose-bar">
@@ -148,18 +142,23 @@ function App() {
                 type="button"
                 className="x-post-submit"
                 onClick={handlePost}
-                disabled={!draft.trim()}
+                disabled={posting || !draft.trim()}
               >
-                Postear
+                {posting ? 'Publicando…' : 'Postear'}
               </button>
             </div>
           </div>
         </div>
 
         <div className="x-feed">
-          {posts.map((post) => (
-            <Post key={post.id} {...post} />
-          ))}
+          {loading && <p className="x-feed-msg">Cargando…</p>}
+          {!loading && error && <p className="x-feed-msg">{error}</p>}
+          {!loading && !error && posts.length === 0 && (
+            <p className="x-feed-msg">No hay nada por aquí todavía.</p>
+          )}
+          {!loading &&
+            !error &&
+            posts.map((post) => <Post key={post.id} {...post} />)}
         </div>
       </main>
 

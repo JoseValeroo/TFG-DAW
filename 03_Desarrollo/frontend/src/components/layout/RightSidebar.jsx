@@ -1,20 +1,21 @@
+import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
+import { feedApi } from '../../services/api';
 import './RightSidebar.css';
 
-const trends = [
-  { scope: 'Tecnología · Tendencia', title: 'React 19', posts: '24,5 mil posts' },
-  { scope: 'Tendencia en España', title: '#DesarrolloWeb', posts: '8.912 posts' },
-  { scope: 'Programación · Tendencia', title: 'TypeScript', posts: '12,1 mil posts' },
-  { scope: 'Tendencia en España', title: '.NET 10', posts: '5.430 posts' },
-];
-
-const whoToFollow = [
-  { name: 'Elon Musk', handle: '@elonmusk' },
-  { name: 'GitHub', handle: '@github' },
-  { name: 'Vite', handle: '@vite_js' },
-];
-
 function RightSidebar() {
+  const [trends, setTrends] = useState([]);
+  const [whoToFollow, setWhoToFollow] = useState([]);
+
+  useEffect(() => {
+    let active = true;
+    feedApi.trends().then((t) => active && setTrends(t)).catch(() => {});
+    feedApi.suggestions().then((s) => active && setWhoToFollow(s)).catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <aside className="x-right">
       <div className="x-right-inner">
@@ -31,23 +32,25 @@ function RightSidebar() {
 
         <section className="x-card">
           <h2>Qué está pasando</h2>
+          {trends.length === 0 && <p className="x-muted-sm">Sin tendencias.</p>}
           {trends.map((t) => (
-            <div key={t.title} className="x-trend">
-              <span className="x-trend-scope">{t.scope}</span>
-              <strong className="x-trend-title">{t.title}</strong>
-              <span className="x-trend-posts">{t.posts}</span>
+            <div key={t.name} className="x-trend">
+              <span className="x-trend-scope">Tendencia</span>
+              <strong className="x-trend-title">{t.name}</strong>
+              <span className="x-trend-posts">{t.posts} posts</span>
             </div>
           ))}
         </section>
 
         <section className="x-card">
           <h2>A quién seguir</h2>
+          {whoToFollow.length === 0 && <p className="x-muted-sm">Sin sugerencias.</p>}
           {whoToFollow.map((u) => (
-            <div key={u.handle} className="x-follow">
-              <span className="x-avatar">{u.name.charAt(0)}</span>
+            <div key={u.id} className="x-follow">
+              <span className="x-avatar">{(u.name || '?').charAt(0).toUpperCase()}</span>
               <div className="x-follow-info">
                 <strong>{u.name}</strong>
-                <span>{u.handle}</span>
+                <span>@{u.handle}</span>
               </div>
               <button type="button" className="x-pill x-pill-dark">Seguir</button>
             </div>

@@ -394,6 +394,127 @@
                                       ],
                          "versionProyecto":  "0.0.0",
                          "fecha":  "2026-06-18 09:09:32"
+                     },
+                     {
+                         "archivosModificados":  13,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.exe",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.pdb",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.AssemblyInfo.cs",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.AssemblyInfoInputs.cache",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.pdb",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.sourcelink.json",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/apphost.exe",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/ref/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/refint/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/rjsmrazor.dswa.cache.json"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-18 09:14:09"
+                     },
+                     {
+                         "archivosModificados":  18,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.exe",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.pdb",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.AssemblyInfo.cs",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.AssemblyInfoInputs.cache",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.pdb",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.sourcelink.json",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/apphost.exe",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/ref/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/refint/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/rjsmrazor.dswa.cache.json",
+                                          "03_Desarrollo/frontend/src/App.css",
+                                          "03_Desarrollo/frontend/src/services/api.js",
+                                          "_duran/ESTADO_PROYECTO.json",
+                                          "_duran/METRICAS.json",
+                                          "03_Desarrollo/backend-dotnet/Sql/"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-18 09:37:46"
+                     },
+                     {
+                         "archivosModificados":  18,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.exe",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.pdb",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.AssemblyInfo.cs",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.AssemblyInfoInputs.cache",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.pdb",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.sourcelink.json",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/apphost.exe",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/ref/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/refint/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/rjsmrazor.dswa.cache.json",
+                                          "03_Desarrollo/frontend/src/App.css",
+                                          "03_Desarrollo/frontend/src/services/api.js",
+                                          "_duran/ESTADO_PROYECTO.json",
+                                          "_duran/METRICAS.json",
+                                          "03_Desarrollo/backend-dotnet/Sql/"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-18 10:45:06"
+                     },
+                     {
+                         "archivosModificados":  30,
+                         "agentsDisponibles":  0,
+                         "modoProyecto":  "puesta_a_punto",
+                         "commitsHoy":  0,
+                         "skillsTocados":  [
+
+                                           ],
+                         "archivos":  [
+                                          "03_Desarrollo/backend-dotnet/Data/LureDbContext.cs",
+                                          "03_Desarrollo/backend-dotnet/Program.cs",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.exe",
+                                          "03_Desarrollo/backend-dotnet/bin/Debug/net10.0/Lure.Api.pdb",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.AssemblyInfo.cs",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.AssemblyInfoInputs.cache",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.csproj.CoreCompileInputs.cache",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.pdb",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/Lure.Api.sourcelink.json",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/apphost.exe",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/ref/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/refint/Lure.Api.dll",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json",
+                                          "03_Desarrollo/backend-dotnet/obj/Debug/net10.0/rjsmrazor.dswa.cache.json",
+                                          "03_Desarrollo/frontend/src/App.css",
+                                          "03_Desarrollo/frontend/src/App.jsx",
+                                          "03_Desarrollo/frontend/src/components/layout/RightSidebar.css",
+                                          "03_Desarrollo/frontend/src/components/layout/RightSidebar.jsx"
+                                      ],
+                         "versionProyecto":  "0.0.0",
+                         "fecha":  "2026-06-18 10:53:40"
                      }
                  ]
 }

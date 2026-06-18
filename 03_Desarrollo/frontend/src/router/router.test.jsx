@@ -6,6 +6,13 @@ import { AuthProvider } from '../context/AuthContext';
 
 vi.mock('../services/api', () => ({
   authApi: { login: vi.fn(), register: vi.fn(), me: vi.fn() },
+  feedApi: {
+    forYou: vi.fn(() => Promise.resolve([])),
+    following: vi.fn(() => Promise.resolve([])),
+    create: vi.fn(),
+    suggestions: vi.fn(() => Promise.resolve([])),
+    trends: vi.fn(() => Promise.resolve([])),
+  },
 }));
 
 describe('Rutas', () => {
