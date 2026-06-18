@@ -80,7 +80,7 @@ const ProfilePage = () => {
     <div className="profile-page">
       <div className="content">
         {/* Card 1: Imagen y datos del usuario */}
-        <div className="profile-card" style={{ display: 'flex', flexDirection: 'column', height: '50%' }}>
+        <div className="profile-card">
           <Card
             style={{ height: '100%', width: '100%', marginTop:'-0.5vh'}}
             cover={<img alt="cover" src={profileData.coverPhoto} />}
@@ -162,8 +162,8 @@ const ProfilePage = () => {
           </div>
 
           {/* Cards de Multimedia y Seguidores/Seguidos */}
-          <div style={{display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-            <div className="media-content-card" style={{ display: 'flex', gap: '20px', width: '50%' }}>
+          <div className="profile-row">
+            <div className="media-content-card">
               <Card style={{width:'100%'}}>
                 <Tabs
                   defaultActiveKey="1"
@@ -215,7 +215,7 @@ const ProfilePage = () => {
             </div>
 
             {/* Cards de Logros, Intereses y Estadísticas */}
-            <div className="mid-cards" style={{width:'50%', height:'10vh'}}>
+            <div className="mid-cards">
               <Row gutter={[16, 16]}>
                 <Col xs={24} sm={12} lg={12}>
                   <div className="achievements-card">

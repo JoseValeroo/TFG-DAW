@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import AppRouter from './router';
 import { AuthProvider } from '../context/AuthContext';
@@ -31,9 +31,7 @@ describe('Rutas', () => {
         </AuthProvider>
       </MemoryRouter>,
     );
-    // La home renderiza el contenedor principal con la clase "App".
-    await waitFor(() => {
-      expect(document.querySelector('.App')).toBeInTheDocument();
-    });
+    // La home (estilo x.com) muestra la pestaña "Para ti".
+    expect(await screen.findByText('Para ti')).toBeInTheDocument();
   });
 });

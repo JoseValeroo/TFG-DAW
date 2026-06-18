@@ -241,3 +241,9 @@ h2 {
 .dark-mode .register-footer a {
   color: #567ebb;
 }
+
+/* ============ Responsive ============ */
+@media (max-width: 480px) {
+  .register-container { padding: 1rem; }
+  .register-card { padding: 1.5rem; }
+}

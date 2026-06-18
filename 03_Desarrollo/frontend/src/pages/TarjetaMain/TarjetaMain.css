@@ -133,3 +133,35 @@ body {
     border-radius: 20px;
     cursor: pointer;
   }
+
+  /* ============ Responsive ============ */
+
+  /* Tablet: se oculta la columna derecha y se estrecha el sidebar */
+  @media (max-width: 1024px) {
+    .right-sidebar { display: none; }
+    .sidebar { width: 200px; }
+  }
+
+  /* Móvil: layout en columna; el sidebar pasa a nav horizontal arriba */
+  @media (max-width: 768px) {
+    .app {
+      flex-direction: column;
+      height: auto;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #2f3336;
+    }
+    .sidebar nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 0;
+    }
+    .sidebar li { margin-bottom: 0; }
+    .sidebar a { font-size: 16px; }
+    .main-content { border-right: none; }
+    .post-button-pequeño { width: auto; }
+  }

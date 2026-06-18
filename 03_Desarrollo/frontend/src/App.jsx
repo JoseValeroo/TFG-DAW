@@ -1,80 +1,169 @@
 import { useState } from 'react';
+import { MessageCircle, Repeat2, Heart, BarChart2, Share, Image, Smile } from 'lucide-react';
+import Sidebar from './components/layout/Sidebar';
+import RightSidebar from './components/layout/RightSidebar';
 import './App.css';
-import CardPadre from './components/CardPadre/CardPadre.jsx';
-import CardPadre2 from './components/CardPadre2/CardPadre2.jsx';
-import CarouselComponent from './components/Carrousel/CarouselComponent.jsx';
-import news from './assets/Image/news.png';
-import comunidades from './assets/Image/comunidades.webp';
 
-const PLACEHOLDER = 'https://definicion.com/wp-content/uploads/2022/09/imagen.jpg.webp';
-
-// Artículo destacado de la columna izquierda.
-const featured = {
-  image:
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSumlR5rxs7S5vvj9jFyq7FqX5gq6eOrnVC3Q&s',
-  title: 'Turn Your Devices From Distractions Into Time Savers',
-  subtitle: 'A journey into digital minimalism',
-  text: 'Every January, I usually purge old email, clothes and unwanted knick-knacks to start the year anew. This time, I focused on my digital spaces instead. My virtual Marie Kondo-ing forced me to think about the indispensable apps and features on my devices—and on the flip side, the time thieves that make it hard to leave the couch.',
-  date: 'January 30, 2024',
-};
-
-// Tarjetas del feed, agrupadas por bloque del grid.
-const topCard = { id: 'card1', image: news, title: 'Card Title', subtitle: 'Card Subtitle', text: 'Texto Aqui .', date: '15/01/2024' };
-
-const column3 = [
-  { id: 'card3-1', image: comunidades, title: 'Card Title', subtitle: 'Card Subtitle', text: 'Texto Aqui .', date: '15/01/2024' },
-  { id: 'card3-2', image: PLACEHOLDER, title: 'Card Title', subtitle: 'Card Subtitle', text: 'Texto Aqui .', date: '15/01/2024' },
-  { id: 'card3-3', image: PLACEHOLDER, title: 'Card Title', subtitle: 'Card Subtitle', text: 'Texto Aqui .', date: '15/01/2024' },
+const postsParaTi = [
+  {
+    id: 1,
+    name: 'Vite',
+    handle: '@vite_js',
+    time: '2h',
+    text: 'Vite 8 ya está aquí: builds aún más rápidos con Rolldown. ⚡',
+    stats: { comments: 128, retweets: 512, likes: '3,4 mil', views: '120 mil' },
+  },
+  {
+    id: 2,
+    name: 'React',
+    handle: '@reactjs',
+    time: '5h',
+    text: 'Los Server Components y Suspense hacen que dividir tu app en chunks sea trivial. Tu bundle inicial lo agradece.',
+    stats: { comments: 89, retweets: 240, likes: '1,9 mil', views: '88 mil' },
+  },
+  {
+    id: 3,
+    name: 'José Valero',
+    handle: '@josevalero',
+    time: '8h',
+    text: '¡Mi red social Lure ya conecta el frontend React con un backend .NET + SQL Server! 🚀 #TFG #DAW',
+    stats: { comments: 42, retweets: 96, likes: 730, views: '21 mil' },
+  },
+  {
+    id: 4,
+    name: 'GitHub',
+    handle: '@github',
+    time: '12h',
+    text: 'Recordatorio: un buen README y unos tests verdes valen más que mil palabras en tu portfolio.',
+    stats: { comments: 210, retweets: 1500, likes: '9,1 mil', views: '340 mil' },
+  },
 ];
 
-const column4 = [
-  { id: 'card4-1', image: PLACEHOLDER, title: 'Card Title', subtitle: 'Card Subtitle', text: 'Texto Aqui .', date: '15/01/2024' },
-  { id: 'card4-2', image: PLACEHOLDER, title: 'Card Title', subtitle: 'Card Subtitle', text: 'Texto Aqui .', date: '15/01/2024' },
-  { id: 'card4-3', image: PLACEHOLDER, title: 'Card Title', subtitle: 'Card Subtitle', text: 'Texto Aqui .', date: '15/01/2024' },
-  { id: 'card4-4', image: PLACEHOLDER, title: 'Card Title', subtitle: 'Card Subtitle', text: 'Texto Aqui .', date: '15/01/2024' },
+const postsSiguiendo = [
+  {
+    id: 101,
+    name: '.NET',
+    handle: '@dotnet',
+    time: '1h',
+    text: '.NET 10 LTS: rendimiento, Minimal APIs y EF Core mejor que nunca. Conecta con LocalDB en segundos.',
+    stats: { comments: 64, retweets: 320, likes: '2,2 mil', views: '95 mil' },
+  },
+  {
+    id: 102,
+    name: 'Lure',
+    handle: '@lure',
+    time: '3h',
+    text: 'Bienvenido a tu feed de "Siguiendo". Aquí verás los posts de las cuentas que sigues. 👀',
+    stats: { comments: 12, retweets: 30, likes: 180, views: '4.200' },
+  },
 ];
 
-// Índice plano para resolver la tarjeta expandida por id.
-const allCards = [topCard, ...column3, ...column4];
+function Post({ name, handle, time, text, stats }) {
+  return (
+    <article className="x-post">
+      <span className="x-avatar">{name.charAt(0)}</span>
+      <div className="x-post-body">
+        <div className="x-post-head">
+          <strong>{name}</strong>
+          <span className="x-muted">{handle}</span>
+          <span className="x-muted">· {time}</span>
+        </div>
+        <p className="x-post-text">{text}</p>
+        <div className="x-post-actions">
+          <button type="button" className="x-action comment">
+            <MessageCircle size={18} />
+            <span>{stats.comments}</span>
+          </button>
+          <button type="button" className="x-action retweet">
+            <Repeat2 size={18} />
+            <span>{stats.retweets}</span>
+          </button>
+          <button type="button" className="x-action like">
+            <Heart size={18} />
+            <span>{stats.likes}</span>
+          </button>
+          <button type="button" className="x-action views">
+            <BarChart2 size={18} />
+            <span>{stats.views}</span>
+          </button>
+          <button type="button" className="x-action share" aria-label="Compartir">
+            <Share size={18} />
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 function App() {
-  const [expandedCardId, setExpandedCardId] = useState(null);
+  const [tab, setTab] = useState('paraTi');
+  const [draft, setDraft] = useState('');
 
-  const expandedCard = allCards.find((card) => card.id === expandedCardId);
+  const posts = tab === 'paraTi' ? postsParaTi : postsSiguiendo;
+
+  const handlePost = () => {
+    setDraft('');
+  };
 
   return (
-    <div className="App">
-      {!expandedCardId ? (
-        <>
-          <div className="Mitad_Izquierda">
-            <CardPadre2 {...featured} />
-          </div>
+    <div className="x-layout">
+      <Sidebar />
 
-          <div className="Mitad_Derecha">
-            <div className="card1">
-              <CardPadre onClick={() => setExpandedCardId(topCard.id)} {...topCard} />
-            </div>
-            <div className="card2">
-              <CarouselComponent />
-            </div>
-            <div className="card3">
-              {column3.map((card) => (
-                <CardPadre key={card.id} onClick={() => setExpandedCardId(card.id)} {...card} />
-              ))}
-            </div>
-            <div className="card4">
-              {column4.map((card) => (
-                <CardPadre key={card.id} onClick={() => setExpandedCardId(card.id)} {...card} />
-              ))}
+      <main className="x-main">
+        <header className="x-main-header">
+          <h1>Inicio</h1>
+          <div className="x-tabs">
+            <button
+              type="button"
+              className={`x-tab ${tab === 'paraTi' ? 'active' : ''}`}
+              onClick={() => setTab('paraTi')}
+            >
+              <span>Para ti</span>
+            </button>
+            <button
+              type="button"
+              className={`x-tab ${tab === 'siguiendo' ? 'active' : ''}`}
+              onClick={() => setTab('siguiendo')}
+            >
+              <span>Siguiendo</span>
+            </button>
+          </div>
+        </header>
+
+        <div className="x-compose">
+          <span className="x-avatar">L</span>
+          <div className="x-compose-body">
+            <textarea
+              placeholder="¿Qué está pasando?"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              rows={2}
+            />
+            <div className="x-compose-bar">
+              <div className="x-compose-icons">
+                <button type="button" aria-label="Añadir imagen"><Image size={20} /></button>
+                <button type="button" aria-label="Añadir emoji"><Smile size={20} /></button>
+              </div>
+              <button
+                type="button"
+                className="x-post-submit"
+                onClick={handlePost}
+                disabled={!draft.trim()}
+              >
+                Postear
+              </button>
             </div>
           </div>
-        </>
-      ) : (
-        // Vista de tarjeta expandida: clic en cualquier parte la cierra.
-        <div className="expanded-card" onClick={() => setExpandedCardId(null)}>
-          {expandedCard && <CardPadre {...expandedCard} />}
         </div>
-      )}
+
+        <div className="x-feed">
+          {posts.map((post) => (
+            <Post key={post.id} {...post} />
+          ))}
+        </div>
+      </main>
+
+      <RightSidebar />
     </div>
   );
 }

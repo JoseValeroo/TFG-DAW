@@ -62,3 +62,52 @@
   display: flex;
   justify-content: center;
 }
+
+/* Layout movido desde estilos inline del JSX (para poder hacerlo responsive) */
+.profile-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.media-content-card {
+  display: flex;
+  gap: 20px;
+  width: 50%;
+}
+
+.mid-cards {
+  width: 50%;
+}
+
+/* ============ Responsive ============ */
+
+/* Tablet y por debajo: la columna de perfil y la de tarjetas se apilan */
+@media (max-width: 992px) {
+  .content { flex-wrap: wrap; }
+  .profile-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+  .other-cards { flex: 1 1 100%; }
+  .profile-row { flex-direction: column; }
+  .media-content-card,
+  .mid-cards { width: 100%; }
+}
+
+/* Móvil: menos padding y tarjetas internas a ancho completo */
+@media (max-width: 600px) {
+  .profile-page { padding: 10px; }
+  .achievements-card,
+  .tags-card,
+  .stats-card,
+  .skills-card { flex: 1 1 100%; }
+}

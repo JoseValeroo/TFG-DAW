@@ -1,69 +1,204 @@
-.App {
-  background-color: rgb(90, 90, 90);
-  display: flex;
-  width: 100%;
-  height: 100vh; /* Asegura que ocupe el 100% de la altura de la ventana */
-  overflow: hidden; /* Evita el scroll global */
-  padding: 5px;
-}
-
-.Mitad_Izquierda {
-  width: 40%; /* Ocupa el 40% del ancho */
+/* ===== Layout estilo x.com (3 columnas centradas, tema oscuro) ===== */
+.x-layout {
   display: flex;
   justify-content: center;
-  margin-right: 5px; /* Espacio entre las cards */
+  min-height: 100vh;
+  margin: 0 auto;
+  max-width: 1290px;
+  background: #000;
+  color: #e7e9ea;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
-.Mitad_Derecha {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-  gap: 5px; /* Espacio entre las cards */
-  width: 60%; /* Ancho del contenedor */
-  height: 100%; /* Altura del contenedor */
-  overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
+/* ===== Columna central ===== */
+.x-main {
+  flex: 1 1 600px;
+  max-width: 600px;
+  min-height: 100vh;
+  border-left: 1px solid #2f3336;
+  border-right: 1px solid #2f3336;
 }
 
-.card1, .card2 {
+.x-main-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #2f3336;
+}
+.x-main-header h1 {
+  margin: 0;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.x-tabs {
+  display: flex;
+}
+.x-tab {
+  flex: 1;
+  padding: 16px 0;
+  background: transparent;
+  border: none;
+  color: #71767b;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+.x-tab:hover { background: rgba(231, 233, 234, 0.1); }
+.x-tab.active { color: #e7e9ea; font-weight: 700; }
+.x-tab.active span {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 14px;
+}
+.x-tab.active span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  border-radius: 9999px;
+  background: #1d9bf0;
+}
+
+/* ===== Caja de publicar ===== */
+.x-compose {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #2f3336;
+}
+.x-compose-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: white; /* Fondo blanco para las tarjetas */
-  overflow: hidden; /* Evita el desbordamiento */
-  padding: 0;
-  margin: 0;
-
 }
-
-.card3 {
-  display: grid;
-  grid-template-columns: 1fr; /* Una columna para las tarjetas */
-  gap: 16px; /* Espacio entre las tarjetas */
-  height: 100%; /* Altura del contenedor */
-  overflow-y: auto; /* Permite desplazamiento vertical si las tarjetas exceden la altura */
-  scrollbar-width: none; /* Firefox */
-}
-
-.card4 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-  grid-template-rows: repeat(2, 1fr); /* 2 filas */
-  gap: 16px;
+.x-compose textarea {
   width: 100%;
-  height: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: #e7e9ea;
+  font-size: 20px;
+  font-family: inherit;
+  padding: 12px 0;
+}
+.x-compose textarea::placeholder { color: #71767b; }
+.x-compose-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #2f3336;
+  padding-top: 10px;
+}
+.x-compose-icons { display: flex; gap: 4px; }
+.x-compose-icons button {
+  display: inline-flex;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #1d9bf0;
+  cursor: pointer;
+}
+.x-compose-icons button:hover { background: rgba(29, 155, 240, 0.1); }
+.x-post-submit {
+  border: none;
+  border-radius: 9999px;
+  background: #1d9bf0;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 9px 18px;
+  cursor: pointer;
+}
+.x-post-submit:hover { background: #1a8cd8; }
+.x-post-submit:disabled { opacity: 0.5; cursor: default; }
+
+/* ===== Feed y posts ===== */
+.x-post {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #2f3336;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.x-post:hover { background: rgba(255, 255, 255, 0.03); }
+
+.x-post-body { flex: 1; min-width: 0; }
+.x-post-head {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+}
+.x-post-head strong { color: #e7e9ea; }
+.x-muted { color: #71767b; font-weight: 400; }
+
+.x-post-text {
+  margin: 2px 0 12px;
+  color: #e7e9ea;
+  font-size: 15px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
-.expanded-card { 
-  width: 100%; 
-  height: 100%; 
-  transition: all 0.3s ease-in-out;
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  background-color: rgba(0, 0, 0, 0.8); 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  z-index: 999; /* Asegura que esté por encima de otros elementos */ 
-  color: white;
+.x-post-actions {
+  display: flex;
+  justify-content: space-between;
+  max-width: 425px;
+}
+.x-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: #71767b;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 9999px;
+  transition: color 0.2s;
+}
+.x-action.comment:hover { color: #1d9bf0; }
+.x-action.retweet:hover { color: #00ba7c; }
+.x-action.like:hover { color: #f91880; }
+.x-action.views:hover { color: #1d9bf0; }
+.x-action.share:hover { color: #1d9bf0; }
+
+/* Avatar genérico (reutiliza el de Sidebar.css si existe; lo definimos por seguridad) */
+.x-post .x-avatar,
+.x-compose .x-avatar {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1d9bf0, #8b5cf6);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ===== Responsive ===== */
+/* Móvil: barra de nav inferior → dejar hueco abajo */
+@media (max-width: 688px) {
+  .x-main {
+    border-left: none;
+    border-right: none;
+    padding-bottom: 60px;
+  }
+  .x-post-actions { max-width: none; }
 }

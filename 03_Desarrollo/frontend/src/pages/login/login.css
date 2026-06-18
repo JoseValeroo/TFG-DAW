@@ -198,3 +198,10 @@ h2 {
 .dark-mode .login-footer a:hover {
   color: #bbb;
 }
+
+/* ============ Responsive ============ */
+@media (max-width: 480px) {
+  .login-container { padding: 1rem; }
+  .login-card { padding: 1.5rem; }
+  .input-group { width: 100%; }
+}
