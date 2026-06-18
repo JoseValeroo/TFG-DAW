@@ -43,6 +43,16 @@ public class FeedController : ControllerBase
         return tweet is null ? Unauthorized() : Ok(tweet);
     }
 
+    // Dar/quitar me gusta a un tweet.
+    [Authorize]
+    [HttpPost("tweets/{id:int}/like")]
+    public async Task<IActionResult> ToggleLike(int id)
+    {
+        var userId = GetUserId();
+        if (userId is null) return Unauthorized();
+        return Ok(await _feed.ToggleLikeAsync(userId.Value, id));
+    }
+
     // "A quién seguir" (público; excluye al usuario si hay sesión).
     [HttpGet("suggestions")]
     public async Task<IActionResult> Suggestions()

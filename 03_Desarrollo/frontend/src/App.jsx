@@ -18,10 +18,31 @@ function timeAgo(iso) {
   return new Date(iso).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 }
 
-function Post({ author, text, createdAt, likes, retweets, comments }) {
+function PostMedia({ type, url }) {
+  if (!type || !url) return null;
+  if (type === 'image') return <img className="x-post-media" src={url} alt="adjunto" loading="lazy" />;
+  if (type === 'video') return <video className="x-post-media" src={url} controls preload="metadata" />;
+  if (type === 'pdf') {
+    return (
+      <a className="x-post-pdf" href={url} target="_blank" rel="noreferrer">
+        📄 Ver documento PDF
+      </a>
+    );
+  }
+  return null;
+}
+
+function Avatar({ author }) {
+  if (author?.avatarUrl) {
+    return <img className="x-avatar x-avatar-img" src={author.avatarUrl} alt={author.name} />;
+  }
+  return <span className="x-avatar">{(author?.name || '?').charAt(0).toUpperCase()}</span>;
+}
+
+function Post({ author, text, createdAt, likes, retweets, comments, mediaType, mediaUrl }) {
   return (
     <article className="x-post">
-      <span className="x-avatar">{(author?.name || '?').charAt(0).toUpperCase()}</span>
+      <Avatar author={author} />
       <div className="x-post-body">
         <div className="x-post-head">
           <strong>{author?.name}</strong>
@@ -29,6 +50,7 @@ function Post({ author, text, createdAt, likes, retweets, comments }) {
           <span className="x-muted">· {timeAgo(createdAt)}</span>
         </div>
         <p className="x-post-text">{text}</p>
+        <PostMedia type={mediaType} url={mediaUrl} />
         <div className="x-post-actions">
           <button type="button" className="x-action comment"><MessageCircle size={18} /><span>{comments}</span></button>
           <button type="button" className="x-action retweet"><Repeat2 size={18} /><span>{retweets}</span></button>

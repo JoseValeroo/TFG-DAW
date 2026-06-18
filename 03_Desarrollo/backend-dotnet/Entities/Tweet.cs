@@ -26,5 +26,8 @@ public class Tweet
     [Column("created_at")]
     public DateTime CreatedAt { get; set; }
 
+    [Column("media_urls")]
+    public string? MediaUrls { get; set; }
+
     public User? User { get; set; }
 }

@@ -39,6 +39,15 @@ public class User
     [Column("bio")]
     public string? Bio { get; set; }
 
+    [Column("location")]
+    public string? Location { get; set; }
+
+    [Column("date_of_birth")]
+    public DateTime? DateOfBirth { get; set; }
+
+    [Column("cover_url")]
+    public string? CoverUrl { get; set; }
+
     [Column("user_role")]
     public string? UserRole { get; set; }
 }

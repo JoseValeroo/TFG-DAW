@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Lure.Api.Data;
 using Lure.Api.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +58,7 @@ public class FeedService : IFeedService
             tweet.TweetText,
             tweet.CreatedAt,
             new AuthorDto(user.UserId, BuildName(user.FirstName, user.LastName, user.UserHandle), user.UserHandle, user.AvatarUrl),
-            0, 0, 0);
+            0, 0, 0, null, null);
     }
 
     public async Task<List<SuggestionDto>> GetSuggestionsAsync(int? excludeUserId, int take = 3)
@@ -90,6 +91,66 @@ public class FeedService : IFeedService
             .ToList();
     }
 
+    public async Task<LikeResult> ToggleLikeAsync(int userId, int tweetId)
+    {
+        var tweet = await _db.Tweets.FirstOrDefaultAsync(t => t.TweetId == tweetId);
+        if (tweet is null) return new LikeResult(false, 0);
+
+        var existing = await _db.TweetLikes
+            .FirstOrDefaultAsync(l => l.UserId == userId && l.TweetId == tweetId);
+
+        bool liked;
+        if (existing is not null)
+        {
+            _db.TweetLikes.Remove(existing);
+            tweet.NumLikes = Math.Max(0, (tweet.NumLikes ?? 0) - 1);
+            liked = false;
+        }
+        else
+        {
+            _db.TweetLikes.Add(new TweetLike { UserId = userId, TweetId = tweetId });
+            tweet.NumLikes = (tweet.NumLikes ?? 0) + 1;
+            liked = true;
+        }
+
+        await _db.SaveChangesAsync();
+        return new LikeResult(liked, tweet.NumLikes ?? 0);
+    }
+
+    public async Task<List<TweetDto>> GetUserTweetsAsync(int userId, int take = 50)
+    {
+        var rows = await BaseQuery()
+            .Where(r => r.UserId == userId)
+            .OrderByDescending(r => r.CreatedAt)
+            .Take(take)
+            .ToListAsync();
+        return rows.Select(ToDto).ToList();
+    }
+
+    public async Task<List<TweetDto>> GetUserLikesAsync(int userId, int take = 50)
+    {
+        var likedIds = _db.TweetLikes.Where(l => l.UserId == userId).Select(l => l.TweetId);
+        var rows = await BaseQuery()
+            .Where(r => likedIds.Contains(r.TweetId))
+            .OrderByDescending(r => r.CreatedAt)
+            .Take(take)
+            .ToListAsync();
+        return rows.Select(ToDto).ToList();
+    }
+
+    public async Task<List<ReplyDto>> GetUserRepliesAsync(int userId, int take = 50)
+    {
+        var query =
+            from c in _db.TweetComments
+            where c.UserId == userId
+            join t in _db.Tweets on c.TweetId equals t.TweetId
+            join u in _db.Users on t.UserId equals u.UserId
+            orderby c.CreatedAt descending
+            select new ReplyDto(c.CommentId, c.CommentText, c.CreatedAt, t.TweetId, u.UserHandle, t.TweetText);
+
+        return await query.Take(take).ToListAsync();
+    }
+
     // Proyección ligera (solo las columnas necesarias) para evitar traer todo el usuario.
     private IQueryable<TweetRow> BaseQuery() =>
         _db.Tweets.Select(t => new TweetRow
@@ -105,16 +166,44 @@ public class FeedService : IFeedService
             Likes = t.NumLikes,
             Retweets = t.NumRetweets,
             Comments = t.NumComments,
+            MediaUrls = t.MediaUrls,
         });
 
-    private static TweetDto ToDto(TweetRow r) => new(
-        r.TweetId,
-        r.Text,
-        r.CreatedAt,
-        new AuthorDto(r.UserId, BuildName(r.FirstName, r.LastName, r.Handle), r.Handle, r.AvatarUrl),
-        r.Likes ?? 0,
-        r.Retweets ?? 0,
-        r.Comments ?? 0);
+    private static TweetDto ToDto(TweetRow r)
+    {
+        var (mediaType, mediaUrl) = ParseMedia(r.MediaUrls);
+        return new TweetDto(
+            r.TweetId,
+            r.Text,
+            r.CreatedAt,
+            new AuthorDto(r.UserId, BuildName(r.FirstName, r.LastName, r.Handle), r.Handle, r.AvatarUrl),
+            r.Likes ?? 0,
+            r.Retweets ?? 0,
+            r.Comments ?? 0,
+            mediaType,
+            mediaUrl);
+    }
+
+    // media_urls puede contener un JSON {"type":"image|video|pdf","url":"..."}.
+    private static (string? type, string? url) ParseMedia(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return (null, null);
+        try
+        {
+            using var doc = JsonDocument.Parse(raw);
+            if (doc.RootElement.ValueKind == JsonValueKind.Object &&
+                doc.RootElement.TryGetProperty("type", out var t) &&
+                doc.RootElement.TryGetProperty("url", out var u))
+            {
+                return (t.GetString(), u.GetString());
+            }
+        }
+        catch
+        {
+            // Formato no reconocido (tweets antiguos): sin media.
+        }
+        return (null, null);
+    }
 
     private static string BuildName(string firstName, string lastName, string handle)
     {
@@ -135,5 +224,6 @@ public class FeedService : IFeedService
         public int? Likes { get; set; }
         public int? Retweets { get; set; }
         public int? Comments { get; set; }
+        public string? MediaUrls { get; set; }
     }
 }

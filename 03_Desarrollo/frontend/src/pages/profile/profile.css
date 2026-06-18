@@ -146,6 +146,52 @@
   color: #7c5cff;
 }
 
+/* Avatares dentro de listas (autores de posts, seguidores...) con degradado */
+.profile-page .ant-list-item-meta-avatar .ant-avatar {
+  background: linear-gradient(135deg, #7c5cff, #00b8d9);
+  color: #fff;
+  font-weight: 700;
+}
+
+.muted-inline { color: #8b9099; font-weight: 400; font-size: 14px; }
+.profile-empty { padding: 24px 8px; text-align: center; color: #8b9099; }
+
+/* Respuestas: cita del tweet original + texto */
+.reply-quote {
+  border-left: 2px solid rgba(124, 92, 255, 0.5);
+  padding: 4px 0 4px 12px;
+  margin: 4px 0 8px;
+  color: #9aa0a6;
+  font-style: italic;
+}
+.reply-text { color: #e7e9ea; }
+
+/* Multimedia en posts del perfil */
+.profile-media {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  margin: 10px 0 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  object-fit: cover;
+  background: #000;
+}
+video.profile-media { object-fit: contain; }
+.profile-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 4px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #d7d9ff;
+  text-decoration: none;
+  background: rgba(124, 92, 255, 0.1);
+}
+.profile-pdf:hover { border-color: #7c5cff; }
+
 /* ---------- "Sobre mí" ---------- */
 .about-card p {
   color: #c7cbd1;

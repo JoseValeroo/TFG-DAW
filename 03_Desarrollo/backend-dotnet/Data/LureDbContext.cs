@@ -11,6 +11,11 @@ public class LureDbContext : DbContext
     public DbSet<Tweet> Tweets => Set<Tweet>();
     public DbSet<Topic> Topics => Set<Topic>();
     public DbSet<Follower> Followers => Set<Follower>();
+    public DbSet<TweetLike> TweetLikes => Set<TweetLike>();
+    public DbSet<TweetComment> TweetComments => Set<TweetComment>();
+    public DbSet<Message> Messages => Set<Message>();
+    public DbSet<Community> Communities => Set<Community>();
+    public DbSet<CommunityMember> CommunityMembers => Set<CommunityMember>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,5 +45,25 @@ public class LureDbContext : DbContext
         // followers: clave compuesta (sin identidad)
         modelBuilder.Entity<Follower>(entity =>
             entity.HasKey(f => new { f.FollowerId, f.FollowingId }));
+
+        // tweet_likes: clave compuesta (sin identidad)
+        modelBuilder.Entity<TweetLike>(entity =>
+            entity.HasKey(l => new { l.UserId, l.TweetId }));
+
+        modelBuilder.Entity<TweetComment>(entity =>
+        {
+            entity.HasKey(c => c.CommentId);
+            entity.Property(c => c.CommentId).ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<Message>(entity =>
+        {
+            entity.HasKey(m => m.MessageId);
+            entity.Property(m => m.MessageId).ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<Community>(entity => entity.HasKey(c => c.CommunityId));
+
+        modelBuilder.Entity<CommunityMember>(entity => entity.HasKey(m => m.Id));
     }
 }

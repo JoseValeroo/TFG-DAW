@@ -11,6 +11,11 @@ const RegisterPage = lazy(() => import('../pages/register/register'));
 const ProfilePage = lazy(() => import('../pages/profile/profilePage'));
 const ForgotPassword = lazy(() => import('../pages/forgotpass/ForgotPassword'));
 const TarjetaMain = lazy(() => import('../pages/TarjetaMain/TarjetaMain'));
+const Configuracion = lazy(() => import('../pages/menu/Configuracion'));
+const Cuentas = lazy(() => import('../pages/menu/Cuentas'));
+const Notificaciones = lazy(() => import('../pages/menu/Notificaciones'));
+const Comunidades = lazy(() => import('../pages/menu/Comunidades'));
+const Mensajes = lazy(() => import('../pages/menu/Mensajes'));
 
 // Envuelve rutas que requieren sesión iniciada.
 function ProtectedRoute({ children }) {
@@ -40,6 +45,11 @@ const AppRouter = () => (
           </ProtectedRoute>
         }
       />
+      <Route path="/configuracion" element={<ProtectedRoute><Configuracion /></ProtectedRoute>} />
+      <Route path="/cuentas" element={<ProtectedRoute><Cuentas /></ProtectedRoute>} />
+      <Route path="/notificaciones" element={<ProtectedRoute><Notificaciones /></ProtectedRoute>} />
+      <Route path="/comunidades" element={<ProtectedRoute><Comunidades /></ProtectedRoute>} />
+      <Route path="/mensajes" element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
       {/* Cualquier ruta desconocida vuelve al inicio */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

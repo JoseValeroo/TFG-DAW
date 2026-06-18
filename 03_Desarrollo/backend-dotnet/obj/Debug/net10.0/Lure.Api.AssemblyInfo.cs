@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Lure.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e5c8b019c37e809e4f56b2472b06adb8ad0e3a2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e83a355c8abe0078263526281e0796dcadd4e839")]
 [assembly: System.Reflection.AssemblyProductAttribute("Lure.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Lure.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

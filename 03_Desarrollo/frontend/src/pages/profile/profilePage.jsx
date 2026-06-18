@@ -1,80 +1,169 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, Avatar, List, Button, Tag, Tabs, Row, Col, Menu, Badge, ConfigProvider, theme } from 'antd';
-import { 
-  MailOutlined, 
-  EnvironmentOutlined, 
-  CalendarOutlined, 
-  TeamOutlined, 
-  LikeOutlined, 
-  CommentOutlined, 
-  ShareAltOutlined, 
-  SaveOutlined, 
+import {
+  HomeOutlined,
+  MailOutlined,
+  EnvironmentOutlined,
+  CalendarOutlined,
+  TeamOutlined,
+  LikeOutlined,
+  LikeFilled,
+  CommentOutlined,
+  ShareAltOutlined,
+  SaveOutlined,
   SettingOutlined,
   MessageOutlined,
   BellOutlined,
   StopOutlined,
   UsergroupAddOutlined,
-  UserOutlined
+  UserOutlined,
 } from '@ant-design/icons';
-import 'antd/dist/reset.css'; // Importa los estilos de Ant Design
-import './profile.css'; // Importa el archivo CSS
-import { useNavigate } from 'react-router-dom';
+import 'antd/dist/reset.css';
+import './profile.css';
 import { useAuth } from '../../context/auth-context';
+import { profileApi, feedApi } from '../../services/api';
 
 const { Meta } = Card;
 
-const posts = [
-  {
-    title: "Post sobre React",
-    description: "Cómo crear componentes reutilizables en React.",
-    avatar: "https://via.placeholder.com/50",
-  },
-  {
-    title: "Post sobre Node.js",
-    description: "Buenas prácticas para construir APIs REST con Node.js.",
-    avatar: "https://via.placeholder.com/50",
-  },
-  {
-    title: "Post sobre DevOps",
-    description: "Cómo implementar CI/CD en proyectos modernos.",
-    avatar: "https://via.placeholder.com/50",
-  },
-];
+function timeAgo(iso) {
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (Number.isNaN(diff)) return '';
+  if (diff < 60) return `${diff}s`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}m`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+  if (diff < 604800) return `${Math.floor(diff / 86400)}d`;
+  return new Date(iso).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+}
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { token, logout } = useAuth();
+
+  const [profile, setProfile] = useState(null);
+  const [mainTab, setMainTab] = useState('posts');
+  const [items, setItems] = useState([]);
+  const [loadingItems, setLoadingItems] = useState(false);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+
+  useEffect(() => {
+    profileApi.me(token).then(setProfile).catch(() => {});
+    profileApi.followers(token).then(setFollowers).catch(() => {});
+    profileApi.following(token).then(setFollowing).catch(() => {});
+  }, [token]);
+
+  const loadItems = useCallback(async () => {
+    setLoadingItems(true);
+    try {
+      if (mainTab === 'posts') setItems(await profileApi.tweets(token));
+      else if (mainTab === 'replies') setItems(await profileApi.replies(token));
+      else setItems(await profileApi.likes(token));
+    } catch {
+      setItems([]);
+    } finally {
+      setLoadingItems(false);
+    }
+  }, [mainTab, token]);
+
+  useEffect(() => {
+    loadItems();
+  }, [loadItems]);
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
-  const profileData = {
-    avatar: "https://via.placeholder.com/150",
-    coverPhoto: "https://via.placeholder.com/300x150",
-    // Datos reales del usuario autenticado (el resto sigue siendo de ejemplo).
-    name: user?.username ?? "Usuario",
-    bio: "Full Stack Developer",
-    location: "San Francisco, CA",
-    birthday: "15 de agosto de 1990",
-    followers: 1200,
-    following: 300,
-    email: user?.email ?? "",
+  const toggleLike = async (id) => {
+    try {
+      const res = await feedApi.toggleLike(id, token);
+      setItems((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, likes: res.likes, likedByMe: res.liked } : p)),
+      );
+    } catch {
+      /* noop */
+    }
   };
 
-  const seguidores = [
-    { id: 1, nombre: 'Juan Pérez', foto: 'https://i.pravatar.cc/150?img=1' },
-    { id: 2, nombre: 'María López', foto: 'https://i.pravatar.cc/150?img=2' },
-    { id: 3, nombre: 'María López', foto: 'https://i.pravatar.cc/150?img=2' },
-    { id: 4, nombre: 'María López', foto: 'https://i.pravatar.cc/150?img=2' },
-  ];
+  const profileData = {
+    name: profile?.name ?? 'Usuario',
+    bio: profile?.bio || 'Sin biografía',
+    location: profile?.location || '—',
+    birthday: profile?.birthday || '—',
+    email: profile?.email || '—',
+    followers: profile?.followers ?? 0,
+    following: profile?.following ?? 0,
+  };
 
-  const seguidos = [
-    { id: 1, nombre: 'Ana Martín', foto: 'https://i.pravatar.cc/150?img=4' },
-    { id: 2, nombre: 'Pedro Ruiz', foto: 'https://i.pravatar.cc/150?img=5' }, 
-    { id: 3, nombre: 'Pedro Ruiz', foto: 'https://i.pravatar.cc/150?img=5' }, 
-    { id: 4, nombre: 'Ana Martín', foto: 'https://i.pravatar.cc/150?img=4' },
-  ];
+  const renderMedia = (t) => {
+    if (!t.mediaType || !t.mediaUrl) return null;
+    if (t.mediaType === 'image') return <img className="profile-media" src={t.mediaUrl} alt="adjunto" loading="lazy" />;
+    if (t.mediaType === 'video') return <video className="profile-media" src={t.mediaUrl} controls preload="metadata" />;
+    if (t.mediaType === 'pdf') return <a className="profile-pdf" href={t.mediaUrl} target="_blank" rel="noreferrer">📄 Ver documento PDF</a>;
+    return null;
+  };
+
+  const renderTweetItem = (t) => (
+    <List.Item
+      actions={[
+        <Button
+          key="like"
+          type="text"
+          icon={t.likedByMe ? <LikeFilled style={{ color: '#f91880' }} /> : <LikeOutlined />}
+          onClick={() => toggleLike(t.id)}
+        >
+          {t.likes}
+        </Button>,
+        <Button key="comment" type="text" icon={<CommentOutlined />}>{t.comments}</Button>,
+        <Button key="share" type="text" icon={<ShareAltOutlined />} />,
+        <Button key="save" type="text" icon={<SaveOutlined />} />,
+      ]}
+    >
+      <List.Item.Meta
+        avatar={<Avatar src={t.author?.avatarUrl || undefined}>{(t.author?.name || '?').charAt(0).toUpperCase()}</Avatar>}
+        title={<span>{t.author?.name} <span className="muted-inline">@{t.author?.handle} · {timeAgo(t.createdAt)}</span></span>}
+        description={
+          <div>
+            <span style={{ color: '#e7e9ea' }}>{t.text}</span>
+            {renderMedia(t)}
+          </div>
+        }
+      />
+    </List.Item>
+  );
+
+  const renderReplyItem = (r) => (
+    <List.Item>
+      <List.Item.Meta
+        title={<span className="muted-inline">En respuesta a @{r.tweetAuthorHandle}</span>}
+        description={
+          <>
+            <div className="reply-quote">{r.tweetText}</div>
+            <div className="reply-text">{r.text}</div>
+          </>
+        }
+      />
+    </List.Item>
+  );
+
+  const renderMain = () => {
+    if (loadingItems) return <p className="profile-empty">Cargando…</p>;
+    if (items.length === 0) {
+      const msg =
+        mainTab === 'posts' ? 'Todavía no has publicado nada.'
+          : mainTab === 'replies' ? 'No has respondido a ningún tweet.'
+            : 'No has dado me gusta a ningún tweet.';
+      return <p className="profile-empty">{msg}</p>;
+    }
+    return (
+      <List
+        itemLayout="horizontal"
+        dataSource={items}
+        renderItem={mainTab === 'replies' ? renderReplyItem : renderTweetItem}
+      />
+    );
+  };
 
   return (
     <ConfigProvider
@@ -104,18 +193,10 @@ const ProfilePage = () => {
             />
             <List itemLayout="horizontal">
               <List.Item>
-                <List.Item.Meta
-                  avatar={<EnvironmentOutlined />}
-                  title="Ubicación"
-                  description={profileData.location}
-                />
+                <List.Item.Meta avatar={<EnvironmentOutlined />} title="Ubicación" description={profileData.location} />
               </List.Item>
               <List.Item>
-                <List.Item.Meta
-                  avatar={<CalendarOutlined />}
-                  title="Fecha de nacimiento"
-                  description={profileData.birthday}
-                />
+                <List.Item.Meta avatar={<CalendarOutlined />} title="Fecha de nacimiento" description={profileData.birthday} />
               </List.Item>
               <List.Item>
                 <List.Item.Meta
@@ -136,65 +217,50 @@ const ProfilePage = () => {
           {/* Card 2: Descripción del usuario */}
           <div className="about-card">
             <Card title="Sobre mí">
-              <p>
-                Soy un desarrollador full stack con experiencia en tecnologías como React, Node.js, y bases de datos como MongoDB. Me especializo en la creación de aplicaciones web modernas y escalables, con un enfoque en la experiencia del usuario (UX). 
-                <br />
-                Tengo experiencia trabajando con APIs RESTful, integrando sistemas en la nube y utilizando prácticas de desarrollo ágil.
-              </p>
+              <p>{profileData.bio}</p>
             </Card>
           </div>
         </div>
 
         {/* Cards adicionales */}
         <div className="other-cards">
-          {/* Card 4: Posts del usuario */}
+          {/* Card 4: Posts / Respuestas / Me gusta */}
           <div className="posts-card">
-            <Card title="Posts">
-              <List
-                itemLayout="horizontal"
-                dataSource={posts}
-                renderItem={(post) => (
-                  <List.Item
-                    actions={[
-                      <Button key="like" type="text" icon={<LikeOutlined />} />,
-                      <Button key="comment" type="text" icon={<CommentOutlined />} />,
-                      <Button key="share" type="text" icon={<ShareAltOutlined />} />,
-                      <Button key="save" type="text" icon={<SaveOutlined />} />,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar src={post.avatar} />} 
-                      title={<a href="#!">{post.title}</a>}
-                      description={post.description}
-                    />
-                  </List.Item>
-                )}
+            <Card title="Actividad">
+              <Tabs
+                activeKey={mainTab}
+                onChange={setMainTab}
+                items={[
+                  { key: 'posts', label: `Posts (${profile?.tweetsCount ?? 0})` },
+                  { key: 'replies', label: `Respuestas (${profile?.repliesCount ?? 0})` },
+                  { key: 'likes', label: `Me gusta (${profile?.likesCount ?? 0})` },
+                ]}
               />
+              {renderMain()}
             </Card>
           </div>
 
-          {/* Cards de Multimedia y Seguidores/Seguidos */}
+          {/* Cards de Seguidores/Seguidos */}
           <div className="profile-row">
             <div className="media-content-card">
-              <Card style={{width:'100%'}}>
+              <Card style={{ width: '100%' }}>
                 <Tabs
                   defaultActiveKey="1"
                   centered
                   items={[
                     {
                       key: '1',
-                      label: 'Seguidores',
+                      label: `Seguidores (${profileData.followers})`,
                       children: (
                         <List
-                          dataSource={seguidores}
+                          dataSource={followers}
+                          locale={{ emptyText: 'Sin seguidores' }}
                           renderItem={(item) => (
-                            <List.Item
-                              actions={[<Button key="seguir" type="primary" shape="round">Seguir</Button>]}
-                            >
+                            <List.Item actions={[<Button key="seguir" type="primary" shape="round">Seguir</Button>]}>
                               <List.Item.Meta
-                                avatar={<Avatar src={item.foto} />}
-                                title={item.nombre}
-                                description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
+                                avatar={<Avatar>{(item.name || '?').charAt(0).toUpperCase()}</Avatar>}
+                                title={item.name}
+                                description={<span>@{item.handle}</span>}
                               />
                             </List.Item>
                           )}
@@ -203,18 +269,17 @@ const ProfilePage = () => {
                     },
                     {
                       key: '2',
-                      label: 'Seguidos',
+                      label: `Seguidos (${profileData.following})`,
                       children: (
                         <List
-                          dataSource={seguidos}
+                          dataSource={following}
+                          locale={{ emptyText: 'No sigues a nadie' }}
                           renderItem={(item) => (
-                            <List.Item
-                              actions={[<Button key="dejar" type="default" shape="round">Dejar Seguir</Button>]}
-                            >
+                            <List.Item actions={[<Button key="dejar" type="default" shape="round">Dejar Seguir</Button>]}>
                               <List.Item.Meta
-                                avatar={<Avatar src={item.foto} />}
-                                title={item.nombre}
-                                description={<span>@{item.nombre.toLowerCase().replace(' ', '')}</span>}
+                                avatar={<Avatar>{(item.name || '?').charAt(0).toUpperCase()}</Avatar>}
+                                title={item.name}
+                                description={<span>@{item.handle}</span>}
                               />
                             </List.Item>
                           )}
@@ -264,9 +329,9 @@ const ProfilePage = () => {
                   <div className="stats-card">
                     <Card title="Estadísticas de Actividad">
                       <ul>
-                        <li>Publicaciones: 35</li>
-                        <li>Comentarios: 120</li>
-                        <li>Interacciones: 500</li>
+                        <li>Publicaciones: {profile?.tweetsCount ?? 0}</li>
+                        <li>Respuestas: {profile?.repliesCount ?? 0}</li>
+                        <li>Me gusta dados: {profile?.likesCount ?? 0}</li>
                       </ul>
                     </Card>
                   </div>
@@ -275,7 +340,7 @@ const ProfilePage = () => {
                 <Col xs={24} sm={12} lg={12}>
                   <div className="skills-card">
                     <Card title="Habilidades">
-                      <ul>        
+                      <ul>
                         <li>React.js</li>
                         <li>Node.js</li>
                         <li>MongoDB</li>
@@ -292,11 +357,12 @@ const ProfilePage = () => {
               mode="horizontal"
               selectable={false}
               items={[
-                { key: '1', icon: <SettingOutlined />, label: 'Configuración' },
-                { key: '2', icon: <MessageOutlined />, label: 'Mensajes' },
-                { key: '3', icon: <Badge count={1}><BellOutlined /></Badge>, label: 'Notificaciones' },
-                { key: '4', icon: <UsergroupAddOutlined />, label: 'Comunidades' },
-                { key: '5', icon: <UserOutlined />, label: 'Cuentas' },
+                { key: '0', icon: <HomeOutlined />, label: 'Inicio', onClick: () => navigate('/') },
+                { key: '1', icon: <SettingOutlined />, label: 'Configuración', onClick: () => navigate('/configuracion') },
+                { key: '2', icon: <MessageOutlined />, label: 'Mensajes', onClick: () => navigate('/mensajes') },
+                { key: '3', icon: <Badge count={1}><BellOutlined /></Badge>, label: 'Notificaciones', onClick: () => navigate('/notificaciones') },
+                { key: '4', icon: <UsergroupAddOutlined />, label: 'Comunidades', onClick: () => navigate('/comunidades') },
+                { key: '5', icon: <UserOutlined />, label: 'Cuentas', onClick: () => navigate('/cuentas') },
                 { key: '6', icon: <StopOutlined />, label: 'Cerrar Sesión', onClick: handleLogout },
               ]}
             />

@@ -1,7 +1,11 @@
 using System.Text;
 using Lure.Api.Auth;
+using Lure.Api.Communities;
 using Lure.Api.Data;
 using Lure.Api.Feed;
+using Lure.Api.Messaging;
+using Lure.Api.Notifications;
+using Lure.Api.Profile;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,6 +24,10 @@ builder.Services.AddDbContext<LureDbContext>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFeedService, FeedService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<ICommunityService, CommunityService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // Autenticación JWT.
 var jwt = builder.Configuration.GetSection("Jwt");

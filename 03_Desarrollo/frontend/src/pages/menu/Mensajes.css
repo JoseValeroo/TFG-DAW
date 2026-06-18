@@ -1,0 +1,80 @@
+.msg-section {
+  margin: 6px 0 12px;
+  font-size: 15px;
+  color: #8b9099;
+}
+
+.msg-conv {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+.msg-conv-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.msg-conv-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 460px;
+}
+
+.msg-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #8b9099;
+  cursor: pointer;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.msg-back:hover { color: #e7e9ea; }
+
+.msg-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 260px;
+  margin-bottom: 14px;
+}
+.msg-bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 15px;
+  line-height: 1.35;
+  word-wrap: break-word;
+}
+.msg-bubble.mine {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #7c5cff, #4f8cff);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.msg-bubble.theirs {
+  align-self: flex-start;
+  background: #1c1f24;
+  color: #e7e9ea;
+  border-bottom-left-radius: 4px;
+}
+
+.msg-compose {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.msg-compose .field-input { flex: 1; }
+.msg-compose .pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+}

@@ -11,6 +11,7 @@ import {
   Feather,
 } from 'lucide-react';
 import lureLogo from '../../assets/Icons/Logo.svg';
+import { useAuth } from '../../context/auth-context';
 import './Sidebar.css';
 
 const navItems = [
@@ -25,6 +26,9 @@ const navItems = [
 ];
 
 function Sidebar() {
+  const { user, isAuthenticated } = useAuth();
+  const displayName = isAuthenticated ? (user?.username ?? 'Usuario') : 'Invitado';
+
   return (
     <header className="x-sidebar">
       <div className="x-sidebar-inner">
@@ -53,11 +57,11 @@ function Sidebar() {
           <Feather className="x-post-btn-icon" size={24} />
         </button>
 
-        <Link to="/login" className="x-account" aria-label="Cuenta">
-          <span className="x-avatar">L</span>
+        <Link to={isAuthenticated ? '/profilePage' : '/login'} className="x-account" aria-label="Cuenta">
+          <span className="x-avatar">{displayName.charAt(0).toUpperCase()}</span>
           <span className="x-account-info">
-            <strong>Invitado</strong>
-            <span>@invitado</span>
+            <strong>{displayName}</strong>
+            <span>@{isAuthenticated ? user?.username : 'invitado'}</span>
           </span>
           <MoreHorizontal size={18} />
         </Link>

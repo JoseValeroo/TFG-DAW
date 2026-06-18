@@ -11,7 +11,9 @@ public record TweetDto(
     AuthorDto Author,
     int Likes,
     int Retweets,
-    int Comments);
+    int Comments,
+    string? MediaType,
+    string? MediaUrl);
 
 public class CreateTweetRequest
 {
@@ -23,3 +25,14 @@ public class CreateTweetRequest
 public record SuggestionDto(int Id, string Name, string Handle);
 
 public record TrendDto(string Name, int Posts);
+
+public record LikeResult(bool Liked, int Likes);
+
+// Una respuesta (comentario) del usuario, con el contexto del tweet original.
+public record ReplyDto(
+    int Id,
+    string Text,
+    DateTime? CreatedAt,
+    int TweetId,
+    string TweetAuthorHandle,
+    string TweetText);
