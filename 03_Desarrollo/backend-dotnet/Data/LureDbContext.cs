@@ -16,6 +16,9 @@ public class LureDbContext : DbContext
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<Community> Communities => Set<Community>();
     public DbSet<CommunityMember> CommunityMembers => Set<CommunityMember>();
+    public DbSet<UserDetail> UserDetails => Set<UserDetail>();
+    public DbSet<Retweet> Retweets => Set<Retweet>();
+    public DbSet<SavedTweet> SavedTweets => Set<SavedTweet>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -65,5 +68,20 @@ public class LureDbContext : DbContext
         modelBuilder.Entity<Community>(entity => entity.HasKey(c => c.CommunityId));
 
         modelBuilder.Entity<CommunityMember>(entity => entity.HasKey(m => m.Id));
+
+        modelBuilder.Entity<UserDetail>(entity =>
+        {
+            entity.HasKey(d => d.DetailId);
+            entity.Property(d => d.DetailId).ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<Retweet>(entity =>
+        {
+            entity.HasKey(r => r.RetweetId);
+            entity.Property(r => r.RetweetId).ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<SavedTweet>(entity =>
+            entity.HasKey(s => new { s.UserId, s.TweetId }));
     }
 }

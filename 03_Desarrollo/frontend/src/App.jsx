@@ -1,67 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageCircle, Repeat2, Heart, BarChart2, Share, Image, Smile } from 'lucide-react';
+import { Image, Smile } from 'lucide-react';
 import Sidebar from './components/layout/Sidebar';
 import RightSidebar from './components/layout/RightSidebar';
+import TweetCard from './components/TweetCard';
 import { feedApi } from './services/api';
 import { useAuth } from './context/auth-context';
 import './App.css';
-
-// Tiempo relativo simple a partir de una fecha ISO.
-function timeAgo(iso) {
-  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-  if (Number.isNaN(diff)) return '';
-  if (diff < 60) return `${diff}s`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
-  if (diff < 604800) return `${Math.floor(diff / 86400)}d`;
-  return new Date(iso).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-}
-
-function PostMedia({ type, url }) {
-  if (!type || !url) return null;
-  if (type === 'image') return <img className="x-post-media" src={url} alt="adjunto" loading="lazy" />;
-  if (type === 'video') return <video className="x-post-media" src={url} controls preload="metadata" />;
-  if (type === 'pdf') {
-    return (
-      <a className="x-post-pdf" href={url} target="_blank" rel="noreferrer">
-        📄 Ver documento PDF
-      </a>
-    );
-  }
-  return null;
-}
-
-function Avatar({ author }) {
-  if (author?.avatarUrl) {
-    return <img className="x-avatar x-avatar-img" src={author.avatarUrl} alt={author.name} />;
-  }
-  return <span className="x-avatar">{(author?.name || '?').charAt(0).toUpperCase()}</span>;
-}
-
-function Post({ author, text, createdAt, likes, retweets, comments, mediaType, mediaUrl }) {
-  return (
-    <article className="x-post">
-      <Avatar author={author} />
-      <div className="x-post-body">
-        <div className="x-post-head">
-          <strong>{author?.name}</strong>
-          <span className="x-muted">@{author?.handle}</span>
-          <span className="x-muted">· {timeAgo(createdAt)}</span>
-        </div>
-        <p className="x-post-text">{text}</p>
-        <PostMedia type={mediaType} url={mediaUrl} />
-        <div className="x-post-actions">
-          <button type="button" className="x-action comment"><MessageCircle size={18} /><span>{comments}</span></button>
-          <button type="button" className="x-action retweet"><Repeat2 size={18} /><span>{retweets}</span></button>
-          <button type="button" className="x-action like"><Heart size={18} /><span>{likes}</span></button>
-          <button type="button" className="x-action views"><BarChart2 size={18} /><span>{Math.max(likes, retweets, comments) * 7}</span></button>
-          <button type="button" className="x-action share" aria-label="Compartir"><Share size={18} /></button>
-        </div>
-      </div>
-    </article>
-  );
-}
 
 function App() {
   const [tab, setTab] = useState('paraTi');
@@ -86,7 +31,7 @@ function App() {
         }
         setPosts(await feedApi.following(token));
       } else {
-        setPosts(await feedApi.forYou());
+        setPosts(await feedApi.forYou(token));
       }
     } catch {
       setError('No se pudo cargar el feed. ¿Está el backend en marcha?');
@@ -99,6 +44,8 @@ function App() {
     loadFeed();
   }, [loadFeed]);
 
+  const updatePost = (updated) => setPosts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+
   const handlePost = async () => {
     const text = draft.trim();
     if (!text) return;
@@ -110,9 +57,7 @@ function App() {
     try {
       const newTweet = await feedApi.create(text, token);
       setDraft('');
-      if (tab === 'paraTi') {
-        setPosts((prev) => [newTweet, ...prev]);
-      }
+      if (tab === 'paraTi') setPosts((prev) => [newTweet, ...prev]);
     } catch (err) {
       setError(err.message || 'No se pudo publicar el tweet.');
     } finally {
@@ -128,25 +73,15 @@ function App() {
         <header className="x-main-header">
           <h1>Inicio</h1>
           <div className="x-tabs">
-            <button
-              type="button"
-              className={`x-tab ${tab === 'paraTi' ? 'active' : ''}`}
-              onClick={() => setTab('paraTi')}
-            >
-              <span>Para ti</span>
-            </button>
-            <button
-              type="button"
-              className={`x-tab ${tab === 'siguiendo' ? 'active' : ''}`}
-              onClick={() => setTab('siguiendo')}
-            >
-              <span>Siguiendo</span>
-            </button>
+            <button type="button" className={`x-tab ${tab === 'paraTi' ? 'active' : ''}`} onClick={() => setTab('paraTi')}><span>Para ti</span></button>
+            <button type="button" className={`x-tab ${tab === 'siguiendo' ? 'active' : ''}`} onClick={() => setTab('siguiendo')}><span>Siguiendo</span></button>
           </div>
         </header>
 
         <div className="x-compose">
-          <span className="x-avatar">{(user?.username || 'L').charAt(0).toUpperCase()}</span>
+          {user?.avatarUrl
+            ? <img className="x-avatar x-avatar-img" src={user.avatarUrl} alt={user.username} />
+            : <span className="x-avatar">{(user?.username || 'L').charAt(0).toUpperCase()}</span>}
           <div className="x-compose-body">
             <textarea
               placeholder={isAuthenticated ? '¿Qué está pasando?' : 'Inicia sesión para publicar…'}
@@ -160,12 +95,7 @@ function App() {
                 <button type="button" aria-label="Añadir imagen"><Image size={20} /></button>
                 <button type="button" aria-label="Añadir emoji"><Smile size={20} /></button>
               </div>
-              <button
-                type="button"
-                className="x-post-submit"
-                onClick={handlePost}
-                disabled={posting || !draft.trim()}
-              >
+              <button type="button" className="x-post-submit" onClick={handlePost} disabled={posting || !draft.trim()}>
                 {posting ? 'Publicando…' : 'Postear'}
               </button>
             </div>
@@ -175,12 +105,10 @@ function App() {
         <div className="x-feed">
           {loading && <p className="x-feed-msg">Cargando…</p>}
           {!loading && error && <p className="x-feed-msg">{error}</p>}
-          {!loading && !error && posts.length === 0 && (
-            <p className="x-feed-msg">No hay nada por aquí todavía.</p>
-          )}
-          {!loading &&
-            !error &&
-            posts.map((post) => <Post key={post.id} {...post} />)}
+          {!loading && !error && posts.length === 0 && <p className="x-feed-msg">No hay nada por aquí todavía.</p>}
+          {!loading && !error && posts.map((post) => (
+            <TweetCard key={post.id} tweet={post} token={token} isAuth={isAuthenticated} onChange={updatePost} />
+          ))}
         </div>
       </main>
 

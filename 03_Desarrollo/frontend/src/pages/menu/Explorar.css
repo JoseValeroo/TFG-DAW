@@ -1,0 +1,100 @@
+.exp-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  background: #16181c;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  color: #71767b;
+}
+.exp-search:focus-within {
+  background: #0d0e11;
+  border-color: #7c5cff;
+  color: #7c5cff;
+}
+.exp-search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e7e9ea;
+  font-size: 15px;
+}
+.exp-clear {
+  background: transparent;
+  border: none;
+  color: #7c5cff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.exp-h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+.exp-trend {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 12px 0;
+  cursor: pointer;
+}
+.exp-trend:last-child { border-bottom: none; }
+.exp-trend:hover { background: rgba(255, 255, 255, 0.03); }
+.exp-trend-rank { color: #8b9099; font-size: 13px; }
+.exp-trend-name { color: #e7e9ea; font-size: 16px; }
+
+.exp-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+.exp-user:hover { background: rgba(255, 255, 255, 0.03); }
+
+.exp-tweet-head { display: flex; gap: 6px; align-items: baseline; }
+.exp-tweet-text { margin: 6px 0 8px; color: #e7e9ea; line-height: 1.4; }
+.exp-tweet-stats { font-size: 13px; }
+
+.exp-media {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  margin: 8px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  object-fit: cover;
+  background: #000;
+}
+video.exp-media { object-fit: contain; }
+.exp-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #d7d9ff;
+  text-decoration: none;
+  background: rgba(124, 92, 255, 0.1);
+}
+.exp-pdf:hover { border-color: #7c5cff; }

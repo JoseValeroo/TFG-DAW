@@ -29,6 +29,6 @@ public class LoginRequest
     public string Password { get; set; } = string.Empty;
 }
 
-public record UserDto(int Id, string Username, string Email);
+public record UserDto(int Id, string Username, string Email, string? AvatarUrl);
 
 public record AuthResponse(string Token, UserDto User);

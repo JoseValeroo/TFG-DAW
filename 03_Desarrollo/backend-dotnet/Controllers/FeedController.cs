@@ -15,14 +15,10 @@ public class FeedController : ControllerBase
         _feed = feed;
     }
 
-    // "Para ti": tweets más recientes (público).
+    // "Para ti" (público; si hay sesión incluye estado like/retweet/guardado).
     [HttpGet("tweets")]
-    public async Task<IActionResult> ForYou()
-    {
-        return Ok(await _feed.GetForYouAsync());
-    }
+    public async Task<IActionResult> ForYou() => Ok(await _feed.GetForYouAsync(GetUserId()));
 
-    // "Siguiendo": tweets de las cuentas que sigue el usuario autenticado.
     [Authorize]
     [HttpGet("following")]
     public async Task<IActionResult> Following()
@@ -32,7 +28,6 @@ public class FeedController : ControllerBase
         return Ok(await _feed.GetFollowingAsync(userId.Value));
     }
 
-    // Crear un tweet (requiere sesión).
     [Authorize]
     [HttpPost("tweets")]
     public async Task<IActionResult> Create([FromBody] CreateTweetRequest request)
@@ -43,28 +38,56 @@ public class FeedController : ControllerBase
         return tweet is null ? Unauthorized() : Ok(tweet);
     }
 
-    // Dar/quitar me gusta a un tweet.
+    // ---- Interacciones ----
     [Authorize]
     [HttpPost("tweets/{id:int}/like")]
-    public async Task<IActionResult> ToggleLike(int id)
+    public Task<IActionResult> ToggleLike(int id) => WithUser(uid => _feed.ToggleLikeAsync(uid, id));
+
+    [Authorize]
+    [HttpPost("tweets/{id:int}/retweet")]
+    public Task<IActionResult> ToggleRetweet(int id) => WithUser(uid => _feed.ToggleRetweetAsync(uid, id));
+
+    [Authorize]
+    [HttpPost("tweets/{id:int}/save")]
+    public Task<IActionResult> ToggleSave(int id) => WithUser(uid => _feed.ToggleSaveAsync(uid, id));
+
+    [Authorize]
+    [HttpPost("users/{id:int}/follow")]
+    public Task<IActionResult> ToggleFollow(int id) => WithUser(uid => _feed.ToggleFollowAsync(uid, id));
+
+    [Authorize]
+    [HttpGet("saved")]
+    public Task<IActionResult> Saved() => WithUser(uid => _feed.GetSavedAsync(uid));
+
+    // ---- Comentarios ----
+    [HttpGet("tweets/{id:int}/comments")]
+    public async Task<IActionResult> Comments(int id) => Ok(await _feed.GetCommentsAsync(id));
+
+    [Authorize]
+    [HttpPost("tweets/{id:int}/comments")]
+    public async Task<IActionResult> AddComment(int id, [FromBody] CreateTweetRequest request)
     {
         var userId = GetUserId();
         if (userId is null) return Unauthorized();
-        return Ok(await _feed.ToggleLikeAsync(userId.Value, id));
+        var comment = await _feed.AddCommentAsync(userId.Value, id, request.Text);
+        return comment is null ? NotFound() : Ok(comment);
     }
 
-    // "A quién seguir" (público; excluye al usuario si hay sesión).
+    // ---- Descubrir ----
     [HttpGet("suggestions")]
-    public async Task<IActionResult> Suggestions()
-    {
-        return Ok(await _feed.GetSuggestionsAsync(GetUserId()));
-    }
+    public async Task<IActionResult> Suggestions() => Ok(await _feed.GetSuggestionsAsync(GetUserId()));
 
-    // "Qué está pasando" (tendencias).
     [HttpGet("trends")]
-    public async Task<IActionResult> Trends()
+    public async Task<IActionResult> Trends() => Ok(await _feed.GetTrendsAsync());
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string q) => Ok(await _feed.SearchAsync(q, GetUserId()));
+
+    private async Task<IActionResult> WithUser<T>(Func<int, Task<T>> action)
     {
-        return Ok(await _feed.GetTrendsAsync());
+        var userId = GetUserId();
+        if (userId is null) return Unauthorized();
+        return Ok(await action(userId.Value));
     }
 
     private int? GetUserId()

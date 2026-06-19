@@ -1,0 +1,206 @@
+/* ===========================================================
+   Lure Premium — estética Apple (tipografía grande, gradientes,
+   glassmorphism, botón azul Apple, mucho aire).
+   =========================================================== */
+.premium {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  background: #000;
+  color: #f5f5f7;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.premium-main {
+  flex: 1;
+  max-width: 1040px;
+  padding: 0 24px 80px;
+}
+
+/* ---------- Hero ---------- */
+.premium-hero {
+  position: relative;
+  text-align: center;
+  padding: 96px 16px 72px;
+  overflow: hidden;
+}
+.premium-hero::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 720px;
+  height: 480px;
+  background: radial-gradient(closest-side, rgba(124, 92, 255, 0.28), transparent 70%),
+    radial-gradient(closest-side, rgba(0, 184, 217, 0.22), transparent 70%);
+  filter: blur(20px);
+  z-index: 0;
+}
+.premium-hero > * { position: relative; z-index: 1; }
+
+.premium-eyebrow {
+  display: inline-block;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  background: linear-gradient(90deg, #a78bfa, #38bdf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 8px;
+}
+.premium-title {
+  margin: 0 0 18px;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  background: linear-gradient(180deg, #ffffff 30%, #b8b8bf);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.premium-sub {
+  max-width: 600px;
+  margin: 0 auto 32px;
+  font-size: 21px;
+  line-height: 1.5;
+  color: #a1a1a6;
+}
+
+/* ---------- Botón Apple ---------- */
+.apple-btn {
+  display: inline-block;
+  padding: 13px 28px;
+  border: none;
+  border-radius: 980px;
+  background: #0071e3;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+.apple-btn:hover { background: #0077ed; }
+.apple-btn:active { transform: scale(0.98); }
+.apple-btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #f5f5f7;
+}
+.apple-btn-ghost:hover { background: rgba(255, 255, 255, 0.08); }
+
+/* ---------- Features ---------- */
+.premium-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 40px 0 90px;
+}
+.premium-feature {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 28px 24px;
+  backdrop-filter: blur(20px);
+  transition: transform 0.2s, border-color 0.2s;
+}
+.premium-feature:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.premium-feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, #7c5cff, #38bdf8);
+}
+.premium-feature h3 { margin: 0 0 6px; font-size: 19px; font-weight: 600; }
+.premium-feature p { margin: 0; color: #a1a1a6; font-size: 15px; line-height: 1.5; }
+
+/* ---------- Planes ---------- */
+.premium-plans { text-align: center; }
+.premium-h2 {
+  margin: 0 0 6px;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.premium-h2-sub { margin: 0 0 40px; color: #a1a1a6; font-size: 19px; }
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+.plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 26px;
+  padding: 32px 28px;
+  backdrop-filter: blur(20px);
+}
+.plan-card.featured {
+  border-color: rgba(56, 189, 248, 0.6);
+  background: linear-gradient(180deg, rgba(124, 92, 255, 0.14), rgba(56, 189, 248, 0.06));
+  box-shadow: 0 20px 60px rgba(56, 189, 248, 0.15);
+  transform: scale(1.03);
+}
+.plan-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 980px;
+  background: linear-gradient(90deg, #7c5cff, #38bdf8);
+  color: #fff;
+}
+.plan-name { margin: 0 0 10px; font-size: 22px; font-weight: 600; }
+.plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px; }
+.plan-amount { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; }
+.plan-period { color: #a1a1a6; font-size: 16px; }
+.plan-perks { list-style: none; margin: 0 0 24px; padding: 0; flex: 1; }
+.plan-perks li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  color: #d2d2d7;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.plan-perks li svg { color: #38bdf8; flex: 0 0 auto; }
+.plan-card .apple-btn { width: 100%; text-align: center; }
+
+.premium-legal { margin-top: 28px; color: #6e6e73; font-size: 13px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  .premium-features { grid-template-columns: repeat(2, 1fr); }
+  .plans-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+  .plan-card.featured { transform: none; }
+}
+@media (max-width: 600px) {
+  .premium-features { grid-template-columns: 1fr; }
+  .premium-hero { padding: 64px 8px 48px; }
+}
+@media (max-width: 688px) {
+  .premium-main { padding-bottom: 70px; }
+}

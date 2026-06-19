@@ -9,6 +9,7 @@ import {
   User,
   MoreHorizontal,
   Feather,
+  Sparkles,
 } from 'lucide-react';
 import lureLogo from '../../assets/Icons/Logo.svg';
 import { useAuth } from '../../context/auth-context';
@@ -16,11 +17,12 @@ import './Sidebar.css';
 
 const navItems = [
   { icon: Home, label: 'Inicio', to: '/' },
-  { icon: Search, label: 'Explorar', to: null },
+  { icon: Search, label: 'Explorar', to: '/explorar' },
   { icon: Bell, label: 'Notificaciones', to: null },
   { icon: Mail, label: 'Mensajes', to: null },
-  { icon: Bookmark, label: 'Guardados', to: null },
-  { icon: Users, label: 'Comunidades', to: null },
+  { icon: Bookmark, label: 'Guardados', to: '/guardados' },
+  { icon: Users, label: 'Comunidades', to: '/comunidades' },
+  { icon: Sparkles, label: 'Premium', to: '/premium' },
   { icon: User, label: 'Perfil', to: '/profilePage' },
   { icon: MoreHorizontal, label: 'Más opciones', to: null },
 ];
@@ -58,7 +60,9 @@ function Sidebar() {
         </button>
 
         <Link to={isAuthenticated ? '/profilePage' : '/login'} className="x-account" aria-label="Cuenta">
-          <span className="x-avatar">{displayName.charAt(0).toUpperCase()}</span>
+          {user?.avatarUrl
+            ? <img className="x-avatar x-avatar-img" src={user.avatarUrl} alt={displayName} />
+            : <span className="x-avatar">{displayName.charAt(0).toUpperCase()}</span>}
           <span className="x-account-info">
             <strong>{displayName}</strong>
             <span>@{isAuthenticated ? user?.username : 'invitado'}</span>

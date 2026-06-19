@@ -63,7 +63,7 @@ public class AuthService : IAuthService
     public async Task<UserDto?> GetByIdAsync(int userId)
     {
         var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-        return user is null ? null : new UserDto(user.UserId, user.UserHandle, user.EmailAddress);
+        return user is null ? null : new UserDto(user.UserId, user.UserHandle, user.EmailAddress, user.AvatarUrl);
     }
 
     private static bool VerifyPassword(string plain, string stored)
@@ -83,7 +83,7 @@ public class AuthService : IAuthService
     private AuthResponse BuildResponse(User user)
     {
         var token = GenerateToken(user);
-        return new AuthResponse(token, new UserDto(user.UserId, user.UserHandle, user.EmailAddress));
+        return new AuthResponse(token, new UserDto(user.UserId, user.UserHandle, user.EmailAddress, user.AvatarUrl));
     }
 
     private string GenerateToken(User user)

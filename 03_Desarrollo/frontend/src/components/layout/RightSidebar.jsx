@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { feedApi } from '../../services/api';
+import { useAuth } from '../../context/auth-context';
 import './RightSidebar.css';
 
 function RightSidebar() {
+  const navigate = useNavigate();
+  const { token, isAuthenticated } = useAuth();
   const [trends, setTrends] = useState([]);
   const [whoToFollow, setWhoToFollow] = useState([]);
+  const [followed, setFollowed] = useState({});
 
   useEffect(() => {
     let active = true;
@@ -15,6 +20,19 @@ function RightSidebar() {
       active = false;
     };
   }, []);
+
+  const follow = async (id) => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    try {
+      const r = await feedApi.follow(id, token);
+      setFollowed((prev) => ({ ...prev, [id]: r.following }));
+    } catch {
+      /* noop */
+    }
+  };
 
   return (
     <aside className="x-right">
@@ -27,7 +45,7 @@ function RightSidebar() {
         <section className="x-card">
           <h2>Suscríbete a Premium</h2>
           <p>Suscríbete para desbloquear nuevas funciones y, si reúnes los requisitos, recibir ingresos.</p>
-          <button type="button" className="x-pill">Suscribirse</button>
+          <button type="button" className="x-pill" onClick={() => navigate('/premium')}>Suscribirse</button>
         </section>
 
         <section className="x-card">
@@ -47,12 +65,14 @@ function RightSidebar() {
           {whoToFollow.length === 0 && <p className="x-muted-sm">Sin sugerencias.</p>}
           {whoToFollow.map((u) => (
             <div key={u.id} className="x-follow">
-              <span className="x-avatar">{(u.name || '?').charAt(0).toUpperCase()}</span>
-              <div className="x-follow-info">
+              <span className="x-avatar x-follow-clickable" onClick={() => navigate(`/usuario/${u.id}`)}>{(u.name || '?').charAt(0).toUpperCase()}</span>
+              <div className="x-follow-info x-follow-clickable" onClick={() => navigate(`/usuario/${u.id}`)}>
                 <strong>{u.name}</strong>
                 <span>@{u.handle}</span>
               </div>
-              <button type="button" className="x-pill x-pill-dark">Seguir</button>
+              <button type="button" className={`x-pill ${followed[u.id] ? '' : 'x-pill-dark'}`} onClick={() => follow(u.id)}>
+                {followed[u.id] ? 'Siguiendo' : 'Seguir'}
+              </button>
             </div>
           ))}
         </section>

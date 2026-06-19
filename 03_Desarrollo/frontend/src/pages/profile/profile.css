@@ -192,6 +192,72 @@ video.profile-media { object-fit: contain; }
 }
 .profile-pdf:hover { border-color: #7c5cff; }
 
+/* ---------- Barra de acciones (Editar / Guardar) ---------- */
+.profile-toolbar {
+  max-width: 1200px;
+  margin: 0 auto 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ---------- Inputs de edición ---------- */
+.profile-edit-input {
+  width: 100%;
+  background: #0d0e11;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: #e7e9ea;
+  font-size: 14px;
+  font-family: inherit;
+}
+.profile-edit-input:focus { outline: none; border-color: #7c5cff; }
+textarea.profile-edit-input { resize: vertical; }
+
+.edit-fields { display: flex; flex-direction: column; }
+.edit-label {
+  margin: 12px 0 5px;
+  font-size: 12px;
+  color: #8b9099;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.edit-list { display: flex; flex-direction: column; gap: 8px; }
+.edit-list-row { display: flex; gap: 8px; align-items: center; }
+.edit-list-row .profile-edit-input { flex: 1; }
+.edit-remove {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f47;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+.edit-add {
+  align-self: flex-start;
+  background: rgba(124, 92, 255, 0.12);
+  border: 1px dashed rgba(124, 92, 255, 0.5);
+  color: #b9a8ff;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.edit-add:hover { background: rgba(124, 92, 255, 0.2); }
+
+/* ---------- Crear publicación ---------- */
+.profile-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+.profile-compose textarea { width: 100%; }
+
 /* ---------- "Sobre mí" ---------- */
 .about-card p {
   color: #c7cbd1;

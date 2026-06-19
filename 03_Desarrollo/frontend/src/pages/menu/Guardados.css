@@ -1,0 +1,24 @@
+.sv-media {
+  display: block;
+  width: 100%;
+  max-height: 340px;
+  margin: 8px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  object-fit: cover;
+  background: #000;
+}
+video.sv-media { object-fit: contain; }
+.sv-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #d7d9ff;
+  text-decoration: none;
+  background: rgba(124, 92, 255, 0.1);
+}
+.sv-pdf:hover { border-color: #7c5cff; }

@@ -9,6 +9,7 @@ import {
   TeamOutlined,
   LikeOutlined,
   LikeFilled,
+  RetweetOutlined,
   CommentOutlined,
   ShareAltOutlined,
   SaveOutlined,
@@ -18,6 +19,7 @@ import {
   StopOutlined,
   UsergroupAddOutlined,
   UserOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import 'antd/dist/reset.css';
 import './profile.css';
@@ -36,9 +38,29 @@ function timeAgo(iso) {
   return new Date(iso).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 }
 
+// Lista editable de strings (añadir / editar / eliminar).
+function EditList({ items, onChange, placeholder }) {
+  return (
+    <div className="edit-list">
+      {items.map((value, idx) => (
+        <div key={idx} className="edit-list-row">
+          <input
+            className="profile-edit-input"
+            value={value}
+            placeholder={placeholder}
+            onChange={(e) => onChange(items.map((x, i) => (i === idx ? e.target.value : x)))}
+          />
+          <button type="button" className="edit-remove" onClick={() => onChange(items.filter((_, i) => i !== idx))}>✕</button>
+        </div>
+      ))}
+      <button type="button" className="edit-add" onClick={() => onChange([...items, ''])}>+ Añadir</button>
+    </div>
+  );
+}
+
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { token, logout } = useAuth();
+  const { token, logout, updateUser } = useAuth();
 
   const [profile, setProfile] = useState(null);
   const [mainTab, setMainTab] = useState('posts');
@@ -47,11 +69,20 @@ const ProfilePage = () => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
 
-  useEffect(() => {
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [draft, setDraft] = useState('');
+
+  const loadProfile = useCallback(() => {
     profileApi.me(token).then(setProfile).catch(() => {});
+  }, [token]);
+
+  useEffect(() => {
+    loadProfile();
     profileApi.followers(token).then(setFollowers).catch(() => {});
     profileApi.following(token).then(setFollowing).catch(() => {});
-  }, [token]);
+  }, [token, loadProfile]);
 
   const loadItems = useCallback(async () => {
     setLoadingItems(true);
@@ -78,15 +109,94 @@ const ProfilePage = () => {
   const toggleLike = async (id) => {
     try {
       const res = await feedApi.toggleLike(id, token);
-      setItems((prev) =>
-        prev.map((p) => (p.id === id ? { ...p, likes: res.likes, likedByMe: res.liked } : p)),
-      );
+      setItems((prev) => prev.map((p) => (p.id === id ? { ...p, likes: res.likes, likedByMe: res.liked } : p)));
     } catch {
       /* noop */
     }
   };
 
-  const profileData = {
+  const toggleRetweet = async (id) => {
+    try {
+      const res = await feedApi.toggleRetweet(id, token);
+      setItems((prev) => prev.map((p) => (p.id === id ? { ...p, retweets: res.retweets, retweetedByMe: res.retweeted } : p)));
+    } catch {
+      /* noop */
+    }
+  };
+
+  const toggleSave = async (id) => {
+    try {
+      const res = await feedApi.toggleSave(id, token);
+      setItems((prev) => prev.map((p) => (p.id === id ? { ...p, savedByMe: res.saved } : p)));
+    } catch {
+      /* noop */
+    }
+  };
+
+  const toggleFollow = async (id, setList) => {
+    try {
+      const res = await feedApi.follow(id, token);
+      setList((prev) => prev.map((u) => (u.id === id ? { ...u, followedByMe: res.following } : u)));
+    } catch {
+      /* noop */
+    }
+  };
+
+  const handlePost = async () => {
+    const text = draft.trim();
+    if (!text) return;
+    try {
+      const tweet = await feedApi.create(text, token);
+      setDraft('');
+      setProfile((p) => (p ? { ...p, tweetsCount: (p.tweetsCount ?? 0) + 1 } : p));
+      if (mainTab === 'posts') setItems((prev) => [tweet, ...prev]);
+    } catch {
+      /* noop */
+    }
+  };
+
+  const startEdit = () => {
+    setForm({
+      name: profile?.name ?? '',
+      bio: profile?.bio ?? '',
+      location: profile?.location ?? '',
+      birthday: profile?.birthdayIso ?? '',
+      logros: [...(profile?.logros ?? [])],
+      intereses: [...(profile?.intereses ?? [])],
+      habilidades: [...(profile?.habilidades ?? [])],
+    });
+    setEditing(true);
+  };
+
+  const saveEdit = async () => {
+    setSaving(true);
+    try {
+      const updated = await profileApi.update(form, token);
+      setProfile(updated);
+      setEditing(false);
+      setForm(null);
+    } catch {
+      /* noop */
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const setField = (key, val) => setForm((f) => ({ ...f, [key]: val }));
+
+  const onAvatarFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const updated = await profileApi.uploadAvatar(file, token);
+      setProfile(updated);
+      updateUser({ avatarUrl: updated.avatarUrl });
+    } catch {
+      /* noop */
+    }
+  };
+
+  const data = {
     name: profile?.name ?? 'Usuario',
     bio: profile?.bio || 'Sin biografía',
     location: profile?.location || '—',
@@ -94,6 +204,9 @@ const ProfilePage = () => {
     email: profile?.email || '—',
     followers: profile?.followers ?? 0,
     following: profile?.following ?? 0,
+    logros: profile?.logros ?? [],
+    intereses: profile?.intereses ?? [],
+    habilidades: profile?.habilidades ?? [],
   };
 
   const renderMedia = (t) => {
@@ -107,28 +220,17 @@ const ProfilePage = () => {
   const renderTweetItem = (t) => (
     <List.Item
       actions={[
-        <Button
-          key="like"
-          type="text"
-          icon={t.likedByMe ? <LikeFilled style={{ color: '#f91880' }} /> : <LikeOutlined />}
-          onClick={() => toggleLike(t.id)}
-        >
-          {t.likes}
-        </Button>,
+        <Button key="like" type="text" icon={t.likedByMe ? <LikeFilled style={{ color: '#f91880' }} /> : <LikeOutlined />} onClick={() => toggleLike(t.id)}>{t.likes}</Button>,
+        <Button key="rt" type="text" icon={<RetweetOutlined style={t.retweetedByMe ? { color: '#00ba7c' } : undefined} />} onClick={() => toggleRetweet(t.id)}>{t.retweets}</Button>,
         <Button key="comment" type="text" icon={<CommentOutlined />}>{t.comments}</Button>,
+        <Button key="save" type="text" icon={<SaveOutlined style={t.savedByMe ? { color: '#1d9bf0' } : undefined} />} onClick={() => toggleSave(t.id)} />,
         <Button key="share" type="text" icon={<ShareAltOutlined />} />,
-        <Button key="save" type="text" icon={<SaveOutlined />} />,
       ]}
     >
       <List.Item.Meta
         avatar={<Avatar src={t.author?.avatarUrl || undefined}>{(t.author?.name || '?').charAt(0).toUpperCase()}</Avatar>}
         title={<span>{t.author?.name} <span className="muted-inline">@{t.author?.handle} · {timeAgo(t.createdAt)}</span></span>}
-        description={
-          <div>
-            <span style={{ color: '#e7e9ea' }}>{t.text}</span>
-            {renderMedia(t)}
-          </div>
-        }
+        description={<div><span style={{ color: '#e7e9ea' }}>{t.text}</span>{renderMedia(t)}</div>}
       />
     </List.Item>
   );
@@ -137,12 +239,7 @@ const ProfilePage = () => {
     <List.Item>
       <List.Item.Meta
         title={<span className="muted-inline">En respuesta a @{r.tweetAuthorHandle}</span>}
-        description={
-          <>
-            <div className="reply-quote">{r.tweetText}</div>
-            <div className="reply-text">{r.text}</div>
-          </>
-        }
+        description={<><div className="reply-quote">{r.tweetText}</div><div className="reply-text">{r.text}</div></>}
       />
     </List.Item>
   );
@@ -150,81 +247,94 @@ const ProfilePage = () => {
   const renderMain = () => {
     if (loadingItems) return <p className="profile-empty">Cargando…</p>;
     if (items.length === 0) {
-      const msg =
-        mainTab === 'posts' ? 'Todavía no has publicado nada.'
-          : mainTab === 'replies' ? 'No has respondido a ningún tweet.'
-            : 'No has dado me gusta a ningún tweet.';
+      const msg = mainTab === 'posts' ? 'Todavía no has publicado nada.'
+        : mainTab === 'replies' ? 'No has respondido a ningún tweet.'
+          : 'No has dado me gusta a ningún tweet.';
       return <p className="profile-empty">{msg}</p>;
     }
-    return (
-      <List
-        itemLayout="horizontal"
-        dataSource={items}
-        renderItem={mainTab === 'replies' ? renderReplyItem : renderTweetItem}
-      />
-    );
+    return <List itemLayout="horizontal" dataSource={items} renderItem={mainTab === 'replies' ? renderReplyItem : renderTweetItem} />;
   };
 
   return (
     <ConfigProvider
       theme={{
         algorithm: theme.darkAlgorithm,
-        token: {
-          colorPrimary: '#7c5cff',
-          colorBgContainer: '#121316',
-          colorBorderSecondary: 'rgba(255,255,255,0.07)',
-          colorText: '#e7e9ea',
-          borderRadius: 16,
-        },
+        token: { colorPrimary: '#7c5cff', colorBgContainer: '#121316', colorBorderSecondary: 'rgba(255,255,255,0.07)', colorText: '#e7e9ea', borderRadius: 16 },
       }}
     >
     <div className="profile-page">
+      <div className="profile-toolbar">
+        {!editing ? (
+          <Button icon={<EditOutlined />} onClick={startEdit}>Editar perfil</Button>
+        ) : (
+          <>
+            <Button type="primary" loading={saving} onClick={saveEdit}>Guardar</Button>
+            <Button onClick={() => { setEditing(false); setForm(null); }}>Cancelar</Button>
+          </>
+        )}
+      </div>
+
       <div className="content">
         {/* Card 1: Imagen y datos del usuario */}
         <div className="profile-card">
-          <Card
-            style={{ height: '100%', width: '100%' }}
-            cover={<div className="profile-cover" />}
-          >
-            <Meta
-              avatar={<Avatar size={68} className="profile-avatar">{(profileData.name || '?').charAt(0).toUpperCase()}</Avatar>}
-              title={profileData.name}
-              description={profileData.bio}
-            />
-            <List itemLayout="horizontal">
-              <List.Item>
-                <List.Item.Meta avatar={<EnvironmentOutlined />} title="Ubicación" description={profileData.location} />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta avatar={<CalendarOutlined />} title="Fecha de nacimiento" description={profileData.birthday} />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<MailOutlined />}
-                  title="Correo"
-                  description={<a href={`mailto:${profileData.email}`}>{profileData.email}</a>}
+          <Card style={{ height: '100%', width: '100%' }} cover={<div className="profile-cover" />}>
+            {editing ? (
+              <div className="edit-fields">
+                <Avatar size={68} className="profile-avatar" src={profile?.avatarUrl || undefined}>{(data.name || '?').charAt(0).toUpperCase()}</Avatar>
+                <label className="edit-label">Foto de perfil</label>
+                <input type="file" accept="image/*" className="profile-edit-input" onChange={onAvatarFile} />
+                <label className="edit-label">Nombre</label>
+                <input className="profile-edit-input" value={form.name} onChange={(e) => setField('name', e.target.value)} />
+                <label className="edit-label">Biografía</label>
+                <textarea className="profile-edit-input" rows={3} maxLength={280} value={form.bio} onChange={(e) => setField('bio', e.target.value)} />
+                <label className="edit-label">Ubicación</label>
+                <input className="profile-edit-input" value={form.location} onChange={(e) => setField('location', e.target.value)} />
+                <label className="edit-label">Fecha de nacimiento</label>
+                <input className="profile-edit-input" type="date" value={form.birthday} onChange={(e) => setField('birthday', e.target.value)} />
+              </div>
+            ) : (
+              <>
+                <Meta
+                  avatar={<Avatar size={68} className="profile-avatar" src={profile?.avatarUrl || undefined}>{(data.name || '?').charAt(0).toUpperCase()}</Avatar>}
+                  title={data.name}
+                  description={data.bio}
                 />
-              </List.Item>
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<TeamOutlined />}
-                  title="Seguidores y seguidos"
-                  description={`${profileData.followers} seguidores · ${profileData.following} seguidos`}
-                />
-              </List.Item>
-            </List>
+                <List itemLayout="horizontal">
+                  <List.Item><List.Item.Meta avatar={<EnvironmentOutlined />} title="Ubicación" description={data.location} /></List.Item>
+                  <List.Item><List.Item.Meta avatar={<CalendarOutlined />} title="Fecha de nacimiento" description={data.birthday} /></List.Item>
+                  <List.Item><List.Item.Meta avatar={<MailOutlined />} title="Correo" description={<a href={`mailto:${data.email}`}>{data.email}</a>} /></List.Item>
+                  <List.Item><List.Item.Meta avatar={<TeamOutlined />} title="Seguidores y seguidos" description={`${data.followers} seguidores · ${data.following} seguidos`} /></List.Item>
+                </List>
+              </>
+            )}
           </Card>
-          {/* Card 2: Descripción del usuario */}
           <div className="about-card">
             <Card title="Sobre mí">
-              <p>{profileData.bio}</p>
+              <p>{data.bio}</p>
             </Card>
           </div>
         </div>
 
         {/* Cards adicionales */}
         <div className="other-cards">
-          {/* Card 4: Posts / Respuestas / Me gusta */}
+          {/* Crear publicación */}
+          <div className="posts-card">
+            <Card title="Crear publicación">
+              <div className="profile-compose">
+                <textarea
+                  className="profile-edit-input"
+                  rows={2}
+                  maxLength={200}
+                  placeholder="¿Qué está pasando?"
+                  value={draft}
+                  onChange={(e) => setDraft(e.target.value)}
+                />
+                <Button type="primary" onClick={handlePost} disabled={!draft.trim()}>Postear</Button>
+              </div>
+            </Card>
+          </div>
+
+          {/* Actividad: Posts / Respuestas / Me gusta */}
           <div className="posts-card">
             <Card title="Actividad">
               <Tabs
@@ -240,7 +350,7 @@ const ProfilePage = () => {
             </Card>
           </div>
 
-          {/* Cards de Seguidores/Seguidos */}
+          {/* Seguidores/Seguidos */}
           <div className="profile-row">
             <div className="media-content-card">
               <Card style={{ width: '100%' }}>
@@ -249,41 +359,33 @@ const ProfilePage = () => {
                   centered
                   items={[
                     {
-                      key: '1',
-                      label: `Seguidores (${profileData.followers})`,
+                      key: '1', label: `Seguidores (${data.followers})`,
                       children: (
-                        <List
-                          dataSource={followers}
-                          locale={{ emptyText: 'Sin seguidores' }}
+                        <List dataSource={followers} locale={{ emptyText: 'Sin seguidores' }}
                           renderItem={(item) => (
-                            <List.Item actions={[<Button key="seguir" type="primary" shape="round">Seguir</Button>]}>
-                              <List.Item.Meta
-                                avatar={<Avatar>{(item.name || '?').charAt(0).toUpperCase()}</Avatar>}
-                                title={item.name}
-                                description={<span>@{item.handle}</span>}
-                              />
+                            <List.Item actions={[
+                              <Button key="seguir" type={item.followedByMe ? 'default' : 'primary'} shape="round" onClick={() => toggleFollow(item.id, setFollowers)}>
+                                {item.followedByMe ? 'Siguiendo' : 'Seguir'}
+                              </Button>,
+                            ]}>
+                              <List.Item.Meta avatar={<Avatar>{(item.name || '?').charAt(0).toUpperCase()}</Avatar>} title={item.name} description={<span>@{item.handle}</span>} />
                             </List.Item>
-                          )}
-                        />
+                          )} />
                       ),
                     },
                     {
-                      key: '2',
-                      label: `Seguidos (${profileData.following})`,
+                      key: '2', label: `Seguidos (${data.following})`,
                       children: (
-                        <List
-                          dataSource={following}
-                          locale={{ emptyText: 'No sigues a nadie' }}
+                        <List dataSource={following} locale={{ emptyText: 'No sigues a nadie' }}
                           renderItem={(item) => (
-                            <List.Item actions={[<Button key="dejar" type="default" shape="round">Dejar Seguir</Button>]}>
-                              <List.Item.Meta
-                                avatar={<Avatar>{(item.name || '?').charAt(0).toUpperCase()}</Avatar>}
-                                title={item.name}
-                                description={<span>@{item.handle}</span>}
-                              />
+                            <List.Item actions={[
+                              <Button key="dejar" type={item.followedByMe ? 'default' : 'primary'} shape="round" onClick={() => toggleFollow(item.id, setFollowing)}>
+                                {item.followedByMe ? 'Dejar de seguir' : 'Seguir'}
+                              </Button>,
+                            ]}>
+                              <List.Item.Meta avatar={<Avatar>{(item.name || '?').charAt(0).toUpperCase()}</Avatar>} title={item.name} description={<span>@{item.handle}</span>} />
                             </List.Item>
-                          )}
-                        />
+                          )} />
                       ),
                     },
                   ]}
@@ -291,16 +393,15 @@ const ProfilePage = () => {
               </Card>
             </div>
 
-            {/* Cards de Logros, Intereses y Estadísticas */}
+            {/* Logros, Intereses, Estadísticas, Habilidades */}
             <div className="mid-cards">
               <Row gutter={[16, 16]}>
                 <Col xs={24} sm={12} lg={12}>
                   <div className="achievements-card">
                     <Card title="Logros">
-                      <ul>
-                        <li>Certificación en AWS</li>
-                        <li>1000+ estrellas en proyectos de GitHub</li>
-                      </ul>
+                      {editing
+                        ? <EditList items={form.logros} onChange={(v) => setField('logros', v)} placeholder="Un logro" />
+                        : (data.logros.length ? <ul>{data.logros.map((l, i) => <li key={i}>{l}</li>)}</ul> : <p className="muted-inline">Sin logros.</p>)}
                     </Card>
                   </div>
                 </Col>
@@ -308,19 +409,9 @@ const ProfilePage = () => {
                 <Col xs={24} sm={12} lg={12}>
                   <div className="tags-card">
                     <Card title="Intereses">
-                      <div>
-                        <Tag color="blue">React</Tag>
-                        <Tag color="green">Node.js</Tag>
-                        <Tag color="purple">Diseño UX</Tag>
-                        <Tag color="gold">Bases de Datos</Tag>
-                        <Tag color="red">DevOps</Tag>
-                        <Tag color="green">Node.js</Tag>
-                        <Tag color="blue">JavaScript</Tag>
-                        <Tag color="green">Python</Tag>
-                        <Tag color="orange">Docker</Tag>
-                        <Tag color="lime">Kubernetes</Tag>
-                        <Tag color="gray">Cybersecurity</Tag>
-                      </div>
+                      {editing
+                        ? <EditList items={form.intereses} onChange={(v) => setField('intereses', v)} placeholder="Un interés" />
+                        : (data.intereses.length ? <div>{data.intereses.map((t, i) => <Tag key={i} color="blue">{t}</Tag>)}</div> : <p className="muted-inline">Sin intereses.</p>)}
                     </Card>
                   </div>
                 </Col>
@@ -340,17 +431,16 @@ const ProfilePage = () => {
                 <Col xs={24} sm={12} lg={12}>
                   <div className="skills-card">
                     <Card title="Habilidades">
-                      <ul>
-                        <li>React.js</li>
-                        <li>Node.js</li>
-                        <li>MongoDB</li>
-                      </ul>
+                      {editing
+                        ? <EditList items={form.habilidades} onChange={(v) => setField('habilidades', v)} placeholder="Una habilidad" />
+                        : (data.habilidades.length ? <ul>{data.habilidades.map((s, i) => <li key={i}>{s}</li>)}</ul> : <p className="muted-inline">Sin habilidades.</p>)}
                     </Card>
                   </div>
                 </Col>
               </Row>
             </div>
           </div>
+
           <div className="profile-menu-wrap">
             <Menu
               className="profile-menu"

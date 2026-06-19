@@ -101,6 +101,8 @@
 .x-follow-info span { color: #71767b; font-size: 14px; }
 
 .x-muted-sm { color: #71767b; font-size: 14px; }
+.x-follow-clickable { cursor: pointer; }
+.x-follow-clickable:hover strong { text-decoration: underline; }
 
 /* Se oculta en tablet y móvil (igual que en x.com) */
 @media (max-width: 1024px) {

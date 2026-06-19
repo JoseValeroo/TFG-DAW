@@ -46,3 +46,29 @@ public class CommunityMember
     [Column("community_id")] public int? CommunityId { get; set; }
     [Column("user_id")] public int? UserId { get; set; }
 }
+
+[Table("retweets")]
+public class Retweet
+{
+    [Column("retweet_id")] public int RetweetId { get; set; }
+    [Column("user_id")] public int UserId { get; set; }
+    [Column("original_tweet_id")] public int OriginalTweetId { get; set; }
+    [Column("created_at")] public DateTime? CreatedAt { get; set; }
+}
+
+[Table("saved_tweets")]
+public class SavedTweet
+{
+    [Column("user_id")] public int UserId { get; set; }
+    [Column("tweet_id")] public int TweetId { get; set; }
+    [Column("saved_at")] public DateTime? SavedAt { get; set; }
+}
+
+[Table("user_details")]
+public class UserDetail
+{
+    [Column("detail_id")] public int DetailId { get; set; }
+    [Column("user_id")] public int UserId { get; set; }
+    [Column("category")] public string Category { get; set; } = string.Empty;
+    [Column("detail_text")] public string DetailText { get; set; } = string.Empty;
+}

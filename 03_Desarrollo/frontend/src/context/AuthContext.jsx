@@ -42,6 +42,15 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(USER_KEY);
   };
 
+  // Actualiza campos del usuario en sesión (p. ej. avatarUrl) y persiste.
+  const updateUser = (patch) => {
+    setUser((prev) => {
+      const next = { ...(prev ?? {}), ...patch };
+      localStorage.setItem(USER_KEY, JSON.stringify(next));
+      return next;
+    });
+  };
+
   const value = {
     user,
     token,
@@ -49,6 +58,7 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

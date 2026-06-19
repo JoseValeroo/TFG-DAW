@@ -173,8 +173,52 @@
 .x-action.comment:hover { color: #1d9bf0; }
 .x-action.retweet:hover { color: #00ba7c; }
 .x-action.like:hover { color: #f91880; }
-.x-action.views:hover { color: #1d9bf0; }
+.x-action.save:hover { color: #1d9bf0; }
 .x-action.share:hover { color: #1d9bf0; }
+
+/* Estados activos (ya interactuado) */
+.x-action.like.active { color: #f91880; }
+.x-action.retweet.active { color: #00ba7c; }
+.x-action.save.active { color: #1d9bf0; }
+
+/* Comentarios */
+.x-comments {
+  margin-top: 10px;
+  border-top: 1px solid #2f3336;
+  padding-top: 10px;
+}
+.x-comment-compose {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.x-comment-compose input {
+  flex: 1;
+  background: #0d0e11;
+  border: 1px solid #2f3336;
+  border-radius: 9999px;
+  padding: 8px 14px;
+  color: #e7e9ea;
+  font-size: 14px;
+}
+.x-comment-compose input:focus { outline: none; border-color: #1d9bf0; }
+.x-comment-compose button {
+  border: none;
+  border-radius: 9999px;
+  background: #1d9bf0;
+  color: #fff;
+  font-weight: 700;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.x-comment-compose button:disabled { opacity: 0.5; cursor: default; }
+.x-comment {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 14px;
+}
+.x-comment:last-child { border-bottom: none; }
+.x-comment > div { color: #e7e9ea; margin-top: 2px; }
 
 /* Avatar genérico (reutiliza el de Sidebar.css si existe; lo definimos por seguridad) */
 .x-post .x-avatar,

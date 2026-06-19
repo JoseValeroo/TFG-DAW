@@ -1,279 +1,201 @@
-# Plantilla de Proyecto STIC
+<div align="center">
 
-Plantilla estándar para proyectos del Servicio de Tecnologías de la Información y Comunicación (STIC) - Universidad Pontificia Comillas.
+# 🐟 Lure
 
-Esta plantilla está **autocontextualizada**: contiene toda la información necesaria para que Claude Code entienda el proyecto y asista en el desarrollo.
+**A full-stack, Twitter-style social network — React + .NET + SQL Server.**
+*Una red social tipo Twitter, full-stack — React + .NET + SQL Server.*
+
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-LocalDB-CC2927?logo=microsoftsqlserver&logoColor=white)
+![EF Core](https://img.shields.io/badge/EF%20Core-10-512BD4)
+![JWT](https://img.shields.io/badge/Auth-JWT%20%2B%20bcrypt-000000?logo=jsonwebtokens)
+
+[English](#-english) · [Español](#-español)
+
+</div>
 
 ---
 
-## 🚀 Instalación Rápida
+## 📸 Screenshots
 
-### Proyecto Existente (Recomendado)
+> Añade aquí tus capturas (la app corre en `http://localhost:5173`). Sugerencia: crea `docs/screenshots/` y referencia las imágenes.
+>
+> `![Home](docs/screenshots/home.png)` · `![Perfil](docs/screenshots/profile.png)` · `![Explorar](docs/screenshots/explore.png)`
 
-```powershell
-# 1. Ir a la carpeta del proyecto
-cd C:\MiProyecto
+---
 
-# 2. Instalar paquete STIC
-irm https://demowww.comillas.edu/claude-stic/arranque.ps1 | iex
+## 🇬🇧 English
 
-# 3. Abrir Claude Code y ejecutar onboarding
-claude
-/onboarding
+**Lure** is a social network inspired by Twitter/X, built as a final degree project (TFG) and now polished as a portfolio piece. It is a complete full-stack application: a **React SPA** talking to a **.NET 10 REST API** backed by **SQL Server**.
 
-# 4. Integrar en Visual Studio (automático o manual)
-.\.claude\commands\integracion-vs.ps1
+### ✨ Features
 
-# 5. Abrir Visual Studio para ver las carpetas
+- 🔐 **Authentication** — register & login with **JWT** and **bcrypt**-hashed passwords; protected routes.
+- 📝 **Tweets** — publish posts (with image / video / PDF media), shown in real time in your feed and profile.
+- ❤️ **Interactions** — like, retweet, save (bookmarks) and comment — all persisted in the database with per-user state.
+- 👥 **Social graph** — follow / unfollow users; real follower & following counts.
+- 🙋 **Profiles** — your own editable profile (name, bio, location, birthday, achievements, interests, skills, **profile photo upload**) and **public profiles** of other users.
+- 🔎 **Explore** — search tweets and accounts; trending topics.
+- 💬 **Direct messages** — real conversations stored in the DB.
+- 🏘️ **Communities** — list and join / leave.
+- 🔔 **Notifications** — derived from real activity (likes, replies, new followers).
+- 💎 **Premium** — Apple-style pricing page.
+- 🎨 **UI/UX** — X.com-style dark interface, responsive (mobile / tablet / desktop), lazy-loaded routes.
+
+### 🧱 Tech stack
+
+| Layer | Tech |
+|---|---|
+| **Frontend** | React 18, Vite 8, React Router 6, Ant Design, lucide-react |
+| **Backend** | .NET 10, ASP.NET Core Web API, Entity Framework Core 10 |
+| **Auth** | JWT (Bearer) + BCrypt.Net |
+| **Database** | SQL Server (LocalDB in dev) |
+| **Testing / Quality** | Vitest + React Testing Library, ESLint |
+
+### 🏗️ Architecture
+
+```mermaid
+flowchart LR
+  A[React SPA - Vite : 5173] -- "fetch / JWT" --> B[.NET 10 REST API : 3000/api]
+  B -- "EF Core" --> C[(SQL Server - LURE)]
+  B -- "static files" --> D[/uploads/avatars/]
 ```
 
-### Proyecto Nuevo
+The SPA consumes a REST API. The API authenticates with JWT, maps to the existing SQL Server schema via EF Core, and serves uploaded media as static files (the DB stores **URLs**, never the binary data).
 
-```powershell
-# 1. Crear carpeta y descargar plantilla
-mkdir C:\MiNuevoProyecto
-cd C:\MiNuevoProyecto
-irm https://demowww.comillas.edu/claude-stic/arranque.ps1 | iex
+### 🚀 Getting started
 
-# 2. Crear proyecto .NET en 03_Desarrollo/
-dotnet new sln -n MiProyecto -o 03_Desarrollo
-# ... crear proyectos
+**Prerequisites:** Node.js 18+, .NET 10 SDK, SQL Server (LocalDB or any instance) with a database named `LURE`.
 
-# 3. Abrir Claude Code y ejecutar onboarding
-claude
-/onboarding
+```bash
+# 1) Backend (.NET API) — http://localhost:3000/api
+cd 03_Desarrollo/backend-dotnet
+#   configure the connection string & JWT secret in appsettings.json (or env vars)
+dotnet run
+
+# 2) Frontend (React) — http://localhost:5173
+cd 03_Desarrollo/frontend
+npm install
+npm run dev          # dev server
+npm run build        # production build
+npm test             # Vitest
+npm run lint         # ESLint
 ```
 
----
+> The backend maps to an existing `LURE` schema (no EF migrations). Demo data and helper scripts live in `03_Desarrollo/backend-dotnet/Sql/`.
 
-## Flujo Completo de Instalación
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ PASO 1: arranque.ps1                                            │
-│ Descarga y extrae la plantilla técnica                          │
-│ → Crea carpetas 00-07, .claude/commands, _duran              │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ PASO 2: /onboarding (8 fases de preguntas)                      │
-│ Claude Code pregunta sobre el proyecto                          │
-│ → Crea ESTADO_PROYECTO.json, FUNCIONALIDADES.md, etc.           │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ PASO 3: integracion-vs.ps1 (automático o manual)                │
-│ Añade Solution Folders al archivo .sln                          │
-│ → 8 carpetas visibles en Visual Studio                          │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ PASO 4: Abrir Visual Studio                                     │
-│ Ver la estructura completa del proyecto                         │
-└─────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Estructura del Proyecto
+### 🗂️ Project structure
 
 ```
-Proyecto/
-│
-├── CLAUDE.md                ← Memoria del proyecto (generado por /init)
-├── README.md                # Este archivo
-├── INICIO_RAPIDO.md         # Guía de inicio en 30 minutos
-│
-├── .claude/                 ← Configuración Claude Code
-│   ├── commands/            # Comandos personalizados (/analizar, /commit, etc.)
-│   │   └── integracion-vs.ps1  # Script para integrar en Visual Studio
-│   ├── rules/               # Reglas condicionales por tipo de archivo
-│   └── CLAUDE_BASE_COMILLAS.md  # Estándares STIC
-│
-├── _duran/               ← Estado dinámico del proyecto
-│   ├── ESTADO_PROYECTO.json # Configuración y estado
-│   ├── DEPENDENCIAS.md      # Stack tecnológico
-│   ├── FUNCIONALIDADES.md   # Módulos y features
-│   ├── DEUDA_TECNICA.md     # Issues conocidos
-│   └── HISTORIAL_CAMBIOS.md # Changelog
-│
-├── Documentos_Base/         # Referencias técnicas STIC
-│   ├── 01_Estructura_Tecnica/
-│   ├── 02_Diseño_Usabilidad/
-│   └── 03_Consideraciones_Comunes/
-│
-├── 00_Gestion/              # Gestión del proyecto
-│   ├── config_proyecto.json
-│   ├── CHECKLIST_INICIO.md
-│   ├── Requerimientos/
-│   └── Reuniones/
-│
-├── 01_Diseño/               # Arquitectura y modelos de datos
-│   ├── Arquitectura/
-│   └── Modelos_Datos/
-│
-├── 02_Entorno/              # Configuración del entorno
-│   ├── docker-compose.yml
-│   ├── .env.example
-│   └── Scripts/
-│
-├── 03_Desarrollo/           # Código fuente (.NET)
-│
-├── 04_Pruebas/              # Tests unitarios e integración
-│
-├── 05_CICD/                 # Pipelines e infraestructura
-│
-├── 06_Documentacion/        # Documentación del proyecto
-│
-└── 07_UAP/                  # Unidad de Atención Prioritaria (soporte)
+03_Desarrollo/
+├── frontend/                 # React + Vite SPA
+│   └── src/
+│       ├── components/       # TweetCard, layout (Sidebar / RightSidebar / AppShell)…
+│       ├── pages/            # login, register, profile, menu/* (explorar, mensajes…)
+│       ├── context/          # AuthContext (JWT in localStorage)
+│       ├── services/api.js   # API client
+│       └── router/           # routes (lazy-loaded)
+└── backend-dotnet/           # .NET 10 Web API
+    ├── Controllers/          # Auth, Feed, Profile, Users, Messages, Communities…
+    ├── Feed/ Profile/ Auth/  # services + DTOs
+    ├── Entities/             # EF Core entities (mapped to existing tables)
+    └── Sql/                  # seed & helper scripts
 ```
 
+### 🔌 API (overview)
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/register` · `/login` · `GET /me` | Authentication (JWT) |
+| `GET` | `/api/feed/tweets` · `/following` | Feeds (per-user interaction state) |
+| `POST` | `/api/feed/tweets` | Create a tweet |
+| `POST` | `/api/feed/tweets/{id}/like` · `/retweet` · `/save` · `/comments` | Interactions |
+| `POST` | `/api/feed/users/{id}/follow` | Follow / unfollow |
+| `GET` | `/api/feed/search` · `/trends` · `/suggestions` | Explore |
+| `GET/PATCH` | `/api/profile/me` (+ `/avatar`, `/tweets`, `/likes`…) | Own profile |
+| `GET` | `/api/users/{id}` (+ `/tweets`, `/followers`…) | Public profiles |
+| `GET/POST` | `/api/messages/*`, `/api/communities/*`, `/api/notifications` | Messaging, communities, notifications |
+
+### 🧪 Testing
+
+Frontend is covered with **Vitest + React Testing Library** (`npm test`). Linting via ESLint (0 errors).
+
+### 🛣️ Roadmap
+
+- [ ] Deploy (Azure App Service + Azure SQL + Static Web Apps + Blob Storage for uploads)
+- [ ] Backend test suite (xUnit) & CI (GitHub Actions)
+- [ ] Migrate the frontend to TypeScript
+- [ ] Full `db/schema.sql` so anyone can spin up the database from scratch
+
+### 👤 Author
+
+**José Valero Montoya** — Final degree project (DAW). The first step of my developer portfolio.
+
+### 📄 License
+
+MIT — see [LICENSE](LICENSE).
+
 ---
 
-## Integración en Visual Studio
+## 🇪🇸 Español
 
-Después del onboarding, el archivo `.sln` incluye **8 Solution Folders** que permiten ver toda la documentación desde Visual Studio:
+**Lure** es una red social inspirada en Twitter/X, desarrollada como Trabajo de Fin de Grado (TFG) y pulida como pieza de portfolio. Es una aplicación full-stack completa: una **SPA en React** que consume una **API REST en .NET 10** con **SQL Server**.
 
-| Carpeta VS | Contenido |
-|------------|-----------|
-| **Contexto Claude** | CLAUDE.md, ESTADO_PROYECTO.json, DEPENDENCIAS.md, etc. |
-| **Especificaciones** | _duran/specs/*.md |
-| **Diagramas** | 01_Diseno/Arquitectura/*.md |
-| **Gestion** | 00_Gestion/*.md |
-| **Pruebas** | 04_Pruebas/*.md |
-| **CI-CD** | 05_CICD/*, azure-pipelines.yml |
-| **Documentacion** | 06_Documentacion/*.md, README.md |
-| **UAP** | 07_UAP/*.md |
+### ✨ Funcionalidades
 
-Si las carpetas no aparecen, ejecutar manualmente:
-```powershell
-.\.claude\commands\integracion-vs.ps1
+- 🔐 **Autenticación** — registro e inicio de sesión con **JWT** y contraseñas con **bcrypt**; rutas protegidas.
+- 📝 **Tweets** — publicar (con imagen / vídeo / PDF), reflejados al instante en tu feed y perfil.
+- ❤️ **Interacciones** — me gusta, retweet, guardar y comentar — todo **persistido** en la BD con estado por usuario.
+- 👥 **Grafo social** — seguir / dejar de seguir; contadores reales de seguidores y seguidos.
+- 🙋 **Perfiles** — el tuyo **editable** (nombre, bio, ubicación, fecha de nacimiento, logros, intereses, habilidades, **subir foto de perfil**) y **perfiles públicos** de otras cuentas.
+- 🔎 **Explorar** — búsqueda de tweets y cuentas; tendencias.
+- 💬 **Mensajes directos** — conversaciones reales guardadas en la BD.
+- 🏘️ **Comunidades** — listado y unirse / salir.
+- 🔔 **Notificaciones** — derivadas de actividad real (me gusta, respuestas, nuevos seguidores).
+- 💎 **Premium** — página de planes con estética Apple.
+- 🎨 **UI/UX** — interfaz oscura estilo X.com, responsive (móvil / tablet / escritorio), rutas con carga diferida.
+
+### 🧱 Stack
+
+| Capa | Tecnología |
+|---|---|
+| **Frontend** | React 18, Vite 8, React Router 6, Ant Design, lucide-react |
+| **Backend** | .NET 10, ASP.NET Core Web API, Entity Framework Core 10 |
+| **Auth** | JWT (Bearer) + BCrypt.Net |
+| **Base de datos** | SQL Server (LocalDB en desarrollo) |
+| **Tests / Calidad** | Vitest + React Testing Library, ESLint |
+
+### 🚀 Puesta en marcha
+
+**Requisitos:** Node.js 18+, SDK de .NET 10, SQL Server (LocalDB u otra instancia) con una base de datos `LURE`.
+
+```bash
+# 1) Backend (.NET) — http://localhost:3000/api
+cd 03_Desarrollo/backend-dotnet
+#   configura la cadena de conexión y el secreto JWT en appsettings.json (o variables de entorno)
+dotnet run
+
+# 2) Frontend (React) — http://localhost:5173
+cd 03_Desarrollo/frontend
+npm install
+npm run dev
 ```
 
----
+> El backend mapea un esquema `LURE` ya existente (sin migraciones EF). Datos de demo y scripts auxiliares en `03_Desarrollo/backend-dotnet/Sql/`.
 
-## Stack Tecnológico
+### 🛣️ Próximos pasos
 
-| Capa | Tecnología | Versión |
-|------|------------|---------|
-| Backend | .NET / C# | 8+ LTS (soporta 4.x, 8, 9, 10) |
-| Acceso a datos | Dapper (recomendado) | Última estable |
-| Base de datos | SQL Server | 2017 (14.0) |
-| Intercalación | SQL_Latin1_General_CP1250_CI_AS | - |
-| Cloud | Azure | - |
-| Caché | Redis | 7+ |
-| Almacenamiento | Azure Blob Storage | - |
-| Contenedores | Docker | - |
+- [ ] Despliegue (Azure App Service + Azure SQL + Static Web Apps + Blob Storage para las subidas)
+- [ ] Tests de backend (xUnit) y CI (GitHub Actions)
+- [ ] Migrar el frontend a TypeScript
+- [ ] `db/schema.sql` completo para crear la base de datos desde cero
 
-Ver detalles completos en: `Documentos_Base/01_Estructura_Tecnica/`
+### 👤 Autor
 
----
+**José Valero Montoya** — TFG (DAW). Primer paso de mi portfolio como desarrollador.
 
-## Comandos Claude Code
+### 📄 Licencia
 
-| Comando | Descripción |
-|---------|-------------|
-| `/onboarding` | Configuración guiada en 8 fases + integración VS |
-| `/analizar` | Análisis profundo del código |
-| `/nuevo-evolutivo` | Iniciar nueva funcionalidad |
-| `/commit` | Commit con mensaje estructurado |
-| `/test` | Generar tests unitarios |
-| `/estado` | Ver dashboard del proyecto |
-| `/actualizar` | Actualizar paquete STIC |
-| `/sos` | Ayuda y comandos disponibles |
-
----
-
-## Documentos Base
-
-La carpeta `Documentos_Base/` contiene las **referencias técnicas oficiales del STIC**:
-
-| Documento | Contenido |
-|-----------|-----------|
-| **Estructura Técnica** | Stack, arquitectura, seguridad, infraestructura balanceada |
-| **Diseño y Usabilidad** | Colores, tipografía, componentes UI, accesibilidad |
-| **Consideraciones Comunes** | RGPD, normativa Comillas, integraciones, auditoría |
-
-Estos documentos son la **fuente de verdad** para cualquier decisión técnica o de diseño.
-
----
-
-## Herramientas IA
-
-| Herramienta | Uso |
-|-------------|-----|
-| **Claude Code** | Análisis, diseño, arquitectura, revisión, documentación |
-| **GitHub Copilot** | Autocompletado, generación de código en IDE |
-
-### Flujo de trabajo
-
-```
-1. Análisis con Claude     → Diseñar solución
-2. Implementación con Copilot → Escribir código
-3. Revisión con Claude     → Detectar mejoras
-4. Testing                 → Generar y ejecutar tests
-5. Code Review Humano      → Aprobación final
-```
-
----
-
-## Reglas de Desarrollo
-
-### Obligatorias
-
-- Todo código IA pasa por **code review humano**
-- Sin datos sensibles en prompts (usar placeholders)
-- Azure Key Vault para **todos los secretos**
-- Azure Blob Storage para **todos los archivos**
-- Redis para **caché distribuida**
-- Sin estado local (infraestructura balanceada)
-
-### Buenas prácticas
-
-Para buenas prácticas técnicas actualizadas, Claude consultará fuentes oficiales:
-- docs.microsoft.com (.NET, Azure)
-- OWASP (seguridad)
-- learn.microsoft.com (patrones)
-
----
-
-## Estrategia Git
-
-```
-main
-├── develop
-├── feature/*
-├── bugfix/*
-└── hotfix/*
-```
-
----
-
-## Actualización del Paquete
-
-Para actualizar a la última versión del paquete STIC:
-
-```powershell
-# Desde PowerShell
-irm https://demowww.comillas.edu/claude-stic/arranque.ps1 | iex
-
-# O desde Claude Code
-/actualizar
-```
-
----
-
-## Contacto
-
-- **Dudas técnicas**: Líder Técnico del proyecto
-- **Dudas de proceso**: JP asignado
-- **Soporte STIC**: soporte.stic@comillas.edu
-
----
-
-**Versión:** 2.2.0
-**Fecha:** Enero 2026
-**Responsable:** STIC - Universidad Pontificia Comillas
+MIT — ver [LICENSE](LICENSE).

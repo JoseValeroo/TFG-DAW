@@ -63,6 +63,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+// Sirve los archivos subidos (avatares, multimedia) desde wwwroot/.
+app.UseStaticFiles();
+
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();

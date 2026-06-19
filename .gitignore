@@ -1,3 +1,59 @@
-.claude/
-.vs/
+# ===== Dependencias =====
+node_modules/
+
+# ===== Builds =====
+dist/
+dist-ssr/
+[Bb]in/
+[Oo]bj/
+*.local
+
+# ===== .NET =====
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ===== Entorno y secretos (NO commitear) =====
+.env
+.env.local
+*.env.local
+appsettings.*.local.json
 _duran/.mcp-credentials.json
+
+# ===== Archivos subidos en runtime (avatares, multimedia) =====
+03_Desarrollo/backend-dotnet/wwwroot/uploads/
+
+# ===== Editores / SO =====
+.vs/
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# ===== Caché Vite =====
+.vite/
+
+# ===== Logs =====
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== Andamiaje interno STIC.IA / TFG (fuera del repo de portfolio) =====
+.claude/
+_duran/
+_atlas/
+Documentos_Base/
+00_Gestion/
+01_Diseno/
+02_Entorno/
+04_Pruebas/
+05_CICD/
+06_Documentacion/
+07_UAP/
+CLAUDE.md
+INICIO_RAPIDO.md
+
+# Backend NestJS antiguo (reemplazado por backend-dotnet)
+03_Desarrollo/backend/

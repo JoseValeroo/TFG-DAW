@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
+import Loading from '../components/Loading';
 
 // Code-splitting por ruta: cada página es un chunk independiente que se
 // descarga solo cuando se visita. Así Ant Design (que solo usa el perfil) no
@@ -16,6 +17,10 @@ const Cuentas = lazy(() => import('../pages/menu/Cuentas'));
 const Notificaciones = lazy(() => import('../pages/menu/Notificaciones'));
 const Comunidades = lazy(() => import('../pages/menu/Comunidades'));
 const Mensajes = lazy(() => import('../pages/menu/Mensajes'));
+const Premium = lazy(() => import('../pages/menu/Premium'));
+const Explorar = lazy(() => import('../pages/menu/Explorar'));
+const Guardados = lazy(() => import('../pages/menu/Guardados'));
+const UserProfile = lazy(() => import('../pages/menu/UserProfile'));
 
 // Envuelve rutas que requieren sesión iniciada.
 function ProtectedRoute({ children }) {
@@ -24,16 +29,13 @@ function ProtectedRoute({ children }) {
 }
 
 const AppRouter = () => (
-  <Suspense
-    fallback={
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
-        Cargando…
-      </div>
-    }
-  >
+  <Suspense fallback={<Loading />}>
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/feed" element={<TarjetaMain />} />
+      <Route path="/premium" element={<Premium />} />
+      <Route path="/explorar" element={<Explorar />} />
+      <Route path="/usuario/:id" element={<UserProfile />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot" element={<ForgotPassword />} />
@@ -50,6 +52,7 @@ const AppRouter = () => (
       <Route path="/notificaciones" element={<ProtectedRoute><Notificaciones /></ProtectedRoute>} />
       <Route path="/comunidades" element={<ProtectedRoute><Comunidades /></ProtectedRoute>} />
       <Route path="/mensajes" element={<ProtectedRoute><Mensajes /></ProtectedRoute>} />
+      <Route path="/guardados" element={<ProtectedRoute><Guardados /></ProtectedRoute>} />
       {/* Cualquier ruta desconocida vuelve al inicio */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

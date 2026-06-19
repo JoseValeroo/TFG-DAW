@@ -44,12 +44,19 @@ export const authApi = {
 };
 
 export const feedApi = {
-  forYou: () => request('/feed/tweets'),
+  forYou: (token) => request('/feed/tweets', { token }),
   following: (token) => request('/feed/following', { token }),
   create: (text, token) => request('/feed/tweets', { method: 'POST', body: { text }, token }),
   suggestions: () => request('/feed/suggestions'),
   trends: () => request('/feed/trends'),
+  search: (q, token) => request(`/feed/search?q=${encodeURIComponent(q)}`, { token }),
   toggleLike: (id, token) => request(`/feed/tweets/${id}/like`, { method: 'POST', token }),
+  toggleRetweet: (id, token) => request(`/feed/tweets/${id}/retweet`, { method: 'POST', token }),
+  toggleSave: (id, token) => request(`/feed/tweets/${id}/save`, { method: 'POST', token }),
+  follow: (id, token) => request(`/feed/users/${id}/follow`, { method: 'POST', token }),
+  getSaved: (token) => request('/feed/saved', { token }),
+  getComments: (id) => request(`/feed/tweets/${id}/comments`),
+  addComment: (id, text, token) => request(`/feed/tweets/${id}/comments`, { method: 'POST', body: { text }, token }),
 };
 
 export const profileApi = {
@@ -60,6 +67,27 @@ export const profileApi = {
   followers: (token) => request('/profile/me/followers', { token }),
   following: (token) => request('/profile/me/following', { token }),
   update: (data, token) => request('/profile/me', { method: 'PATCH', body: data, token }),
+  uploadAvatar: async (file, token) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await fetch(`${API_URL}/profile/me/avatar`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.message || 'No se pudo subir la imagen');
+    return data;
+  },
+};
+
+export const usersApi = {
+  get: (id, token) => request(`/users/${id}`, { token }),
+  tweets: (id, token) => request(`/users/${id}/tweets`, { token }),
+  replies: (id, token) => request(`/users/${id}/replies`, { token }),
+  likes: (id, token) => request(`/users/${id}/likes`, { token }),
+  followers: (id, token) => request(`/users/${id}/followers`, { token }),
+  following: (id, token) => request(`/users/${id}/following`, { token }),
 };
 
 export const messagesApi = {
